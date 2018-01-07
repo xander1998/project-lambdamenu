@@ -17,6 +17,7 @@
 #include <sstream>
 
 #include <vector>
+#include <functional>
 
 class TreeNode
 {
