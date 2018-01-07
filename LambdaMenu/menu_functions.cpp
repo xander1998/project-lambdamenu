@@ -202,7 +202,6 @@ void draw_menu_from_struct_def(StandardOrToggleMenuDef defs[], int lineCount, in
 			{
 				item.toggleValueUpdated = defs[i].pUpdated;
 			}
-			item.toggle_name = defs[i].toggle_name;
 			menuItems.push_back(item);
 		}
 		else if (defs[i].itemType != NULL && defs[i].itemType == WANTED)
@@ -210,7 +209,6 @@ void draw_menu_from_struct_def(StandardOrToggleMenuDef defs[], int lineCount, in
 			WantedSymbolItem<int> item;
 			item.caption = defs[i].text;
 			item.value = i;
-			item.toggle_name = defs[i].toggle_name;
 			menuItems.push_back(item);
 		}
 		else
@@ -219,7 +217,6 @@ void draw_menu_from_struct_def(StandardOrToggleMenuDef defs[], int lineCount, in
 			item.caption = defs[i].text;
 			item.value = i;
 			item.isLeaf = defs[i].isLeaf;
-			item.toggle_name = defs[i].toggle_name;
 			menuItems.push_back(item);
 		}
 	}
@@ -258,45 +255,44 @@ void draw_menu_from_struct_def(StringStandardOrToggleMenuDef defs[], int lineCou
 	draw_generic_menu<std::string>(menuItems, selectionRef, caption, onConfirmation, NULL, NULL);
 }
 
-void show_keyboard(char* title_id, const std::string& prepopulated_text, const std::function<void(const std::string&)>& onEntry)
+std::string show_keyboard(char* title_id, char* prepopulated_text)
 {
 	DWORD time = GetTickCount() + 400;
-
-	submit_call_on_result([=]()
+	while (GetTickCount() < time)
 	{
-		return (GetTickCount() >= time);
-	}, [=]()
+		make_periodic_feature_call();
+		WAIT(0);
+	}
+
+	/*
+	Any x;
+	GAMEPLAY::START_SAVE_DATA(&x, 1, 1);
+	GAMEPLAY::REGISTER_TEXT_LABEL_TO_SAVE(&x, "XYZ123");
+	GAMEPLAY::STOP_SAVE_DATA();
+	*/
+
+	GAMEPLAY::DISPLAY_ONSCREEN_KEYBOARD(
+		true,
+		const_cast<char*>(title_id == NULL ? "HUD_TITLE" : title_id),
+		"",
+		const_cast<char*>(prepopulated_text == NULL ? "" : prepopulated_text),
+		"", "", "", 64);
+
+	while (GAMEPLAY::UPDATE_ONSCREEN_KEYBOARD() == 0)
 	{
+		//update_status_text();
+		WAIT(0);
+	}
 
-		/*
-		Any x;
-		GAMEPLAY::START_SAVE_DATA(&x, 1, 1);
-		GAMEPLAY::REGISTER_TEXT_LABEL_TO_SAVE(&x, "XYZ123");
-		GAMEPLAY::STOP_SAVE_DATA();
-		*/
-
-		GAMEPLAY::DISPLAY_ONSCREEN_KEYBOARD(
-			true,
-			const_cast<char*>(title_id == NULL ? "HUD_TITLE" : title_id),
-			"",
-			const_cast<char*>(prepopulated_text.c_str()),
-			"", "", "", 64);
-
-		submit_call_on_result([=]()
-		{
-			return GAMEPLAY::UPDATE_ONSCREEN_KEYBOARD() != 0;
-		}, [=]()
-		{
-			if (!GAMEPLAY::GET_ONSCREEN_KEYBOARD_RESULT())
-			{
-				onEntry("");
-			}
-			else
-			{
-				onEntry(std::string(GAMEPLAY::GET_ONSCREEN_KEYBOARD_RESULT()));
-			}
-		});
-	});
+	std::stringstream ss;
+	if (!GAMEPLAY::GET_ONSCREEN_KEYBOARD_RESULT())
+	{
+		return std::string("");
+	}
+	else
+	{
+		return std::string(GAMEPLAY::GET_ONSCREEN_KEYBOARD_RESULT());
+	}
 }
 
 

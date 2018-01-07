@@ -37,8 +37,7 @@ IMPORT void nativeCallVector3(float* x, float* y, float* z);
 
 #include <emscripten.h>
 
-//static void WAIT(DWORD time) { emscripten_sleep(time); }
-//static void WAIT(DWORD time) {  }
-//static void TERMINATE() { WAIT(MAXDWORD); }
+static void WAIT(DWORD time) { emscripten_sleep(time); }
+static void TERMINATE() { WAIT(MAXDWORD); }
 
 DWORD GetTickCount();

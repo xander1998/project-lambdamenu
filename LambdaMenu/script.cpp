@@ -61,7 +61,6 @@ struct playerinfo {
 	Ped ped;
 	Blip blip;
 	int head;
-	bool wasDead;
 };
 
 Player playerId;
@@ -135,7 +134,6 @@ bool featureMiscLockRadio = false;
 bool featureHideMap = false;
 bool featureMiscHideHud = false;
 bool featureBigHud = false;
-bool featureBigHudUpdated = false;
 bool featureBlackout = false;
 bool featureRestoreWeapons = false;
 bool featureRestoreAppearance = false;
@@ -200,29 +198,7 @@ const char* player_models[] = { "a_c_boar", "a_c_cat_01", "a_c_chimp", "a_c_chop
 
 const char* CLIPSET_DRUNK = "move_m@drunk@verydrunk";
 
-inline constexpr char ToLower(const char c)
-{
-	return (c >= 'A' && c <= 'Z') ? (c - 'A' + 'a') : c;
-}
-
-// hash string, lowercase
-inline constexpr Hash $(const char* string)
-{
-	uint32_t hash = 0;
-
-	for (; *string; ++string)
-	{
-		hash += ToLower(*string);
-		hash += (hash << 10);
-		hash ^= (hash >> 6);
-	}
-
-	hash += (hash << 3);
-	hash ^= (hash >> 11);
-	hash += (hash << 15);
-
-	return hash;
-}
+Hash $(char* string) { return GAMEPLAY::GET_HASH_KEY(string); }
 
 std::string killActionFromWeaponHash(Hash weaponHash)
 {
@@ -302,8 +278,6 @@ std::string killActionFromWeaponHash(Hash weaponHash)
 	}
 	return "murdered";
 }
-
-std::vector<int> blipsList;
 
 void blips()
 {
@@ -974,163 +948,14 @@ void blips()
 	UI::SET_BLIP_COLOUR(fib, 44);
 	UI::SET_BLIP_AS_SHORT_RANGE(fib, 1);
 
-	blipsList.push_back(open1);
-	blipsList.push_back(open2);
-	blipsList.push_back(open3);
-	blipsList.push_back(open4);
-	blipsList.push_back(open5);
-	blipsList.push_back(open6);
-	blipsList.push_back(open7);
-	blipsList.push_back(open8);
-	blipsList.push_back(open9);
-	blipsList.push_back(open10);
-	blipsList.push_back(open11);
-	blipsList.push_back(open12);
-	blipsList.push_back(open13);
-	blipsList.push_back(open14);
-	blipsList.push_back(open15);
-	blipsList.push_back(open16);
-	blipsList.push_back(open17);
-	blipsList.push_back(open18);
-	blipsList.push_back(open19);
-	blipsList.push_back(open20);
-	blipsList.push_back(open21);
-	blipsList.push_back(open22);
-	blipsList.push_back(open23);
-	blipsList.push_back(open24);
-	blipsList.push_back(open25);
-	blipsList.push_back(open26);
-	blipsList.push_back(open27);
-	blipsList.push_back(open28);
-	blipsList.push_back(open29);
-	blipsList.push_back(open30);
-	blipsList.push_back(open31);
-	blipsList.push_back(open32);
-	blipsList.push_back(open33);
-	blipsList.push_back(open34);
-	blipsList.push_back(ponsonbys1);
-	blipsList.push_back(ponsonbys2);
-	blipsList.push_back(ponsonbys3);
-	blipsList.push_back(discount1);
-	blipsList.push_back(discount2);
-	blipsList.push_back(discount3);
-	blipsList.push_back(discount4);
-	blipsList.push_back(discount5);
-	blipsList.push_back(binco1);
-	blipsList.push_back(binco2);
-	blipsList.push_back(suburban1);
-	blipsList.push_back(suburban2);
-	blipsList.push_back(suburban3);
-	blipsList.push_back(suburban4);
-	blipsList.push_back(lsc1);
-	blipsList.push_back(lsc2);
-	blipsList.push_back(lsc3);
-	blipsList.push_back(lsc4);
-	blipsList.push_back(lsc5);
-	blipsList.push_back(lsc6);
-	blipsList.push_back(tattoo1);
-	blipsList.push_back(tattoo2);
-	blipsList.push_back(tattoo3);
-	blipsList.push_back(tattoo4);
-	blipsList.push_back(tattoo5);
-	blipsList.push_back(tattoo6);
-	blipsList.push_back(ammo1);
-	blipsList.push_back(ammo2);
-	blipsList.push_back(ammo3);
-	blipsList.push_back(ammo4);
-	blipsList.push_back(ammo5);
-	blipsList.push_back(ammo6);
-	blipsList.push_back(ammo7);
-	blipsList.push_back(ammo8);
-	blipsList.push_back(ammo9);
-	blipsList.push_back(ammo10);
-	blipsList.push_back(ammo11);
-	blipsList.push_back(barber1);
-	blipsList.push_back(barber2);
-	blipsList.push_back(barber3);
-	blipsList.push_back(barber4);
-	blipsList.push_back(barber5);
-	blipsList.push_back(barber6);
-	blipsList.push_back(barber7);
-	blipsList.push_back(store1);
-	blipsList.push_back(store2);
-	blipsList.push_back(store3);
-	blipsList.push_back(store4);
-	blipsList.push_back(store5);
-	blipsList.push_back(store6);
-	blipsList.push_back(store7);
-	blipsList.push_back(store8);
-	blipsList.push_back(store9);
-	blipsList.push_back(store10);
-	blipsList.push_back(store11);
-	blipsList.push_back(store12);
-	blipsList.push_back(policestation1);
-	blipsList.push_back(policestation2);
-	blipsList.push_back(policestation4);
-	blipsList.push_back(policestation5);
-	blipsList.push_back(policestation6);
-	blipsList.push_back(policestation7);
-	blipsList.push_back(policestation8);
-	blipsList.push_back(policestation9);
-	blipsList.push_back(policestation10);
-	blipsList.push_back(policestation11);
-	blipsList.push_back(bank1);
-	blipsList.push_back(bank2);
-	blipsList.push_back(bank3);
-	blipsList.push_back(bank4);
-	blipsList.push_back(bank5);
-	blipsList.push_back(bank6);
-	blipsList.push_back(bank7);
-	blipsList.push_back(cablecar1);
-	blipsList.push_back(cablecar2);
-	blipsList.push_back(carwash1);
-	blipsList.push_back(carwash2);
-	blipsList.push_back(airport1);
-	blipsList.push_back(airport2);
-	blipsList.push_back(airport3);
-	blipsList.push_back(stripclub);
-	blipsList.push_back(helipad);
-	blipsList.push_back(boat1);
-	blipsList.push_back(rebel);
-	blipsList.push_back(theater1);
-	blipsList.push_back(theater2);
-	blipsList.push_back(theater3);
-	blipsList.push_back(hospital1);
-	blipsList.push_back(hospital2);
-	blipsList.push_back(hospital3);
-	blipsList.push_back(bar1);
-	blipsList.push_back(bar2);
-	blipsList.push_back(comedy);
-	blipsList.push_back(drugs);
-	blipsList.push_back(marijuana1);
-	blipsList.push_back(marijuana2);
-	blipsList.push_back(altruist);
-	blipsList.push_back(sub);
-	blipsList.push_back(masks);
-	blipsList.push_back(fairground);
-	blipsList.push_back(golf);
-	blipsList.push_back(tennis);
-	blipsList.push_back(darts);
-	blipsList.push_back(playboy);
-	blipsList.push_back(fib);
-
 	blipCheck1 = true;
-}
-
-void unblips()
-{
-	for (auto& blip : blipsList)
-	{
-		UI::REMOVE_BLIP(&blip);
-	}
-
-	blipsList.clear();
 }
 
 
 void teleport_to_marker_coords(Entity e, Vector3 coords)
 {
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(e, coords.x, coords.y, coords.z, 0, 0, 1);
+	WAIT(0);
 	set_status_text("Teleported to map marker.");
 }
 
@@ -1153,61 +978,6 @@ void animal_watch()
 			//change this to only the elements needed to prevent weapons/wheel, rather than disabling the entire hud
 		}
 	}
-}
-
-void restore_player_appearance()
-{
-	if (STREAMING::IS_MODEL_IN_CDIMAGE(pmodel) && STREAMING::IS_MODEL_VALID(pmodel))
-	{
-		STREAMING::REQUEST_MODEL(pmodel);
-
-		submit_call_on_result([=]()
-		{
-			return STREAMING::HAS_MODEL_LOADED(pmodel);
-		}, [=]()
-		{
-			if (pmodel == GAMEPLAY::GET_HASH_KEY("a_c_dolphin") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_fish") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_sharkhammer") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_humpback") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_killerwhale") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_stingray") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_sharktiger"))
-			{
-				set_status_text("Restore appearance disabled for fish");
-			}
-			else
-			{
-				PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), pmodel);
-
-				for (int i = 0; i < 12; i++)
-				{
-					PED::SET_PED_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), i, drawable[i], dtexture[i], pallet[i]);
-					PED::SET_PED_PROP_INDEX(PLAYER::PLAYER_PED_ID(), i, prop[i], ptexture[i], 0);
-				}
-			}
-			
-			STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(pmodel);
-		});
-	}
-}
-
-static bool deathLock = false;
-
-static void on_undead_tick()
-{
-	submit_call_on_result([=]()
-	{
-		return ENTITY::IS_ENTITY_DEAD(PLAYER::PLAYER_PED_ID());
-	}, [=]()
-	{
-
-		if (featureRestoreAppearance)
-		{
-			restore_player_appearance();
-		}
-
-		if (featureRestoreWeapons)
-		{
-			restore_player_weapons();
-		}
-
-		deathLock = false;
-	});
 }
 
 void death_watch()
@@ -1251,6 +1021,7 @@ void death_watch()
 			set_status_text((char*)msg.c_str());
 		}
 
+
 		if (featureShowDeathCutscene)
 		{
 			AUDIO::PLAY_SOUND_FRONTEND(-1, "Bed", "WastedSounds", 1);
@@ -1258,50 +1029,99 @@ void death_watch()
 
 			int scaleform = GRAPHICS::REQUEST_SCALEFORM_MOVIE("MP_BIG_MESSAGE_FREEMODE");
 
-			deathLock = true;
+			while (!GRAPHICS::HAS_SCALEFORM_MOVIE_LOADED(scaleform))
+				WAIT(0);
 
-			submit_call_on_result([=]()
+			GRAPHICS::_PUSH_SCALEFORM_MOVIE_FUNCTION(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE");
+			GRAPHICS::_BEGIN_TEXT_COMPONENT("STRING");
+			UI::_ADD_TEXT_COMPONENT_ITEM_STRING("RESPAWN_W");
+			GRAPHICS::_END_TEXT_COMPONENT();
+			GRAPHICS::_POP_SCALEFORM_MOVIE_FUNCTION_VOID();
+
+			WAIT(1000);
+
+			AUDIO::PLAY_SOUND_FRONTEND(-1, "TextHit", "WastedSounds", 1);
+			while (ENTITY::IS_ENTITY_DEAD(PLAYER::GET_PLAYER_PED(playerId))) {
+				GRAPHICS::_DRAW_SCALEFORM_MOVIE_DEFAULT(scaleform, 255, 255, 255, 255);
+				WAIT(0);
+			}
+
+			GRAPHICS::_STOP_SCREEN_EFFECT("DeathFailOut");
+
+			if (featureRestoreAppearance)
 			{
-				return GRAPHICS::HAS_SCALEFORM_MOVIE_LOADED(scaleform);
-			}, [=]()
-			{
-				GRAPHICS::_PUSH_SCALEFORM_MOVIE_FUNCTION(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE");
-				GRAPHICS::_BEGIN_TEXT_COMPONENT("STRING");
-				UI::_ADD_TEXT_COMPONENT_ITEM_STRING("RESPAWN_W");
-				GRAPHICS::_END_TEXT_COMPONENT();
-				GRAPHICS::_POP_SCALEFORM_MOVIE_FUNCTION_VOID();
-
-				uint32_t endTick = GetTickCount() + 1000;
-
-				submit_call_on_result([=]()
+				if (STREAMING::IS_MODEL_IN_CDIMAGE(pmodel) && STREAMING::IS_MODEL_VALID(pmodel))
 				{
-					return (GetTickCount() > endTick);
-				}, [=]()
-				{
-					AUDIO::PLAY_SOUND_FRONTEND(-1, "TextHit", "WastedSounds", 1);
+					STREAMING::REQUEST_MODEL(pmodel);
 
-					submit_call_on_result([=]()
+					while (!STREAMING::HAS_MODEL_LOADED(pmodel))
+						WAIT(0);
+
+					if (pmodel == GAMEPLAY::GET_HASH_KEY("a_c_dolphin") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_fish") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_sharkhammer") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_humpback") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_killerwhale") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_stingray") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_sharktiger"))
 					{
-						bool dead = ENTITY::IS_ENTITY_DEAD(PLAYER::GET_PLAYER_PED(playerId));
+						set_status_text("Restore appearance disabled for fish");
+					}
+					else
+					{
+						PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), pmodel);
 
-						if (dead)
+						for (int i = 0; i < 12; i++)
 						{
-							GRAPHICS::_DRAW_SCALEFORM_MOVIE_DEFAULT(scaleform, 255, 255, 255, 255);
+							PED::SET_PED_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), i, drawable[i], dtexture[i], pallet[i]);
+							PED::SET_PED_PROP_INDEX(PLAYER::PLAYER_PED_ID(), i, prop[i], ptexture[i], 0);
 						}
+					}
 
-						return !dead;
-					}, [=]()
-					{
-						GRAPHICS::_STOP_SCREEN_EFFECT("DeathFailOut");
-					});
+					WAIT(100);
 
-					on_undead_tick();
-				});
-			});
+					STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(pmodel);
+				}
+			}
+
+			if (featureRestoreWeapons)
+			{
+				restore_player_weapons();
+			}
 		}
 		else
 		{
-			on_undead_tick();
+			while (ENTITY::IS_ENTITY_DEAD(PLAYER::PLAYER_PED_ID()))
+				WAIT(0);
+
+			if (featureRestoreAppearance)
+			{
+				if (STREAMING::IS_MODEL_IN_CDIMAGE(pmodel) && STREAMING::IS_MODEL_VALID(pmodel))
+				{
+					STREAMING::REQUEST_MODEL(pmodel);
+
+					while (!STREAMING::HAS_MODEL_LOADED(pmodel))
+						WAIT(0);
+
+					if (pmodel == GAMEPLAY::GET_HASH_KEY("a_c_dolphin") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_fish") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_sharkhammer") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_humpback") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_killerwhale") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_stingray") || pmodel == GAMEPLAY::GET_HASH_KEY("a_c_sharktiger"))
+					{
+						set_status_text("Restore appearance disabled for fish");
+					}
+					else
+					{
+						PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), pmodel);
+
+						for (int i = 0; i < 12; i++)
+						{
+							PED::SET_PED_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), i, drawable[i], dtexture[i], pallet[i]);
+							PED::SET_PED_PROP_INDEX(PLAYER::PLAYER_PED_ID(), i, prop[i], ptexture[i], 0);
+						}
+					}
+
+					WAIT(100);
+
+					STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(pmodel);
+				}
+			}
+
+			if (featureRestoreWeapons)
+			{
+				restore_player_weapons();
+			}
 		}
 	}
 }
@@ -1335,31 +1155,23 @@ void refresh_route()
 
 void toggle_watch()
 {
-	if (featureBigHudUpdated && toggle_allowed("misc_big_map"))
+	if (featureBigHud)
 	{
-		featureBigHudUpdated = false;
-
-		if (featureBigHud)
-		{
-			UI::_SET_RADAR_BIGMAP_ENABLED(1, 0);
-		}
-		else
-		{
-			UI::_SET_RADAR_BIGMAP_ENABLED(0, 0);
-		}
+		UI::_SET_RADAR_BIGMAP_ENABLED(1, 0);
+	}
+	else
+	{
+		UI::_SET_RADAR_BIGMAP_ENABLED(0, 0);
 	}
 
-	if (toggle_allowed("misc_player_blip_names"))
+	if (featurePlayerBlipNames)
 	{
-		if (featurePlayerBlipNames)
-		{
-			UI::_SET_RADAR_BIGMAP_ENABLED(1, 0);
-			UI::_0x82CEDC33687E1F50(1);
-		}
-		else
-		{
-			UI::_0x82CEDC33687E1F50(0);
-		}
+		UI::_SET_RADAR_BIGMAP_ENABLED(1, 0);
+		UI::_0x82CEDC33687E1F50(1);
+	}
+	else
+	{
+		UI::_0x82CEDC33687E1F50(0);
 	}
 
 	if (featureHideMap)
@@ -1371,7 +1183,7 @@ void toggle_watch()
 		UI::DISPLAY_RADAR(1);
 	}
 
-	if (featureMapBlips && !blipCheck1 && !blipCheck2 && toggle_allowed("misc_map_blips"))
+	if (featureMapBlips && !blipCheck1 && !blipCheck2)
 	{
 		blips();
 		blipCheck2 = true;
@@ -1481,87 +1293,74 @@ void update_features()
 
 			if (NETWORK::NETWORK_IS_PLAYER_CONNECTED(i))
 			{
-				char* name = PLAYER::GET_PLAYER_NAME(i);
+				std::string name = (char*)PLAYER::GET_PLAYER_NAME(i);
 
 				if (featureShowVoiceChatSpeaker && NETWORK::NETWORK_IS_PLAYER_TALKING(i))
 				{
 					if (!isVoiceChatRunning)
 						isVoiceChatRunning = true;
-					voice_status_msg += "~n~~b~" + std::string(name);
+					voice_status_msg += "~n~~b~" + name;
 				}
 
 				if (i != playerId)
 				{
 					Ped pedId = PLAYER::GET_PLAYER_PED(i);
+					unsigned int headDisplayId = UI::_0xBFEFE3321A3F5015(pedId, (char*)"", 0, 0, (char*)"", 0); // CREATE_PED_HEAD_DISPLAY
 
 					if (ENTITY::IS_ENTITY_DEAD(pedId) && ENTITY::DOES_ENTITY_EXIST(pedId))
 					{
-						if (!playerdb[i].wasDead)
+						if (featurePlayerBlips && UI::DOES_BLIP_EXIST(playerdb[i].blip))
 						{
-							if (featurePlayerBlips && UI::DOES_BLIP_EXIST(playerdb[i].blip))
-							{
-								UI::SET_BLIP_SPRITE(playerdb[i].blip, 274); // Death blip ('X')
-								UI::SET_BLIP_NAME_TO_PLAYER_NAME(playerdb[i].blip, i);
-								UI::_0x5FBCA48327B914DF(playerdb[i].blip, 0);
-							}
-
-							if (featureDeathNotifications && toggle_allowed("misc_death_notifications"))
-							{
-								std::string msg = "<C>~o~" + std::string(name) + "</C> ~s~died.";
-								Hash weaponHash;
-								Entity e = NETWORK::NETWORK_GET_ENTITY_KILLER_OF_PLAYER(i, &weaponHash);
-								if (PED::IS_PED_A_PLAYER(e)) {
-									Player killer = NETWORK::_0x6C0E2E0125610278(e); // _NETWORK_GET_PLAYER_FROM_PED
-									std::string kname = PLAYER::GET_PLAYER_NAME(killer);
-									if (kname != "") {
-										if (kname == name) {
-											msg = "<C>~o~" + std::string(name) + "</C> ~s~commited suicide.";
-										}
-										else if (kname == PLAYER::GET_PLAYER_NAME(playerId)) {
-											msg = "~y~<C>You</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
-										}
-										else {
-											msg = "~y~<C>" + kname + "</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
-										}
-									}
-								}
-								set_status_text((char*)msg.c_str());
-							}
+							UI::SET_BLIP_SPRITE(playerdb[i].blip, 274); // Death blip ('X')
+							UI::SET_BLIP_NAME_TO_PLAYER_NAME(playerdb[i].blip, i);
+							UI::_0x5FBCA48327B914DF(playerdb[i].blip, 0);
 						}
 
-						playerdb[i].wasDead = true;
-					}
-					else
-					{
-						playerdb[i].wasDead = false;
-					}
-
-					if ((!playerdb[i].head || playerdb[i].ped != pedId) && toggle_allowed("misc_player_names_overhead"))
-					{
-						unsigned int headDisplayId = UI::_0xBFEFE3321A3F5015(pedId, (char*)"", 0, 0, (char*)"", 0); // CREATE_PED_HEAD_DISPLAY
-
-						if (UI::_0x4E929E7A5796FD26(headDisplayId))
+						if (featureDeathNotifications)
 						{
-							playerdb[i].head = headDisplayId;
-							if (featurePlayerHeadDisplay)
+							std::string msg = "<C>~o~" + name + "</C> ~s~died.";
+							Hash weaponHash;
+							Entity e = NETWORK::NETWORK_GET_ENTITY_KILLER_OF_PLAYER(i, &weaponHash);
+							if (PED::IS_PED_A_PLAYER(e)) {
+								Player killer = NETWORK::_0x6C0E2E0125610278(e); // _NETWORK_GET_PLAYER_FROM_PED
+								std::string kname = PLAYER::GET_PLAYER_NAME(killer);
+								if (kname != "") {
+									if (kname == name) {
+										msg = "<C>~o~" + name + "</C> ~s~commited suicide.";
+									}
+									else if (kname == PLAYER::GET_PLAYER_NAME(playerId)) {
+										msg = "~y~<C>You</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
+									}
+									else {
+										msg = "~y~<C>" + kname + "</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
+									}
+								}
+							}
+							set_status_text((char*)msg.c_str());
+						}
+					}
+
+					if (UI::_0x4E929E7A5796FD26(headDisplayId))
+					{
+						playerdb[i].head = headDisplayId;
+						if (featurePlayerHeadDisplay)
+						{
+							UI::_0xDEA2B8283BAA3944(headDisplayId, (char*)name.c_str());
+							Ped playerPed = PLAYER::PLAYER_PED_ID();
+							if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(playerPed, playerdb[i].ped, 17) && !(!featurePlayerVehHeadDisplay && PED::IS_PED_IN_ANY_VEHICLE(playerdb[i].ped, 0)))
 							{
-								UI::_0xDEA2B8283BAA3944(headDisplayId, (char*)name);
-								Ped playerPed = PLAYER::PLAYER_PED_ID();
-								if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(playerPed, playerdb[i].ped, 17) && !(!featurePlayerVehHeadDisplay && PED::IS_PED_IN_ANY_VEHICLE(playerdb[i].ped, 0)))
-								{
-									UI::_0x63BB75ABEDC1F6A0(headDisplayId, 0, 1);
-								}
-								else
-								{
-									UI::_0x63BB75ABEDC1F6A0(headDisplayId, 0, 0);
-								}
+								UI::_0x63BB75ABEDC1F6A0(headDisplayId, 0, 1);
+							}
+							else
+							{
+								UI::_0x63BB75ABEDC1F6A0(headDisplayId, 0, 0);
 							}
 						}
 					}
 
 					if (playerWasDisconnected || !UI::DOES_BLIP_EXIST(playerdb[i].blip))
 					{
-						if (featurePlayerBlips && toggle_allowed("misc_player_blips"))
+						if (featurePlayerBlips)
 						{
 							playerdb[i].blip = UI::ADD_BLIP_FOR_ENTITY(pedId);
 							UI::SET_BLIP_NAME_TO_PLAYER_NAME(playerdb[i].blip, i);
@@ -1578,15 +1377,16 @@ void update_features()
 						{
 							if (featurePlayerNotifications)
 							{
-								std::string msg = "~g~<C>" + std::string(name) + "</C> ~s~joined.";
+								std::string msg = "~g~<C>" + name + "</C> ~s~joined.";
 								set_status_text((char*)msg.c_str());
 							}
 
 							playerdb[i].name = name;
 						}
+						playerdb[i].ped = pedId;
 					}
 
-					if (featurePlayerBlips && toggle_allowed("misc_player_blips")) {
+					if (featurePlayerBlips) {
 
 						int sprite = 1;
 
@@ -1654,13 +1454,11 @@ void update_features()
 
 						UI::SET_BLIP_SCALE(playerdb[i].blip, UI::IS_PAUSE_MENU_ACTIVE() ? 1.2 : 0.8);
 					}
-
-					playerdb[i].ped = pedId;
 				}
 			}
 			else if (playerdb[i].name != "")
 			{
-				if (featurePlayerNotifications && toggle_allowed("misc_player_notifications"))
+				if (featurePlayerNotifications)
 				{
 					std::string msg = "~r~<C>" + playerdb[i].name + "</C> ~s~left.";
 					set_status_text((char*)msg.c_str());
@@ -1727,20 +1525,20 @@ void update_features()
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
 	BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(playerPed);
 
-	if (featurePlayerInvincibleUpdated && toggle_allowed("player_invincible"))
+	if (featurePlayerInvincibleUpdated)
 	{
 		if (bPlayerExists && !featurePlayerInvincible)
 			PLAYER::SET_PLAYER_INVINCIBLE(player, FALSE);
 		featurePlayerInvincibleUpdated = false;
 	}
-	if (featurePlayerInvincible && toggle_allowed("player_invincible"))
+	if (featurePlayerInvincible)
 	{
 		if (bPlayerExists)
 			PLAYER::SET_PLAYER_INVINCIBLE(player, TRUE);
 	}
 
 	//keep clean
-	if (featureKeepClean && toggle_allowed("player_keep_clean"))
+	if (featureKeepClean)
 	{
 		if (bPlayerExists && !featureKeepWet)
 			PED::SET_PED_WETNESS_HEIGHT(playerPed, -2.0);
@@ -1748,7 +1546,7 @@ void update_features()
 		PED::CLEAR_PED_LAST_DAMAGE_BONE(playerPed);
 	}
 
-	if (featureKeepWet && toggle_allowed("player_keep_wet"))
+	if (featureKeepWet)
 	{
 		if (bPlayerExists)
 			PED::SET_PED_WETNESS_HEIGHT(playerPed, 2.0);
@@ -1756,7 +1554,7 @@ void update_features()
 
 
 	//Wanted Level Frozen - prevents stars increasing/decreasing
-	if (featureWantedLevelFrozen && toggle_allowed("player_freeze_wanted"))
+	if (featureWantedLevelFrozen)
 	{
 		if (featureWantedLevelFrozenUpdated)
 		{
@@ -1786,7 +1584,7 @@ void update_features()
 			set_status_text("You must have a Wanted Level first.");
 		}
 	}
-	if (featureWantedLevelFrozenUpdated && toggle_allowed("player_freeze_wanted"))
+	if (featureWantedLevelFrozenUpdated)
 	{
 		if (!featureWantedLevelFrozen)
 		{
@@ -1798,7 +1596,7 @@ void update_features()
 
 
 	// player never wanted
-	if (featurePlayerNeverWanted && toggle_allowed("player_never_wanted"))
+	if (featurePlayerNeverWanted)
 	{
 		if (bPlayerExists)
 		{
@@ -1812,7 +1610,7 @@ void update_features()
 	}
 
 	// police ignore player
-	if (featurePlayerIgnoredByPolice && toggle_allowed("player_police_ignored"))
+	if (featurePlayerIgnoredByPolice)
 	{
 		if (bPlayerExists)
 		{
@@ -1829,7 +1627,7 @@ void update_features()
 	}
 
 	// everyone ignores player
-	if (featurePlayerIgnoredByAll && toggle_allowed("player_ignored"))
+	if (featurePlayerIgnoredByAll)
 	{
 		if (bPlayerExists)
 		{
@@ -1857,7 +1655,7 @@ void update_features()
 
 
 	// player special ability
-	if (featurePlayerUnlimitedAbility && toggle_allowed("player_unlimited_stamina"))
+	if (featurePlayerUnlimitedAbility)
 	{
 		if (bPlayerExists)
 			PLAYER::SPECIAL_ABILITY_FILL_METER(player, 1);
@@ -1865,13 +1663,13 @@ void update_features()
 	}
 
 	// player no noise
-	if (featurePlayerNoNoiseUpdated && toggle_allowed("player_silent"))
+	if (featurePlayerNoNoiseUpdated)
 	{
 		if (bPlayerExists && !featurePlayerNoNoise)
 			PLAYER::SET_PLAYER_NOISE_MULTIPLIER(player, 1.0);
 		featurePlayerNoNoiseUpdated = false;
 	}
-	if (featurePlayerNoNoise && toggle_allowed("player_silent"))
+	if (featurePlayerNoNoise)
 		PLAYER::SET_PLAYER_NOISE_MULTIPLIER(player, 0.0);
 
 	// player fast swim
@@ -1881,7 +1679,7 @@ void update_features()
 			PLAYER::SET_SWIM_MULTIPLIER_FOR_PLAYER(player, 1.0);
 		featurePlayerFastSwimUpdated = false;
 	}
-	if (featurePlayerFastSwim && toggle_allowed("player_fast_swim"))
+	if (featurePlayerFastSwim)
 		PLAYER::SET_SWIM_MULTIPLIER_FOR_PLAYER(player, 1.49);
 
 	// player fast run
@@ -1891,18 +1689,18 @@ void update_features()
 			PLAYER::SET_RUN_SPRINT_MULTIPLIER_FOR_PLAYER(player, 1.0);
 		featurePlayerFastRunUpdated = false;
 	}
-	if (featurePlayerFastRun && toggle_allowed("player_fast_run"))
+	if (featurePlayerFastRun)
 		PLAYER::SET_RUN_SPRINT_MULTIPLIER_FOR_PLAYER(player, 1.49);
 
 	// player super jump
-	if (featurePlayerSuperJump && toggle_allowed("player_super_jump"))
+	if (featurePlayerSuperJump)
 	{
 		if (bPlayerExists)
 			GAMEPLAY::SET_SUPER_JUMP_THIS_FRAME(player);
 	}
 
 	//player no ragdoll
-	if (featureNoRagDoll && toggle_allowed("player_no_ragdoll"))
+	if (featureNoRagDoll)
 	{
 		PED::SET_PED_CAN_RAGDOLL(playerPed, 0); //CANNOT ragdoll
 	}
@@ -1927,7 +1725,7 @@ void update_features()
 	}
 
 	//Player Invisible
-	if (featurePlayerInvisibleUpdated && toggle_allowed("player_invisible"))
+	if (featurePlayerInvisibleUpdated)
 	{
 		featurePlayerInvisibleUpdated = false;
 		if (bPlayerExists && featurePlayerInvisible)
@@ -1935,21 +1733,19 @@ void update_features()
 		else if (bPlayerExists){ ENTITY::SET_ENTITY_VISIBLE(playerPed, true); }
 	}
 
-	if (featurePlayerDrunkUpdated && toggle_allowed("player_drunk"))
+	if (featurePlayerDrunkUpdated)
 	{
 		featurePlayerDrunkUpdated = false;
 		if (featurePlayerDrunk)
 		{
-			const char* CLIPSET_DRUNK = "move_m@drunk@verydrunk";
 			STREAMING::REQUEST_ANIM_SET((char*)CLIPSET_DRUNK);
-			submit_call_on_result([=]()
+			while (!STREAMING::HAS_ANIM_SET_LOADED((char*)CLIPSET_DRUNK))
 			{
-				return STREAMING::HAS_ANIM_SET_LOADED((char*)CLIPSET_DRUNK);
-			}, [=]()
-			{
-				PED::SET_PED_MOVEMENT_CLIPSET(playerPed, (char*)CLIPSET_DRUNK, 1.0f);
-				CAM::SHAKE_GAMEPLAY_CAM("DRUNK_SHAKE", 1.0f);
-			});
+				WAIT(0);
+			}
+			const char* CLIPSET_DRUNK = "move_m@drunk@verydrunk";
+			PED::SET_PED_MOVEMENT_CLIPSET(playerPed, (char*)CLIPSET_DRUNK, 1.0f);
+			CAM::SHAKE_GAMEPLAY_CAM("DRUNK_SHAKE", 1.0f);
 		}
 		else
 		{
@@ -2270,7 +2066,7 @@ void update_features()
 				for (int i = 0; i < sizeof(groundCheckHeight) / sizeof(float); i++)
 				{
 					ENTITY::SET_ENTITY_COORDS_NO_OFFSET(e, coords.x, coords.y, groundCheckHeight[i], 0, 0, 1);
-					//WAIT(100);
+					WAIT(100);
 					if (GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(coords.x, coords.y, groundCheckHeight[i], &coords.z))
 					{
 						groundFound = true;
@@ -2358,7 +2154,6 @@ void update_features()
 			}
 		}
 
-#if 0
 		if (pointingAction)
 		{
 			if (AI::_0x921CE12C489C4C41(playerPed))
@@ -2386,7 +2181,6 @@ void update_features()
 				STREAMING::REMOVE_ANIM_DICT("anim@mp_point");
 			}
 		}
-#endif
 	}
 #endif
 }
@@ -2448,24 +2242,19 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 		{
 			if (!NETWORK::NETWORK_IS_PLAYER_CONNECTED(targetId))
 				set_status_text("Player has ~r~<C>disconnected</C>.");
+
 			else if (featureSpectate)
 			{
 				if (!CAM::IS_SCREEN_FADED_OUT()) {
 					if (!CAM::IS_SCREEN_FADING_OUT()) {
 						CAM::DO_SCREEN_FADE_OUT(1000);
-
-						submit_call_on_result([]() 
-						{
-							return CAM::IS_SCREEN_FADED_OUT();
-						}, [=]()
-						{
-							Vector3 targetpos = ENTITY::GET_ENTITY_COORDS(target.ped, 0);
-							STREAMING::REQUEST_COLLISION_AT_COORD(targetpos.x, targetpos.y, targetpos.z);
-							NETWORK::NETWORK_SET_IN_SPECTATOR_MODE(1, target.ped);
-							if (CAM::IS_SCREEN_FADED_OUT()) {
-								CAM::DO_SCREEN_FADE_IN(1000);
-							}
-						});
+						while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
+						Vector3 targetpos = ENTITY::GET_ENTITY_COORDS(target.ped, 0);
+						STREAMING::REQUEST_COLLISION_AT_COORD(targetpos.x, targetpos.y, targetpos.z);
+						NETWORK::NETWORK_SET_IN_SPECTATOR_MODE(1, target.ped);
+						if (CAM::IS_SCREEN_FADED_OUT()) {
+							CAM::DO_SCREEN_FADE_IN(1000);
+						}
 					}
 				}
 				set_status_text("Spectating: ~b~<C>" + target.name + "</C>.");
@@ -2475,18 +2264,13 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 				if (!CAM::IS_SCREEN_FADED_OUT()) {
 					if (!CAM::IS_SCREEN_FADING_OUT()) {
 						CAM::DO_SCREEN_FADE_OUT(1000);
-						submit_call_on_result([]()
-						{
-							return CAM::IS_SCREEN_FADED_OUT();
-						}, [=]()
-						{
-							Vector3 targetposME = ENTITY::GET_ENTITY_COORDS(playerPed, 0);
-							STREAMING::REQUEST_COLLISION_AT_COORD(targetposME.x, targetposME.y, targetposME.z);
-							NETWORK::NETWORK_SET_IN_SPECTATOR_MODE(0, target.ped);
-							if (CAM::IS_SCREEN_FADED_OUT()) {
-								CAM::DO_SCREEN_FADE_IN(1000);
-							}
-						});
+						while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
+						Vector3 targetposME = ENTITY::GET_ENTITY_COORDS(playerPed, 0);
+						STREAMING::REQUEST_COLLISION_AT_COORD(targetposME.x, targetposME.y, targetposME.z);
+						NETWORK::NETWORK_SET_IN_SPECTATOR_MODE(0, target.ped);
+						if (CAM::IS_SCREEN_FADED_OUT()) {
+							CAM::DO_SCREEN_FADE_IN(1000);
+						}
 					}
 				}
 			}
@@ -2660,13 +2444,13 @@ void process_online_player_options(bool(*onConfirmation)(MenuItem<int> value), b
 	std::string caption = target.name;
 
 	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Spectate", &featureSpectate, NULL, true, FT("player_spectate") },
-		{ "Draw Route On Map", &featureDrawRoute, NULL, true, FT("player_draw_route") },
-		{ "Teleport To Player", NULL, NULL, true, FT("player_teleport") },
-		{ "Teleport Into Player Vehicle", NULL, NULL, true, FT("player_teleport_vehicle") },
-		{ "Mark As Friendly", NULL, NULL, true, FT("player_mark_blip") },
-		{ "Mark As Hostile", NULL, NULL, true, FT("player_mark_blip") },
-		{ "Clear Blip Mark", NULL, NULL, true, FT("player_mark_blip") }
+		{ "Spectate", &featureSpectate, NULL, true },
+		{ "Draw Route On Map", &featureDrawRoute, NULL, true },
+		{ "Teleport To Player", NULL, NULL, true },
+		{ "Teleport Into Player Vehicle", NULL, NULL, true },
+		{ "Mark As Friendly", NULL, NULL, true },
+		{ "Mark As Hostile", NULL, NULL, true },
+		{ "Clear Blip Mark", NULL, NULL, true }
 	};
 
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexOnlinePlayerOptions, caption, onconfirm_online_player_options_menu);
@@ -2768,27 +2552,27 @@ void process_player_menu()
 	std::string caption = "Player Options";
 
 	StandardOrToggleMenuDef lines[] = {
-		{ "Player Skin", NULL, NULL, false, FT("player_skin")},
-		{ "Clean & Heal Player", NULL, NULL, true, FT("player_heal") },
-		{ "Give Armor To Player", NULL, NULL, true, FT("player_armour") },
-		{ "Keep Clean", &featureKeepClean, NULL, true, FT("player_keep_clean") },
-		{ "Invincible", &featurePlayerInvincible, &featurePlayerInvincibleUpdated, true, FT("player_invincible") },
-		{ "No Ragdoll", &featureNoRagDoll, NULL, true, FT("player_no_ragdoll") },
-		{ "Drunk", &featurePlayerDrunk, &featurePlayerDrunkUpdated, true, FT("player_drunk") },
-		{ "Stamina", &featurePlayerUnlimitedAbility, NULL, true, FT("player_unlimited_stamina") },
-		{ "Super Jump", &featurePlayerSuperJump, NULL, true, FT("player_super_jump") },
-		{ "Fast Run", &featurePlayerFastRun, &featurePlayerFastRunUpdated, true, FT("player_fast_run") },
-		{ "Fast Swim", &featurePlayerFastSwim, &featurePlayerFastSwimUpdated, true, FT("player_fast_swim") },
-		{ "Night Vision", &featureNightVision, NULL, true, FT("player_night_vision") },
-		{ "Thermal Vision", &featureThermalVision, NULL, true, FT("player_thermal_vision") },
-		{ "Wet", &featureKeepWet, NULL, true, FT("player_wet") },
-		{ "Invisibility", &featurePlayerInvisible, &featurePlayerInvisibleUpdated, true, FT("player_invisible") },
-		{ "Silent", &featurePlayerNoNoise, &featurePlayerNoNoiseUpdated, true, FT("player_silent") },
-		{ "Everyone Ignores You", &featurePlayerIgnoredByAll, &featurePlayerIgnoredByAllUpdated, true, FT("player_ignored") },
-		{ "Police Ignore You", &featurePlayerIgnoredByPolice, &featurePlayerIgnoredByPoliceUpdated, true, FT("player_police_ignored") },
-		{ "Never Wanted", &featurePlayerNeverWanted, &featurePlayerNeverWantedUpdated, true, FT("player_never_wanted") },
-		{ "Wanted Level", NULL, NULL, true, WANTED, FT("player_wanted_level") },
-		{ "Freeze Wanted Level", &featureWantedLevelFrozen, &featureWantedLevelFrozenUpdated, true, FT("player_freeze_wanted") }
+		{ "Player Skin", NULL, NULL, false},
+		{ "Clean & Heal Player", NULL, NULL, true},
+		{ "Give Armor To Player", NULL, NULL, true },
+		{ "Keep Clean", &featureKeepClean, NULL, true },
+		{ "Invincible", &featurePlayerInvincible, &featurePlayerInvincibleUpdated, true },
+		{ "No Ragdoll", &featureNoRagDoll, NULL, true },
+		{ "Drunk", &featurePlayerDrunk, &featurePlayerDrunkUpdated, true },
+		{ "Stamina", &featurePlayerUnlimitedAbility, NULL, true },
+		{ "Super Jump", &featurePlayerSuperJump, NULL, true },
+		{ "Fast Run", &featurePlayerFastRun, &featurePlayerFastRunUpdated, true },
+		{ "Fast Swim", &featurePlayerFastSwim, &featurePlayerFastSwimUpdated, true },
+		{ "Night Vision", &featureNightVision, NULL, true },
+		{ "Thermal Vision", &featureThermalVision, NULL, true },
+		{ "Wet", &featureKeepWet, NULL, true },
+		{ "Invisibility", &featurePlayerInvisible, &featurePlayerInvisibleUpdated, true },
+		{ "Silent", &featurePlayerNoNoise, &featurePlayerNoNoiseUpdated, true },
+		{ "Everyone Ignores You", &featurePlayerIgnoredByAll, &featurePlayerIgnoredByAllUpdated, true },
+		{ "Police Ignore You", &featurePlayerIgnoredByPolice, &featurePlayerIgnoredByPoliceUpdated, true },
+		{ "Never Wanted", &featurePlayerNeverWanted, &featurePlayerNeverWantedUpdated, true },
+		{ "Wanted Level", NULL, NULL, true, WANTED},
+		{ "Freeze Wanted Level", &featureWantedLevelFrozen, &featureWantedLevelFrozenUpdated, true }
 	};
 
 	draw_menu_from_struct_def(lines, sizeof(lines) / sizeof(*lines), &activeLineIndexPlayer, caption, onconfirm_player_menu);
@@ -4071,7 +3855,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 	switch (activeLineIndexMisc)
 	{
 	case 0:
-		if (featureMapBlips && toggle_allowed("misc_map_blips"))
+		if (featureMapBlips)
 		{
 			if (!blipCheck2)
 			{
@@ -4081,11 +3865,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 		}
 		else
 		{
-			if (blipCheck2)
-			{
-				unblips();
-				blipCheck2 = false;
-			}
+			set_status_text("~r~Please wait a moment, then rejoin to remove blips.");
 		}
 		break;
 	case 1:
@@ -4155,16 +3935,13 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 		process_voice_menu();
 		break;
 	case 10: //portable radio
-		if (toggle_allowed("misc_portable_radio"))
-		{
-			if (featurePlayerRadio || featurePlayerRadioUpdated)
+		if (featurePlayerRadio || featurePlayerRadioUpdated)
 			{
 				if (featurePlayerRadio)
 					AUDIO::SET_MOBILE_RADIO_ENABLED_DURING_GAMEPLAY(true);
 				else
 					AUDIO::SET_MOBILE_RADIO_ENABLED_DURING_GAMEPLAY(false);
 			}
-		}
 		break;
 	case 12: // next radio track
 		AUDIO::SKIP_RADIO_FORWARD();
@@ -4211,26 +3988,26 @@ void process_misc_menu()
 	std::string caption = "Game Settings";
 
 	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Map Location Blips", &featureMapBlips, NULL, true, FT("misc_map_blips") },
-		{ "Player Blips", &featurePlayerBlips, NULL, true, FT("misc_player_blips") },
-		{ "Player Blip Names", &featurePlayerBlipNames, NULL, true, FT("misc_player_blip_names") },
-		{ "Player Names Overhead", &featurePlayerHeadDisplay, NULL, true, FT("misc_player_names_overhead") },
-		{ "Player Names Over Vehicles", &featurePlayerVehHeadDisplay, NULL, true, FT("misc_player_names_vehicles") },
-		{ "Player Blip Cone (Police FOV)", &featurePlayerBlipCone, NULL, true, FT("misc_player_blip_cones") },
-		{ "Police Blips", &featurePoliceBlips, NULL, true, FT("misc_police_blips") },
-		{ "Player Notifications", &featurePlayerNotifications, NULL, true, FT("misc_player_notifications") },
-		{ "Death Notifications", &featureDeathNotifications, NULL, true, FT("misc_death_notifications") },
-		{ "Voice Options", NULL, NULL, false, FT("misc_voice_options") },
-		{ "Radio Always Off", &featureRadioAlwaysOff, &featureRadioAlwaysOffUpdated, true, FT("misc_radio_always_off") },
-		{ "Portable Radio", &featurePlayerRadio, &featurePlayerRadioUpdated, true, FT("misc_portable_radio") },
-		{ "Next Radio Track", NULL, NULL, true, FT("misc_next_radio_track") },
-		{ "Hide Map", &featureHideMap, NULL, true, FT("misc_hide_map") },
-		{ "Large Map", &featureBigHud, &featureBigHudUpdated, true, FT("misc_big_map") },
-		{ "Hide HUD", &featureMiscHideHud, NULL, true, FT("misc_hide_hud") },
-		{ "Hide Area & Street Names", &featureAreaStreetNames, NULL, true, FT("misc_hide_area_names") },
-		{ "Restore Appearance On Respawn", &featureRestoreAppearance, NULL, true, FT("misc_restore_appearance") },
-		{ "Restore Weapons On Respawn", &featureRestoreWeapons, NULL, true, FT("misc_restore_weapons") },
-		{ "Death Cutscene", &featureShowDeathCutscene, NULL, true, FT("misc_death_cutscene") },
+		{ "Map Location Blips", &featureMapBlips, NULL, true },
+		{ "Player Blips", &featurePlayerBlips, NULL, true },
+		{ "Player Blip Names", &featurePlayerBlipNames, NULL, true },
+		{ "Player Names Overhead", &featurePlayerHeadDisplay, NULL, true },
+		{ "Player Names Over Vehicles", &featurePlayerVehHeadDisplay, NULL, true },
+		{ "Player Blip Cone (Police FOV)", &featurePlayerBlipCone, NULL, true },
+		{ "Police Blips", &featurePoliceBlips, NULL, true },
+		{ "Player Notifications", &featurePlayerNotifications, NULL, true },
+		{ "Death Notifications", &featureDeathNotifications, NULL, true },
+		{ "Voice Options", NULL, NULL, false },
+		{ "Radio Always Off", &featureRadioAlwaysOff, &featureRadioAlwaysOffUpdated, true },
+		{ "Portable Radio", &featurePlayerRadio, &featurePlayerRadioUpdated, true },
+		{ "Next Radio Track", NULL, NULL, true },
+		{ "Hide Map", &featureHideMap, NULL, true },
+		{ "Large Map", &featureBigHud, NULL, true },
+		{ "Hide HUD", &featureMiscHideHud, NULL, true },
+		{ "Hide Area & Street Names", &featureAreaStreetNames, NULL, true },
+		{ "Restore Appearance On Respawn", &featureRestoreAppearance, NULL, true },
+		{ "Restore Weapons On Respawn", &featureRestoreWeapons, NULL, true },
+		{ "Death Cutscene", &featureShowDeathCutscene, NULL, true },
 		{ "Reset All Settings", NULL, NULL, false },
 		{ "Info & Credits", NULL, NULL, true }
 	};
@@ -4249,13 +4026,12 @@ bool onconfirm_leave_menu(MenuItem<int> choice)
 	case 0:
 		if (!CAM::IS_SCREEN_FADED_OUT()) {
 			if (!CAM::IS_SCREEN_FADING_OUT()) {
+				CAM::DO_SCREEN_FADE_OUT(500);
 				NETWORK::NETWORK_SESSION_LEAVE_SINGLE_PLAYER();
-#if 0
 				while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
 				if (CAM::IS_SCREEN_FADED_OUT()) {
 					CAM::DO_SCREEN_FADE_IN(500);
 				}
-#endif
 			}
 		}
 		break;
@@ -4314,26 +4090,25 @@ bool onconfirm_main_menu(MenuItem<int> choice)
 void process_main_menu()
 {
 	std::string caption = "~b~LAMBDA ~s~MENU";
-	std::vector<std::tuple<std::string, std::string>> TOP_OPTIONS = {
-		{"Online Players", FT("main_online_players")},
-		{"Player", FT("main_player")},
-		{"Actions", FT("main_actions")},
-		{"Weapons", FT("main_weapons")},
-		{"Vehicles", FT("main_vehicles")},
-		{"World", FT("main_world")},
-		{ "Settings", FT("main_settings") },
-		{ "Leave Session", FT("main_leave") }
+	std::vector<std::string> TOP_OPTIONS = {
+		"Online Players",
+		"Player",
+		"Actions",
+		"Weapons",
+		"Vehicles",
+		"World",
+		"Settings",
+		"Leave Session"
 	};
 
 	MenuItemVector<int> menuItems;
 	for (int i = 0; i < TOP_OPTIONS.size(); i++)
 	{
 		MenuItem<int> item;
-		item.caption = std::get<0>(TOP_OPTIONS[i]);
+		item.caption = TOP_OPTIONS[i];
 		item.value = i;
 		item.isLeaf = (i==7);
 		item.currentMenuIndex = i;
-		item.toggle_name = std::get<1>(TOP_OPTIONS[i]);
 		menuItems.push_back(item);
 	}
 
@@ -4383,7 +4158,6 @@ void reset_globals()
 	featureWantedLevelFrozen = false;
 	featureRestoreWeapons =
 	featureRestoreAppearance =
-	featureBigHudUpdated =
 	featurePlayerInvincibleUpdated =
 	featurePlayerNeverWantedUpdated =
 	featurePlayerIgnoredByPoliceUpdated =
@@ -4454,96 +4228,6 @@ void reset_globals()
 	save_settings();
 #endif
 }
-
-#include <tuple>
-#include <list>
-
-std::list<std::tuple<std::function<bool()>, std::function<void()>>> g_callResults;
-
-void submit_call_on_result(const std::function<bool()>& result, const std::function<void()>& call)
-{
-	g_callResults.push_back({ result, call });
-}
-
-using TMenu = std::tuple<std::function<bool()>, std::function<void(bool)>>;
-
-#include <stack>
-
-std::stack<TMenu> g_menuList;
-
-void set_menu_processor(const std::function<bool()>& process, const std::function<void(bool)>& onExit)
-{
-	g_menuList.push({ process, onExit });
-}
-
-void process_current_menu()
-{
-	if (!g_menuList.empty())
-	{
-		if (!std::get<0>(g_menuList.top())())
-		{
-			auto fn = std::get<1>(g_menuList.top());
-
-			if (fn)
-			{
-				fn(false);
-			}
-
-			g_menuList.pop();
-		}
-	}
-}
-
-#include <msgpack.hpp>
-
-IMPORT void trigger_event(const char* eventName, const void* dataPtr, uint32_t size);
-
-void main_loop()
-{
-	static bool initializedLM = false;
-
-	if (!initializedLM)
-	{
-		msgpack::sbuffer sb;
-		msgpack::packer<msgpack::sbuffer> packer(sb);
-		packer.pack_array(0);
-
-		trigger_event("lambdamenu:started", sb.data(), (uint32_t)sb.size());
-
-		initializedLM = true;
-	}
-
-	if (trainer_switch_pressed())
-	{
-		menu_beep();
-		set_menu_showing(true);
-		process_main_menu();
-	}
-	else if (noclip_switch_pressed())
-	{
-		menu_beep();
-		process_noclip_menu();
-
-	}
-
-	process_current_menu();
-	update_features();
-
-	for (auto it = g_callResults.begin(); it != g_callResults.end(); )
-	{
-		if (std::get<0>(*it)())
-		{
-			std::get<1>(*it)();
-
-			it = g_callResults.erase(it);
-		}
-		else
-		{
-			it++;
-		}
-	}
-}
-
 void RunMain()
 {	
 
@@ -4568,16 +4252,24 @@ void RunMain()
 	// tell cout to use our new locale.
 	std::cout.imbue(comma_locale);
 
-#ifndef SERVER_SIDED
 	while (true)
 	{
-		main_loop();
+		if (trainer_switch_pressed())
+		{
+			menu_beep();
+			set_menu_showing(true);
+			process_main_menu();
+		}
+		else if (noclip_switch_pressed())
+		{
+			menu_beep();
+			process_noclip_menu();
+			
+		}
 
+		update_features();
 		WAIT(0);
 	}
-#else
-	emscripten_set_main_loop(main_loop, 60, false);
-#endif
 }
 
 #ifndef SERVER_SIDED
@@ -4845,9 +4537,13 @@ void save_settings()
 		return;
 	}
 
+	write_text_to_log_file("Saving settings, start");
+
 	if (database != NULL)
 	{
+		write_text_to_log_file("Actually saving");
 		database->store_feature_enabled_pairs(get_feature_enablements());
+		write_text_to_log_file("Save flag released");
 	}
 }
 

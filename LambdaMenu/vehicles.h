@@ -51,11 +51,9 @@ void save_current_vehicle(int slot);
 
 bool onconfirm_spawn_menu_vehicle_selection(MenuItem<std::string> choice);
 
-#include <functional>
+bool do_spawn_vehicle(std::string modelName, std::string modelTitle);
 
-bool do_spawn_vehicle(std::string modelName, std::string modelTitle, const std::function<void(Vehicle)>&);
-
-void do_spawn_vehicle(DWORD modelHash, std::string modelTitle, const std::function<void(Vehicle)>&);
+Vehicle do_spawn_vehicle(DWORD modelHash, std::string modelTitle);
 
 //Paint menus
 

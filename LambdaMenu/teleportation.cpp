@@ -286,7 +286,7 @@ std::vector<tele_location> VOV_LOCATIONS[] = { LOCATIONS_SAFE, LOCATIONS_LANDMAR
 void teleport_to_coords(Entity e, Vector3 coords)
 {
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(e, coords.x, coords.y, coords.z, 0, 0, 1);
-	//WAIT(0);
+	WAIT(0);
 	set_status_text("Teleported");
 }
 
@@ -333,7 +333,7 @@ void teleport_to_marker(Entity e)
 		for (int i = 0; i < sizeof(groundCheckHeight) / sizeof(float); i++)
 		{
 			ENTITY::SET_ENTITY_COORDS_NO_OFFSET(e, coords.x, coords.y, groundCheckHeight[i], 0, 0, 1);
-			//WAIT(100);
+			WAIT(100);
 			if (GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(coords.x, coords.y, groundCheckHeight[i], &coords.z))
 			{
 				groundFound = true;
@@ -418,6 +418,22 @@ bool onconfirm_teleport_location(MenuItem<int> choice)
 		}
 
 		value->isLoaded = true;
+
+		DWORD time = GetTickCount() + 1000;
+		while (GetTickCount() < time)
+		{
+			make_periodic_feature_call();
+			WAIT(0);
+		}
+
+		set_status_text("Scenery loaded");
+
+		time = GetTickCount() + 1000;
+		while (GetTickCount() < time)
+		{
+			make_periodic_feature_call();
+			WAIT(0);
+		}
 	}
 
 	coords.x = value->x;
@@ -451,14 +467,12 @@ bool onconfirm_teleport_location(MenuItem<int> choice)
 				if (!unloadedAnything)
 				{
 					set_status_text("Unloading old scenery...");
-#if 0
 					time = GetTickCount() + 1000;
 					while (GetTickCount() < time)
 					{
 						make_periodic_feature_call();
 						WAIT(0);
 					}
-#endif
 				}
 
 				if ( ENTITY::DOES_ENTITY_EXIST ( PLAYER::PLAYER_PED_ID () ) )// && STREAMING::IS_IPL_ACTIVE("plg_01") == 1)
@@ -488,6 +502,13 @@ bool onconfirm_teleport_location(MenuItem<int> choice)
 	if (unloadedAnything)
 	{
 		set_status_text("Old scenery unloaded");
+
+		time = GetTickCount() + 1000;
+		while (GetTickCount() < time)
+		{
+			make_periodic_feature_call();
+			WAIT(0);
+		}
 	}
 
 	return false;

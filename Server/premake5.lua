@@ -17,7 +17,7 @@ solution 'lm-sv'
 
 		removefiles { '../**/database_sqlite.cpp', '../**/sqlite3.c' }
 
-		includedirs { '../Server/Include/', '../Vendor/msgpack-c/include/' }
+		includedirs { '../Server/Include/' }
 
 		defines { 'SERVER_SIDED' }
 
