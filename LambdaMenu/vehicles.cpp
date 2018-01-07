@@ -171,15 +171,6 @@ const std::vector<std::string> CAPTIONS_OFFROAD{ "Karin Technical Custom", "HVY 
 
 const std::vector<std::string> CAPTIONS_VIP{ "Benefactor Schafter V12", "Benefactor Schafter V12 (Armored)", "Benefactor Schafter LWB", "Benefactor Schafter LWB (Armored)", "Benefactor Turreted Limo", "Benefactor XLS", "Benefactor XLS (Armored)", "Enus Cognoscenti", "Enus Cognoscenti (Armored)", "Enus Cognoscenti 55", "Enus Cognoscenti 55 (Armored)", "Gallivanter Baller LE", "Gallivanter Baller LE (Armored)", "Gallivanter Baller LE LWB", "Gallivanter Baller LE LWB (Armored)" };
 
-
-const std::vector<std::string> VALUES_SUPERCARS{ "LE7B", "BANSHEE2", "VOLTIC", "SHEAVA", "CHEETAH", "PROTOTIPO", "TURISMOR", "SULTANRS", "ENTITYXF", "INFERNUS", "OSIRIS", "REAPER", "VACCA", "ZENTORNO", "PFISTER811", "T20", "TYRUS", "ADDER", "BULLET", "FMJ" };
-
-const std::vector<std::string> VALUES_SPORTS{ "ALPHA", "ELEGY2", "FELTZER2", "SCHWARZER", "SURANO", "RAPTOR",  "BANSHEE", "BUFFALO", "BUFFALO2", "BUFFALO3", "VERLIERER2", "TAMPA2", "MASSACRO", "MASSACRO2", "RAPIDGT", "RAPIDGT2", "SEVEN70", "BLISTA2", "BLISTA3", "JESTER", "JESTER2", "BESTIAGTS", "CARBONIZZARE", "KHAMELION", "COQUETTE", "FUTO", "KURUMA", "KURUMA2", "SULTAN", "FUROREGT", "TROPOS", "PENUMBRA", "NINEF", "NINEF2", "OMNIS", "LYNX", "COMET2", "FUSILADE" };
-
-const std::vector<std::string> VALUES_SPORTCLASSICS{ "MANANA", "BTYPE", "BTYPE3", "FELTZER3", "TORNADO", "TORNADO3", "TORNADO2", "TORNADO4", "TORNADO6", "JB700", "STINGER", "STINGERGT", "COQUETTE2", "CASCO", "PIGALLE", "MONROE", "ZTYPE", "PEYOTE" };
-
-const std::vector<std::string> VALUES_MUSCLE{ "BUCCANEER", "BTYPE2", "LURCHER", "VIRGO", "GAUNTLET", "GAUNTLET2", "PICADOR", "MAMBA", "TAMPA", "SABREGT", "STALION", "STALION2", "VIGERO", "VOODOO2", "VIRGO3", "DUKES2", "DUKES", "NIGHTSHADE", "PHOENIX", "RUINER", "COQUETTE3", "BLADE", "CHINO", "DOMINATOR", "DOMINATOR2", "HOTKNIFE", "SLAMVAN", "SLAMVAN2", "FACTION" };
-
 const std::vector<std::string> VALUES_SUPERCARS{ "VAGNER", "XA21", "GP1", "ITALIGTB", "ITALIGTB2", "NERO", "NERO2", "TEMPESTA", "PENETRATOR", "VOLTIC2", "LE7B", "BANSHEE2", "VOLTIC", "SHEAVA", "CHEETAH", "PROTOTIPO", "TURISMOR", "SULTANRS", "ENTITYXF", "INFERNUS", "OSIRIS", "REAPER", "VACCA", "ZENTORNO", "PFISTER811", "T20", "TYRUS", "ADDER", "BULLET", "FMJ" };
 
 const std::vector<std::string> VALUES_SPORTS{ "RUSTON", "SPECTER", "SPECTER2", "COMET3", "ALPHA", "ELEGY2", "ELEGY", "FELTZER2", "SCHWARZER", "SURANO", "RAPTOR",  "BANSHEE", "BUFFALO", "BUFFALO2", "BUFFALO3", "VERLIERER2", "TAMPA2", "MASSACRO", "MASSACRO2", "RAPIDGT", "RAPIDGT2", "SEVEN70", "BLISTA2", "BLISTA3", "JESTER", "JESTER2", "BESTIAGTS", "CARBONIZZARE", "KHAMELION", "COQUETTE", "FUTO", "KURUMA", "KURUMA2", "SULTAN", "FUROREGT", "TROPOS", "PENUMBRA", "NINEF", "NINEF2", "OMNIS", "LYNX", "COMET2", "FUSILADE" };
