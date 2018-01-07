@@ -18,7 +18,7 @@
 #include <tchar.h>
 #include <windows.h>
 
-#include <msxml6.dll> //read the GitHub project readme regarding what you need to make this work
+#import <msxml6.dll> //read the GitHub project readme regarding what you need to make this work
 
 #include "keyboard.h"
 
