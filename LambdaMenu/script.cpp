@@ -3180,7 +3180,7 @@ int activeLineIndexTime = 0;
 bool onconfirm_time_menu(MenuItem<int> choice)
 {
 	int right_now = TIME::GET_CLOCK_HOURS();
-	int now;
+	//int now;
 
 	switch (activeLineIndexTime)
 	{

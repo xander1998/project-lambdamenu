@@ -12,12 +12,10 @@
 * (C) Alexander Blade 2015
 */
 
-#include "anims.h";
-#include "menu_functions.h";
-#include "debuglog.h";
-
+#include "anims.h"
+#include "menu_functions.h"
+#include "debuglog.h"
 #include <sstream>
-
 #include <vector>
 
 TreeNode *rootNode;
