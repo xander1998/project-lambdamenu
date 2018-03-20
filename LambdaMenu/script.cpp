@@ -3970,10 +3970,11 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 		process_reset_globals();
 		break;
 	case 21:
-		set_status_text("           <C>~b~Lambda ~s~Menu 2</C>");
+		set_status_text("           <C>~b~Lambda ~s~Menu 2.1</C>");
 		set_status_text("Contributors:");
 		set_status_text("Oui, TheDroidGeek & ");
 		set_status_text("The FiveM Collective");
+		set_status_text("Firecul");
 		break;
 		// switchable features
 	default:
