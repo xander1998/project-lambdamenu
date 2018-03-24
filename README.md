@@ -2,4 +2,4 @@
 
 In-game menu for FiveM/Project Λ.
 
-Project maintained by the CitizenFX Collective.
+Project maintained by Firecul in lieu of the CitizenFX Collective.
