@@ -18,7 +18,7 @@
 
 #pragma comment(lib, "Shlwapi.lib")
 
-#define MAX_PLAYERS 32
+#define MAX_PLAYERS 256
 
 #include "io.h"
 #include "config_io.h"
