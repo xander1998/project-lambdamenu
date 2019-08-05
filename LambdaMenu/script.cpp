@@ -3970,7 +3970,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 		process_reset_globals();
 		break;
 	case 21:
-		set_status_text("<C>~b~Lambda ~s~Menu 2.3</C>");
+		set_status_text("<C>~b~Lambda ~s~Menu 2.4</C>");
 		set_status_text("Contributors:");
 		set_status_text("Oui, TheDroidGeek & ");
 		set_status_text("The FiveM Collective");
