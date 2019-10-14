@@ -63,9 +63,9 @@ void draw_menu_line(std::string caption, float lineWidth, float lineHeight, floa
 		//rect_col[0] = 102;
 		//rect_col[1] = 153;
 		//rect_col[2] = 255;
-		rect_col[0] = 93;
-		rect_col[1] = 182;
-		rect_col[2] = 229;
+		rect_col[0] = 242;
+		rect_col[1] = 133;
+		rect_col[2] = 16;
 		rect_col[3] = 200;
 
 

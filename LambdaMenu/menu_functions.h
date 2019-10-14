@@ -249,7 +249,7 @@ inline void draw_menu_header_line(std::string caption, float lineWidth, float li
 	if (pageCount > 1)
 	{
 		std::ostringstream ss;
-		ss << " " << curPage << " of " << pageCount;
+		ss << " <FONT COLOR='#F28510'>" << curPage << " of " << pageCount;
 		
 		//text_col[0] = 102;
 		//text_col[1] = 153;
@@ -293,7 +293,7 @@ void draw_menu_item_line(MenuItem<T> *item, float lineWidth, float lineHeight, f
 		rect_col[4] = { 0, 0, 0, 50 };
 	float text_scale = 0.33;
 	int font = 0;
-	bool outline = false;
+	bool outline = true;
 	bool dropShadow = false;
 
 	// correcting values for active line
@@ -303,12 +303,9 @@ void draw_menu_item_line(MenuItem<T> *item, float lineWidth, float lineHeight, f
 		text_col[1] = 255;
 		text_col[2] = 255;
 
-		//rect_col[0] = 102;
-		//rect_col[1] = 153;
-		//rect_col[2] = 255;
-		rect_col[0] = 93;
-		rect_col[1] = 182;
-		rect_col[2] = 229;
+		rect_col[0] = 242;
+		rect_col[1] = 133;
+		rect_col[2] = 16;
 		rect_col[3] = 200;
 
 		if (rescaleText) text_scale = 0.33;
@@ -344,7 +341,7 @@ void draw_menu_item_line(MenuItem<T> *item, float lineWidth, float lineHeight, f
 
 	if (outline)
 	{
-		//UI::SET_TEXT_OUTLINE();
+		UI::SET_TEXT_OUTLINE();
 	}
 
 	if (dropShadow)
