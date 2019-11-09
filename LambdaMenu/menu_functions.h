@@ -33,6 +33,7 @@
 #include <vector>
 
 #include <memory>
+#include "colors.h"
 
 #pragma warning(disable : 4244 4305) // double <-> float conversions
 
@@ -249,7 +250,7 @@ inline void draw_menu_header_line(std::string caption, float lineWidth, float li
 	if (pageCount > 1)
 	{
 		std::ostringstream ss;
-		ss << " <FONT COLOR='#F28510'>" << curPage << " of " << pageCount;
+		ss << " <FONT COLOR='" + menuColor_HEX + "'>" << curPage << " of " << pageCount;
 		
 		//text_col[0] = 102;
 		//text_col[1] = 153;
@@ -303,9 +304,9 @@ void draw_menu_item_line(MenuItem<T> *item, float lineWidth, float lineHeight, f
 		text_col[1] = 255;
 		text_col[2] = 255;
 
-		rect_col[0] = 242;
-		rect_col[1] = 133;
-		rect_col[2] = 16;
+		rect_col[0] = menuColor_RGB[0];
+		rect_col[1] = menuColor_RGB[1];
+		rect_col[2] = menuColor_RGB[2];
 		rect_col[3] = 200;
 
 		if (rescaleText) text_scale = 0.33;

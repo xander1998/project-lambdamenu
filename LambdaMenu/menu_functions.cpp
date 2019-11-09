@@ -14,6 +14,7 @@
 
 #include "menu_functions.h"
 #include "script.h"
+#include "colors.h"
 
 std::string centreScreenStatusText;
 DWORD centreScreenStatusTextDrawTicksMax;
@@ -63,9 +64,9 @@ void draw_menu_line(std::string caption, float lineWidth, float lineHeight, floa
 		//rect_col[0] = 102;
 		//rect_col[1] = 153;
 		//rect_col[2] = 255;
-		rect_col[0] = 242;
-		rect_col[1] = 133;
-		rect_col[2] = 16;
+		rect_col[0] = menuColor_RGB[0];
+		rect_col[1] = menuColor_RGB[1];
+		rect_col[2] = menuColor_RGB[2];
 		rect_col[3] = 200;
 
 

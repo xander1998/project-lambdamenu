@@ -15,6 +15,7 @@
 #include "menu_functions.h"
 #include "weapons.h"
 #include "config_io.h"
+#include <regex>
 
 const std::vector<std::string> MENU_WEAPON_CATEGORIES{ "Melee", "Handguns", "Submachine Guns", "Assault Rifles", "Shotguns", "Sniper Rifles", "Heavy Weapons", "Thrown Weapons", "Spawn Weapon By Name", "Spawn Component By Name" };
 
@@ -203,7 +204,6 @@ bool redrawWeaponMenuAfterEquipChange = false;
 std::string previousWeaponModelName;
 std::string previousWeaponComponentModelName;
 
-
 bool process_individual_weapon_menu(int weaponIndex)
 {
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
@@ -213,15 +213,7 @@ bool process_individual_weapon_menu(int weaponIndex)
 	lastSelectedWeapon = weaponIndex;
 
 	std::string caption = VOV_WEAPON_CAPTIONS[lastSelectedWeaponCategory].at(weaponIndex);
-	if (caption.compare("Pistol .50") == 0)
-	{
-		caption = "Pistol"; //menu title can't handle symbols
-	}
-
-	if (caption.compare("Up-n-Atomizer") == 0)
-	{
-		caption = "Up N Atomizer";
-	}
+	
 
 	std::string value = VOV_WEAPON_VALUES[lastSelectedWeaponCategory].at(weaponIndex);
 	MenuItemVector<int> menuItems;
@@ -386,7 +378,7 @@ bool onconfirm_weaponlist_menu(MenuItem<int> choice)
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
 	if (choice.value == MENU_WEAPON_CATEGORIES.size() - 2) //custom weapon spawn
 	{
-		std::string result = show_keyboard(NULL, (previousWeaponModelName.c_str()) == "" ? "Enter weapon model name." : (char*)previousWeaponModelName.c_str());
+		std::string result = show_keyboard(NULL, (char*)previousWeaponModelName.c_str());
 		if (!result.empty())
 		{
 			previousWeaponModelName = result;
@@ -408,7 +400,7 @@ bool onconfirm_weaponlist_menu(MenuItem<int> choice)
 	}
 	else if (choice.value == MENU_WEAPON_CATEGORIES.size() - 1) //custom weapon component spawn
 	{
-		std::string result = show_keyboard(NULL, (previousWeaponComponentModelName.c_str()) == "" ? "Enter weapon component model name" : (char*)previousWeaponComponentModelName.c_str());
+		std::string result = show_keyboard(NULL, (char*)previousWeaponComponentModelName.c_str());
 		if (!result.empty())
 		{
 			previousWeaponComponentModelName = result;
@@ -487,15 +479,23 @@ bool process_weaponlist_menu()
 	return draw_generic_menu<int>(menuItems, &weaponSelectionIndex, "Weapon Categories", onconfirm_weaponlist_menu, NULL, NULL);
 }
 
-bool do_give_weapon(std::string modelName)
+bool do_give_weapon(std::string modelName) 
 {
-	// common variables
-	BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(PLAYER::PLAYER_PED_ID());
-	Player player = PLAYER::PLAYER_ID();
-	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	if (modelName.c_str() == "")
+	{
+		return false;
+	}
 
-	if (bPlayerExists) { WEAPON::GIVE_DELAYED_WEAPON_TO_PED(playerPed, GAMEPLAY::GET_HASH_KEY((char *)modelName.c_str()), 1000, 0); return true; }
-	else { return false; }
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	Player player = PLAYER::PLAYER_ID();
+	BOOL pedExists = ENTITY::DOES_ENTITY_EXIST(playerPed);
+
+	if (pedExists)
+	{
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(playerPed, GAMEPLAY::GET_HASH_KEY((char*)modelName.c_str()), 1000, TRUE);
+		return true;
+	}
+	return false;
 }
 
 bool onconfirm_weapon_menu(MenuItem<int> choice)
