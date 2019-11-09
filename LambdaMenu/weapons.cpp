@@ -213,7 +213,15 @@ bool process_individual_weapon_menu(int weaponIndex)
 	lastSelectedWeapon = weaponIndex;
 
 	std::string caption = VOV_WEAPON_CAPTIONS[lastSelectedWeaponCategory].at(weaponIndex);
-	
+	if (caption.compare("Pistol .50") == 0)
+	{
+		caption = "Pistol \\.50";
+	}
+
+	if (caption.compare("Up-n-Atomizer") == 0)
+	{
+		caption = "Up\\-n\\-Atomizer";
+	}
 
 	std::string value = VOV_WEAPON_VALUES[lastSelectedWeaponCategory].at(weaponIndex);
 	MenuItemVector<int> menuItems;
@@ -479,7 +487,7 @@ bool process_weaponlist_menu()
 	return draw_generic_menu<int>(menuItems, &weaponSelectionIndex, "Weapon Categories", onconfirm_weaponlist_menu, NULL, NULL);
 }
 
-bool do_give_weapon(std::string modelName) 
+bool do_give_weapon(std::string modelName)
 {
 	if (modelName.c_str() == "")
 	{
