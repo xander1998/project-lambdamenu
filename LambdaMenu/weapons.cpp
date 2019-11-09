@@ -15,7 +15,6 @@
 #include "menu_functions.h"
 #include "weapons.h"
 #include "config_io.h"
-#include <regex>
 
 const std::vector<std::string> MENU_WEAPON_CATEGORIES{ "Melee", "Handguns", "Submachine Guns", "Assault Rifles", "Shotguns", "Sniper Rifles", "Heavy Weapons", "Thrown Weapons", "Spawn Weapon By Name", "Spawn Component By Name" };
 
