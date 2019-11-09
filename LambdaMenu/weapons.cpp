@@ -200,6 +200,9 @@ int saved_armour = 0;
 
 bool redrawWeaponMenuAfterEquipChange = false;
 
+std::string previousWeaponModelName;
+std::string previousWeaponComponentModelName;
+
 
 bool process_individual_weapon_menu(int weaponIndex)
 {
@@ -383,9 +386,10 @@ bool onconfirm_weaponlist_menu(MenuItem<int> choice)
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
 	if (choice.value == MENU_WEAPON_CATEGORIES.size() - 2) //custom weapon spawn
 	{
-		std::string result = show_keyboard(NULL, "Enter weapon model name");
+		std::string result = show_keyboard(NULL, (previousWeaponModelName.c_str()) == "" ? "Enter weapon model name." : (char*)previousWeaponModelName.c_str());
 		if (!result.empty())
 		{
+			previousWeaponModelName = result;
 			Hash whash = GAMEPLAY::GET_HASH_KEY((char*)result.c_str());
 			if (!WEAPON::IS_WEAPON_VALID(whash))
 			{
@@ -404,9 +408,10 @@ bool onconfirm_weaponlist_menu(MenuItem<int> choice)
 	}
 	else if (choice.value == MENU_WEAPON_CATEGORIES.size() - 1) //custom weapon component spawn
 	{
-		std::string result = show_keyboard(NULL, "Enter weapon component model name");
+		std::string result = show_keyboard(NULL, (previousWeaponComponentModelName.c_str()) == "" ? "Enter weapon component model name" : (char*)previousWeaponComponentModelName.c_str());
 		if (!result.empty())
 		{
+			previousWeaponComponentModelName = result;
 			Hash chash = GAMEPLAY::GET_HASH_KEY((char*)result.c_str());
 			Hash weapon = WEAPON::GET_SELECTED_PED_WEAPON(playerPed);
 			int unarmed = GAMEPLAY::GET_HASH_KEY("WEAPON_UNARMED");
