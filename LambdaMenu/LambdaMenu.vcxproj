@@ -105,7 +105,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.asi</TargetExt>
-    <OutDir>..\..\FiveM\FiveM.app\plugins\</OutDir>
+    <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>tmp\$(Configuration)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <IncludePath>C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include;$(IncludePath)</IncludePath>
