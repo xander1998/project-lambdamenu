@@ -2972,7 +2972,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 		Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(veh, -1);
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
 
-#ifndef SERVER_SIDED
 		bool bUp = get_key_pressed(get_config()->get_key_config()->key_veh_boost);
 		bool bDown = get_key_pressed(get_config()->get_key_config()->key_veh_stop);
 
@@ -2995,7 +2994,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				}
 			}
 		}
-#endif
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -3493,7 +3491,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 		Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(veh, -1);
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
 
-#ifndef SERVER_SIDED
 		KeyInputConfig* keyConfig = get_config()->get_key_config();
 
 		bool bSelect = get_key_pressed(keyConfig->drift_mode);
@@ -3511,7 +3508,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				}
 			}
 		}
-#endif
 	}
 
 
@@ -3891,7 +3887,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 	//vehicle controls
 	if (featureVehControls && bPlayerExists && PED::IS_PED_IN_ANY_VEHICLE(playerPed, 0))
 	{
-#ifndef SERVER_SIDED
 		Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
 		Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(veh, -1);
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
@@ -4097,7 +4092,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				}
 			}
 		}
-#endif
 	}
 
 	if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh) && !VEHICLE::_IS_VEHICLE_ENGINE_ON(ownedveh) && !featureRemoteEngine)

@@ -796,10 +796,3 @@ void ERDatabaseKVS::rename_saved_skin(std::string name, int slot)
 
 	SET_RESOURCE_KVP(("skin:" + std::to_string(slot)).c_str(), j.dump().c_str());
 }
-
-#ifdef SERVER_SIDED
-ERDatabase* create_database()
-{
-	return new ERDatabaseKVS();
-}
-#endif

@@ -288,7 +288,6 @@ void noclip(bool inVehicle)
 	float xVect = forwardPush * sin(degToRad(curHeading)) * -1.0f;
 	float yVect = forwardPush * cos(degToRad(curHeading));
 
-#ifndef SERVER_SIDED
 	KeyInputConfig* keyConfig = get_config()->get_key_config();
 
 	bool moveUpKey = get_key_pressed(keyConfig->key_noclip_up);
@@ -376,7 +375,6 @@ void noclip(bool inVehicle)
 
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(target, curLocation.x, curLocation.y, curLocation.z, xBoolParam, yBoolParam, zBoolParam);
 	ENTITY::SET_ENTITY_HEADING(target, curHeading - rotationSpeed);
-#endif
 }
 
 bool is_in_noclip_mode()

@@ -403,17 +403,7 @@ bool ERDatabaseSQL::open()
 
 	write_text_to_log_file("Opening DB file");
 
-#ifdef SERVER_SIDED
-	char* db_path = get_storage_dir_path("/lm.db");
 
-	//std::wstring ws(db_path);
-	//std::string fileSS(ws.begin(), ws.end());
-	//write_text_to_log_file(fileSS);
-
-	mutex_lock();
-
-	int rc = sqlite3_open(db_path, &db);
-#else
 	WCHAR* db_path = get_storage_dir_path("/lm.db");
 
 	//std::wstring ws(db_path);
@@ -423,7 +413,7 @@ bool ERDatabaseSQL::open()
 	mutex_lock();
 
 	int rc = sqlite3_open16(db_path, &db);
-#endif
+
 	//delete db_path;
 	if (rc == SQLITE_OK)
 	{

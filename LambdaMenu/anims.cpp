@@ -31,7 +31,6 @@ int driveStyle;
 const std::vector<std::string> ALL_ANIMS =
 {
 	"amb@bagels@male@walking@ static",
-#ifndef SERVER_SIDED
 	"amb@code_human_cower@female@base base",
 	"amb@code_human_cower@female@enter enter",
 	"amb@code_human_cower@female@exit exit_flee",
@@ -21912,7 +21911,6 @@ const std::vector<std::string> ALL_ANIMS =
 	"weapons@unarmed walk_additive_forward",
 	"weapons@unarmed walk_additive_left",
 	"weapons@unarmed walk_additive_right"
-#endif
 };
 
 

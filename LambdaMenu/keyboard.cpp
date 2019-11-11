@@ -10,7 +10,6 @@
 
 #include <sstream>
 
-#ifndef SERVER_SIDED
 const int KEYS_SIZE = 255;
 
 struct {
@@ -71,24 +70,3 @@ int keyNameToVal(char * input)
 	}
 	return -1;
 }
-#else
-bool IsKeyDown(DWORD key)
-{
-	return false;
-}
-
-bool IsKeyJustUp(DWORD key, bool exclusive)
-{
-	return false;
-}
-
-void ResetKeyState(DWORD key)
-{
-
-}
-
-int keyNameToVal(char * input)
-{
-	return -1;
-}
-#endif

@@ -12,16 +12,6 @@
 * (C) Alexander Blade 2015
 */
 
-#ifdef SERVER_SIDED
-#include "script.h"
-
-int main()
-{
-	printf("main();\n");
-
-	ScriptMain();
-}
-#else
 #include <main.h>
 #include "script.h"
 #include "keyboard.h"
@@ -46,4 +36,3 @@ BOOL APIENTRY DllMain(HMODULE hInstance, DWORD reason, LPVOID lpReserved)
 	}
 	return TRUE;
 }
-#endif

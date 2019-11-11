@@ -34,12 +34,10 @@
 #include "anims.h"
 //#include "crash_handler.h"
 
-#ifndef SERVER_SIDED
 #include <DbgHelp.h>
 #include <ShlObj.h>
 #include <windows.h>
 #include <Shlwapi.h>
-#endif
 
 #include <string>
 #include <sstream> 
@@ -1498,13 +1496,9 @@ void update_features()
 
 	if (game_frame_num % 1000 == 0)
 	{
-#ifndef SERVER_SIDED
 		DWORD myThreadID;
 		HANDLE myHandle = CreateThread(0, 0, save_settings_thread, 0, 0, &myThreadID);
 		CloseHandle(myHandle);
-#else
-		save_settings();
-#endif
 	}
 
 	update_centre_screen_status_text();
@@ -1707,7 +1701,6 @@ void update_features()
 	else
 	{
 		PED::SET_PED_CAN_RAGDOLL(playerPed, 1); //CAN ragdoll
-#ifndef SERVER_SIDED
 		KeyInputConfig* keyConfig = get_config()->get_key_config();
 		bool pRag = get_key_pressed(keyConfig->player_ragdoll);
 		bool fRag = get_key_pressed(keyConfig->ragdoll_force);
@@ -1721,7 +1714,6 @@ void update_features()
 				ENTITY::APPLY_FORCE_TO_ENTITY(playerPed, 1, rand() % 100, rand() % 100, rand() % 100, rand() % 100, rand() % 100, rand() % 100, false, false, false, false, false, false);
 			}
 		}
-#endif
 	}
 
 	//Player Invisible
@@ -1980,7 +1972,6 @@ void update_features()
 	//----Hotkeys----
 
 	//map cycle
-#ifndef SERVER_SIDED
 	if (bPlayerExists)
 	{
 		bool mapcycle = IsKeyJustUp(get_config()->get_key_config()->map_cycle);
@@ -2182,7 +2173,6 @@ void update_features()
 			}
 		}
 	}
-#endif
 }
 
 //==================
@@ -4221,13 +4211,9 @@ void reset_globals()
 	
 	set_status_text("All Settings ~r~RESET.");
 
-#ifndef SERVER_SIDED
 	DWORD myThreadID;
 	HANDLE myHandle = CreateThread(0, 0, save_settings_thread, 0, 0, &myThreadID);
 	CloseHandle(myHandle);
-#else
-	save_settings();
-#endif
 }
 void RunMain()
 {	
@@ -4273,7 +4259,6 @@ void RunMain()
 	}
 }
 
-#ifndef SERVER_SIDED
 void make_minidump(EXCEPTION_POINTERS* e)
 {
 	write_text_to_log_file("Dump requested");
@@ -4323,7 +4308,6 @@ int filterException(int code, PEXCEPTION_POINTERS ex)
 	make_minidump(ex);
 	return EXCEPTION_EXECUTE_HANDLER;
 }
-#endif
 
 void ScriptMain()
 {
@@ -4336,9 +4320,7 @@ void ScriptMain()
 
 		clear_log_file();
 
-#ifndef SERVER_SIDED
 		init_storage();
-#endif
 
 		write_text_to_log_file("Creating database?");
 
@@ -4354,9 +4336,9 @@ void ScriptMain()
 
 		srand(GetTickCount());
 		write_text_to_log_file("Reading config...");
-#ifndef SERVER_SIDED
+
 		read_config_file();
-#endif
+
 		write_text_to_log_file("Config read complete");	
 		RunMain();
 		
@@ -4523,13 +4505,11 @@ std::vector<FeatureEnabledLocalDefinition> get_feature_enablements()
 	return results;
 }
 
-#ifndef SERVER_SIDED
 DWORD WINAPI save_settings_thread(LPVOID lpParameter)
 {
 	save_settings();
 	return 0;
 }
-#endif
 
 void save_settings()
 {
@@ -4559,7 +4539,6 @@ void load_settings()
 
 void init_storage()
 {
-#ifndef SERVER_SIDED
 	WCHAR* folder = get_storage_dir_path();
 	write_text_to_log_file("Trying to create storage folder");
 
@@ -4592,10 +4571,8 @@ void init_storage()
 		write_text_to_log_file("Couldn't create temp dir");
 	}
 	delete folder2;
-#endif
 }
 
-#ifndef SERVER_SIDED
 WCHAR* get_temp_dir_path()
 {
 	WCHAR s[MAX_PATH];
@@ -4666,16 +4643,8 @@ WCHAR* get_storage_dir_path(char* file)
 
 	return output;
 }
-#endif
 
 ERDatabase* get_database()
 {
 	return database;
 }
-
-#ifdef SERVER_SIDED
-DWORD GetTickCount()
-{
-	return GAMEPLAY::GET_GAME_TIMER();
-}
-#endif
