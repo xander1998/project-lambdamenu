@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="colors.cpp" />
     <ClCompile Include="database_kvs.cpp" />
     <ClCompile Include="noclip.cpp" />
     <ClCompile Include="anims.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="weapons.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colors.h" />
     <ClInclude Include="inc\enums.h" />
     <ClInclude Include="inc\natives.h" />
     <ClInclude Include="inc\types.h" />
@@ -103,7 +105,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.asi</TargetExt>
-    <OutDir>bin\$(Configuration)\</OutDir>
+    <OutDir>..\..\FiveM\FiveM.app\plugins\</OutDir>
     <IntDir>tmp\$(Configuration)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <IncludePath>C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include;$(IncludePath)</IncludePath>
