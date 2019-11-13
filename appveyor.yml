@@ -3,7 +3,7 @@ image: Visual Studio 2017
 build:
 after_build:
   - cmd: if %APPVEYOR_REPO_TAG%==true (appveyor SetVariable -Name VERSION_NAME -Value %APPVEYOR_REPO_TAG_NAME%) else (appveyor SetVariable -Name VERSION_NAME -Value beta)
-  - cmd: 7z a LambdaMenu-%VERSION_NAME%.zip -r ..\build\*
+  - cmd: 7z a LambdaMenu-%VERSION_NAME%.zip -r .\LambdaMenu\bin\Release\build\
   - cmd: appveyor PushArtifact LambdaMenu-%VERSION_NAME%.zip
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/Zeemahh/appveyor-discord-webhook/master/send.ps1 -o send.ps1
