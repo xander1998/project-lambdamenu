@@ -179,6 +179,7 @@ bool featureChannel5 = false;
 bool featureVoiceChat = true;
 bool featureWantedLevelFrozen = false;
 bool featureWantedLevelFrozenUpdated = false;
+bool featPurpleAsShit = false;
 int frozenWantedLevel = 0;
 int blipCheck1;
 int blipCheck2;
@@ -4239,6 +4240,14 @@ void RunMain()
 	// tell cout to use our new locale.
 	std::cout.imbue(comma_locale);
 
+	if (featPurpleAsShit)
+	{
+		for (int i = 2; i < 216; i++)
+		{
+			UI::_0xF314CF4F0211894E(i, 117, 27, 241, 150);
+		}
+	}
+
 	while (true)
 	{
 		if (trainer_switch_pressed())
@@ -4494,6 +4503,7 @@ std::vector<FeatureEnabledLocalDefinition> get_feature_enablements()
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel4", &featureChannel4 });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel5", &featureChannel5 });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureVoiceChat", &featureVoiceChat });
+	results.push_back(FeatureEnabledLocalDefinition{ "featPurpleAsShit", &featPurpleAsShit });
 
 
 	std::vector<FeatureEnabledLocalDefinition> vehResults = get_feature_enablements_vehicles();
