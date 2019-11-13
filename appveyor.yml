@@ -1,8 +1,6 @@
 configuration: Release
 image: Visual Studio 2017
 build:
-  parallel: true
-  project: LambdaMenu.sln
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/Zeemahh/appveyor-discord-webhook/master/send.ps1 -o send.ps1
   - ps: ./send.ps1 success $env:WEBHOOK_URL
