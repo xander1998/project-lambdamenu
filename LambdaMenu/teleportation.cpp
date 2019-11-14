@@ -521,13 +521,13 @@ bool process_teleport_menu(int categoryIndex)
 		MenuItemVector<int> menuItems;
 
 		MenuItem<int> markerItem;
-		markerItem.caption = "GO TO MARKER LOCATION";
+		markerItem.caption = "Teleport to waypoint";
 		markerItem.value = -2;
 		markerItem.isLeaf = true;
 		menuItems.push_back(markerItem);
 
 		MenuItem<int> dialogItem;
-		dialogItem.caption = "SHOW COORDINATES";
+		dialogItem.caption = "Show coordinates";
 		dialogItem.value = -1;
 		dialogItem.isLeaf = true;
 		menuItems.push_back(dialogItem);
