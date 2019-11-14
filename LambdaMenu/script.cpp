@@ -180,6 +180,7 @@ bool featureVoiceChat = true;
 bool featureWantedLevelFrozen = false;
 bool featureWantedLevelFrozenUpdated = false;
 bool featPurpleAsShit = false;
+bool defaultHudColors = true;
 int frozenWantedLevel = 0;
 int blipCheck1;
 int blipCheck2;
@@ -3809,6 +3810,44 @@ void process_voice_menu()
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexVoice, caption, onconfirm_voice_menu);
 }
 
+//================
+// Random hud color option lol
+//================
+int activeLineIndexHudColors = 0;
+bool onconfirm_hudcolor_menu(MenuItem<int> choice)
+{
+	switch (activeLineIndexHudColors)
+	{
+	case 0:
+		change_color_of_all_hud_ids(117, 27, 241, 150);
+		break;
+	case 1:
+		for (int i = 0; i < 217; i++) 
+		{
+			UI::RESET_HUD_COMPONENT_VALUES(i);
+		}
+		break;
+
+	default:
+		break;
+	}
+	return false;
+}
+
+void process_hud_colors()
+{
+	const int lineCount = 2;
+
+	std::string caption = "Hud Colors";
+
+	StandardOrToggleMenuDef lines[lineCount] = {
+		{ "Purple Colors", &featPurpleAsShit, NULL, false },
+		{ "Reset", &defaultHudColors, NULL, true }
+	};
+
+	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexHudColors, caption, onconfirm_hudcolor_menu);
+}
+
 //==================
 // RESET SETTINGS MENU
 //==================
@@ -3925,7 +3964,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 	case 9:
 		process_voice_menu();
 		break;
-	case 10: //portable radio
+	case 11: //portable radio
 		if (featurePlayerRadio || featurePlayerRadioUpdated)
 			{
 				if (featurePlayerRadio)
@@ -3934,10 +3973,13 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 					AUDIO::SET_MOBILE_RADIO_ENABLED_DURING_GAMEPLAY(false);
 			}
 		break;
-	case 12: // next radio track
+	case 12:
+		process_hud_colors();
+		break;
+	case 13: // next radio track
 		AUDIO::SKIP_RADIO_FORWARD();
 		break;
-	case 13:
+	case 14:
 		if (!featureHideMap)
 		{
 			UI::DISPLAY_RADAR(1);
@@ -3947,7 +3989,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 			UI::DISPLAY_RADAR(0);
 		}
 		break; 
-	case 14:
+	case 15:
 		if (!featureBigHud)
 		{
 			UI::_SET_RADAR_BIGMAP_ENABLED(0, 0);
@@ -3957,10 +3999,10 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 			UI::_SET_RADAR_BIGMAP_ENABLED(1, 0);
 		}
 	break;
-	case 20:
+	case 21:
 		process_reset_globals();
 		break;
-	case 21:
+	case 22:
 		set_status_text("<C>~b~Lambda ~s~Menu 2.4.1</C>");
 		set_status_text("Contributors:");
 		set_status_text("Oui, TheDroidGeek & ");
@@ -3975,7 +4017,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 }
 void process_misc_menu()
 {
-	const int lineCount = 22;
+	const int lineCount = 23;
 
 	std::string caption = "Game Settings";
 
@@ -3990,6 +4032,7 @@ void process_misc_menu()
 		{ "Player Notifications", &featurePlayerNotifications, NULL, true },
 		{ "Death Notifications", &featureDeathNotifications, NULL, true },
 		{ "Voice Options", NULL, NULL, false },
+		{ "HUD Colors", NULL, NULL, false },
 		{ "Radio Always Off", &featureRadioAlwaysOff, &featureRadioAlwaysOffUpdated, true },
 		{ "Portable Radio", &featurePlayerRadio, &featurePlayerRadioUpdated, true },
 		{ "Next Radio Track", NULL, NULL, true },
@@ -4107,7 +4150,13 @@ void process_main_menu()
 	draw_generic_menu<int>(menuItems, &activeLineIndexMain, caption, onconfirm_main_menu, NULL, NULL);
 }
 
-
+void change_color_of_all_hud_ids(int r, int g, int b, int a)
+{
+	for (int i = 2; i < 216; i++)
+	{
+		UI::_0xF314CF4F0211894E(i, r, g, b, a);
+	}
+}
 
 void reset_globals()
 {
@@ -4216,9 +4265,9 @@ void reset_globals()
 	HANDLE myHandle = CreateThread(0, 0, save_settings_thread, 0, 0, &myThreadID);
 	CloseHandle(myHandle);
 }
+
 void RunMain()
 {	
-
 	//reset_globals();
 
 	write_text_to_log_file("Setting up calls");
@@ -4239,14 +4288,6 @@ void RunMain()
 
 	// tell cout to use our new locale.
 	std::cout.imbue(comma_locale);
-
-	if (featPurpleAsShit)
-	{
-		for (int i = 2; i < 216; i++)
-		{
-			UI::_0xF314CF4F0211894E(i, 117, 27, 241, 150);
-		}
-	}
 
 	while (true)
 	{
