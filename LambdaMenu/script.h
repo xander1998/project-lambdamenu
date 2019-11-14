@@ -51,6 +51,8 @@ bool process_skinchanger_detail_menu();
 
 void update_features();
 
+void change_color_of_all_hud_ids(int r, int g, int b, int a);
+
 void reset_globals();
 
 void set_all_nearby_peds_to_calm(Ped playerPed, int count);
