@@ -532,6 +532,7 @@ bool process_skinchanger_choices_misc()
 * =================
 */
 
+std::string previousPlayerModelName;
 bool onconfirm_skinchanger_menu(MenuItem<int> choice)
 {
 	skinMainMenuPosition = choice.currentMenuIndex;
@@ -542,9 +543,10 @@ bool onconfirm_skinchanger_menu(MenuItem<int> choice)
 
 	if (choice.value == MENU_SKINS_TYPES_CAPTIONS.size() - 1) //custom player model spawn
 	{
-		std::string result = show_keyboard(NULL, "Enter player model name");
+		std::string result = show_keyboard(NULL, (char*)previousPlayerModelName.c_str());
 		if (!result.empty())
-		{		
+		{
+			previousPlayerModelName = result;
 			Hash hash = GAMEPLAY::GET_HASH_KEY((char*)result.c_str());
 			if (!STREAMING::IS_MODEL_IN_CDIMAGE(hash) || !STREAMING::IS_MODEL_VALID(hash))
 			{
