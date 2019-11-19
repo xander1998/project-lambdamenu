@@ -3462,139 +3462,21 @@ void process_world_menu()
 //==================
 int activeLineIndexVoiceChannel = 0;
 
-bool onconfirm_voicechannel_menu(MenuItem<int> choice)
+std::string lastVoiceInput;
+int channelId;
+bool onconfirm_voicechannel_menu()
 {
-	switch (activeLineIndexVoiceChannel)
+	std::string result = show_keyboard(NULL, (char*)lastVoiceInput.c_str());
+	if (!result.empty())
 	{
-	case 0:
-		if (!featureChannelDefault)
-		{
-			featureChannelDefault = true;
-		}
-		else
-		{
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 1:
-		if (featureChannel1)
-		{
-			featureChannelDefault = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
-			set_status_text("Voice channel: ~g~Channel 1");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 2:
-		if (featureChannel2)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
-			set_status_text("Voice channel: ~g~Channel 2");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 3:
-		if (featureChannel3)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
-			set_status_text("Voice channel: ~g~Channel 3");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 4:
-		if (featureChannel4)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
-			set_status_text("Voice channel: ~g~Channel 4");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 5:
-		if (featureChannel5)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
-			set_status_text("Voice channel: ~g~Channel 5");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	default:
-		break;
+		channelId = std::atoi(result.c_str()) || 0;
+
+		NETWORK::NETWORK_SET_VOICE_CHANNEL(channelId);
+		set_status_text("Voice channel set to: ~g~Channel " + channelId);
+		return true;
 	}
+	set_status_text("~r~Failed to set voice channel (result was empty).");
 	return false;
-}
-void process_voicechannel_menu()
-{
-	const int lineCount = 6;
-
-	std::string caption = "Voice Channels";
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Default", &featureChannelDefault, NULL, true },
-		{ "Channel 1", &featureChannel1, NULL, true },
-		{ "Channel 2", &featureChannel2, NULL, true },
-		{ "Channel 3", &featureChannel3, NULL, true },
-		{ "Channel 4", &featureChannel4, NULL, true },
-		{ "Channel 5", &featureChannel5, NULL, true }
-		//	{ "Team", &feature, NULL, true },
-		//	{ "Friends", &feature, NULL, true }
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexVoiceChannel, caption, onconfirm_voicechannel_menu);
 }
 
 //==================
@@ -3784,7 +3666,7 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 		}
 		break;
 	case 2:
-		process_voicechannel_menu();
+		onconfirm_voicechannel_menu();
 		break;
 	case 3:
 		process_voiceproximity_menu();
@@ -3803,7 +3685,7 @@ void process_voice_menu()
 	StandardOrToggleMenuDef lines[lineCount] = {
 		{ "Voice Chat", &featureVoiceChat, NULL, true },
 		{ "Show Voice Chat Speaker", &featureShowVoiceChatSpeaker, NULL, true },
-		{ "Voice Channel", NULL, NULL, false },
+		{ "Set Voice Channel", NULL, NULL, false },
 		{ "Voice Proximity", NULL, NULL, false }
 	};
 
