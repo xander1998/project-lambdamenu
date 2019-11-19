@@ -1005,11 +1005,12 @@ void save_current_skin(int slot)
 			if (database->save_skin(playerPed, result, slot))
 			{
 				activeSavedSkinSlotName = result;
-				set_status_text("Saved Skin");
+				set_status_text("~g~Skin has been saved as: ~r~" + result);
 			}
 			else
 			{
-				set_status_text("Save Error");
+				set_status_text("~r~/!\\ IMPORTANT /!\\");
+				set_status_text("~r~SKIN SAVE FAILED, THIS IS BAD!");
 			}
 		}
 	}
