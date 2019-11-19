@@ -4802,28 +4802,29 @@ void save_current_vehicle(int slot)
 						ERDatabase* database = get_database();
 						if (database->save_vehicle(veh, result, slot))
 						{
-							set_status_text("Saved Vehicle");
+							set_status_text("~g~Vehicle has been saved as: ~r~" + result);
 							activeSavedVehicleSlotName = result;
 						}
 						else
 						{
-							set_status_text("Save Error");
+							set_status_text("~r~/!\\ IMPORTANT /!\\");
+							set_status_text("~r~VEHICLE SAVE FAILED, THIS IS BAD!");
 						}
 					}
 				}
 				else
 				{
-					set_status_text("You must be the driver to save a vehicle.");
+					set_status_text("~r~Save failed (you are not the driver).");
 				}
 			}
 			else
 			{
-				set_status_text("You must be the driver to save a vehicle.");
+				set_status_text("~r~Save failed (entity does not exist).");
 			}
 		}
 		else
 		{
-			set_status_text("Player isn't in a vehicle");
+			set_status_text("~r~Save failed (you are not in a vehicle).");
 		}
 	}
 }
