@@ -4368,28 +4368,18 @@ bool do_spawn_vehicle(std::string modelName, std::string modelTitle)
 			}
 			else
 			{
-				Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(preveh, -1);
-				if (ENTITY::DOES_ENTITY_EXIST(driver))
+				if (VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) != 0)
 				{
-					set_status_text("Driver in vehicle, can't delete.");
+					set_status_text("~r~Unable to delete last spawned vehicle (is occupied).");
+					return false;
 				}
-				else if (!ENTITY::DOES_ENTITY_EXIST(driver) && VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) > 0)
-				{
-					set_status_text("Passenger(s) in vehicle, can't delete.");
-				}
-				else if (ENTITY::DOES_ENTITY_EXIST(driver) && VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) > 0)
-				{
-					set_status_text("Driver & passenger(s) in vehicle, can't delete.");
-				}
-				else if (!ENTITY::DOES_ENTITY_EXIST(driver) && VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) == 0)
-				{
-					VEHICLE::DELETE_VEHICLE(&preveh);
-				}
+
+				VEHICLE::DELETE_VEHICLE(&preveh);
 			}
 		}
 		return true;
 	}
-return false;
+	return false;
 }
 
 Vehicle do_spawn_vehicle(DWORD model, std::string modelTitle) //, bool cleanup)
