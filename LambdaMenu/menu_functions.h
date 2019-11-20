@@ -180,13 +180,15 @@ void set_menu_showing(bool showing);
 bool is_menu_showing();
 
 /**Draw a solid rectangle.
-* I think parameters are:
+* Parameters are:
 * - A_0: X
 * - A_1: Y
-* - A_2: W
-* - A_3: H
-* - A_4 - 7: R,G,B,A
-* but you'll have to look at uses to be sure, and to understand scaling.
+* - A_2: WIDTH
+* - A_3: HEIGHT
+* - A_4: RED
+* - A_5: GREEN
+* - A_6: BLUE
+* - A_7: ALPHA
 */
 void draw_rect(float A_0, float A_1, float A_2, float A_3, int A_4, int A_5, int A_6, int A_7);
 
