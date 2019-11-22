@@ -46,22 +46,10 @@ void fill_weapon_ammo(MenuItem<int> choice);
 
 void onconfirm_open_tint_menu(MenuItem<int> choice);
 
-bool process_weapon_mod_menu_tint();
-
 //Weapon mod menu
-
-bool process_weapon_mod_menu_tint();
 
 bool onconfirm_weapon_mod_menu_tint(MenuItem<int> choice);
 
 std::vector<FeatureEnabledLocalDefinition> get_feature_enablements_weapons();
 
 bool weapon_reequip_interrupt();
-
-// weapon damage modifier
-
-//void onchange_weap_dmg_modifier(int value, SelectFromListMenuItem* source);
-
-//void add_weapons_generic_settings(std::vector<StringPairSettingDBRow>* results);
-
-//void handle_generic_settings_weapons(std::vector<StringPairSettingDBRow>* settings);
