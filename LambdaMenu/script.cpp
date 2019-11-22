@@ -17,6 +17,7 @@
 */
 
 #pragma comment(lib, "Shlwapi.lib")
+#pragma warning(disable : 4996)
 
 #define MAX_PLAYERS 256
 
@@ -3940,6 +3941,40 @@ void process_misc_menu()
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexMisc, caption, onconfirm_misc_menu);
 }
 
+#ifdef DEVELOPMENT
+//==================
+// DEVELOPMENT TOOLS
+//==================
+int activeLineIndexDev = 0;
+std::string activeNetState;
+bool onconfirm_dev_menu(MenuItem<int> choice)
+{
+	switch (activeLineIndexDev)
+	{
+	case 1:
+		activeNetState = (NETWORK::NETWORK_IS_SESSION_ACTIVE() ? "~g~true" : "~r~false");
+		set_status_text("NETWORK_IS_SESSION_ACTIVE returns " + activeNetState);
+		break;
+	case 2:
+
+		break;
+	}
+	return false;
+}
+void process_dev_menu()
+{
+	std::string caption = "Development Tools";
+
+	const int lineCount = 1;
+
+	StandardOrToggleMenuDef lines[lineCount] = {
+		{ "Is Network Session Active?", NULL, NULL, false }
+	};
+
+	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexDev, caption, onconfirm_dev_menu);
+}
+#endif
+
 //==================
 // LEAVE MENU
 //==================
@@ -4006,9 +4041,18 @@ bool onconfirm_main_menu(MenuItem<int> choice)
 	case 6:
 		process_misc_menu();
 		break;
+#ifdef DEVELOPMENT
+	case 7:
+		process_dev_menu();
+		break;
+	case 8:
+		process_leave_menu();
+		break;
+#else
 	case 7:
 		process_leave_menu();
 		break;
+#endif
 	}
 	return false;
 }
@@ -4023,6 +4067,9 @@ void process_main_menu()
 		"Vehicles",
 		"World",
 		"Settings",
+#ifdef DEVELOPMENT
+		"Development Tools",
+#endif
 		"Leave Session"
 	};
 
@@ -4032,7 +4079,11 @@ void process_main_menu()
 		MenuItem<int> item;
 		item.caption = TOP_OPTIONS[i];
 		item.value = i;
+#ifdef DEVELOPMENT
+		item.isLeaf = (i==8);
+#else
 		item.isLeaf = (i==7);
+#endif
 		item.currentMenuIndex = i;
 		menuItems.push_back(item);
 	}
