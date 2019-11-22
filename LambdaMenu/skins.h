@@ -50,7 +50,3 @@ bool process_savedskin_slot_menu(int slot);
 bool spawn_saved_skin(int slot, std::string caption);
 
 void save_current_skin(int slot);
-
-void save_player_appearance();
-
-void restore_player_appearance();
