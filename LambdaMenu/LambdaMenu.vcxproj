@@ -36,8 +36,6 @@
   <ItemGroup>
     <ClInclude Include="colors.h" />
     <ClInclude Include="inc\enums.h" />
-    <ClInclude Include="inc\natives.h" />
-    <ClInclude Include="inc\types.h" />
     <ClInclude Include="noclip.h" />
     <ClInclude Include="anims.h" />
     <ClInclude Include="config_io.h" />
