@@ -1,6 +1,4 @@
-configuration: 
-  - Release
-  - Debug
+configuration: Release
 image: Visual Studio 2017
 build:
 after_build:
