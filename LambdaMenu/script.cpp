@@ -3469,10 +3469,18 @@ bool onconfirm_voicechannel_menu()
 	std::string result = show_keyboard(NULL, (char*)lastVoiceInput.c_str());
 	if (!result.empty())
 	{
-		channelId = std::atoi(result.c_str()) || 0;
+		//std::string::size_type sz;
+		try {
+			channelId = std::stoi(result, nullptr, 0);
+		}
+		catch (std::invalid_argument & e) {
+			set_status_text("~r~Could not convert string to int (invalid channel).");
+			return false;
+		}
 
 		NETWORK::NETWORK_SET_VOICE_CHANNEL(channelId);
 		set_status_text("Voice channel set to: ~g~Channel " + channelId);
+		set_status_text_centre_screen("Channel ID: " + channelId, 4000UL);
 		return true;
 	}
 	set_status_text("~r~Failed to set voice channel (result was empty).");
