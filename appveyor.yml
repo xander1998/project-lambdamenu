@@ -1,9 +1,11 @@
-configuration: Release
+configuration: 
+  - Release
+  - Debug
 image: Visual Studio 2017
 build:
 after_build:
-  - cmd: if %APPVEYOR_REPO_TAG%==true (appveyor SetVariable -Name VERSION_NAME -Value %APPVEYOR_REPO_TAG_NAME%) else (appveyor SetVariable -Name VERSION_NAME -Value beta)
-  - cmd: 7z a LambdaMenu-%VERSION_NAME%.zip -r .\LambdaMenu\bin\Release\LambdaMenu.asi
+  - cmd: if %APPVEYOR_REPO_TAG%==true (appveyor SetVariable -Name VERSION_NAME -Value %APPVEYOR_REPO_TAG_NAME%) else if "%CONFIGURATION%"=="Debug" (appveyor SetVariable -Name VERSION_NAME -Value dev) else (appveyor SetVariable -Name VERSION_NAME -Value beta)
+  - cmd: if "%CONFIGURATION%"=="Release" (7z a LambdaMenu-%VERSION_NAME%.zip -r .\LambdaMenu\bin\Release\LambdaMenu.asi) else if "%CONFIGURATION%"=="Debug" (7z a LambdaMenu-%VERSION_NAME%.zip -r .\LambdaMenu\bin\Debug\LambdaMenu.asi)
   - cmd: appveyor PushArtifact LambdaMenu-%VERSION_NAME%.zip
 on_success:
   - ps: Invoke-RestMethod https://raw.githubusercontent.com/Zeemahh/appveyor-discord-webhook/master/send.ps1 -o send.ps1
