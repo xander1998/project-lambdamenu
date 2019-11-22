@@ -19,7 +19,7 @@
 #pragma comment(lib, "Shlwapi.lib")
 #pragma warning(disable : 4996)
 
-#define MAX_PLAYERS 256
+constexpr auto MAX_PLAYERS = 256;
 
 #include "io.h"
 #include "config_io.h"
@@ -3474,8 +3474,8 @@ bool onconfirm_voicechannel_menu()
 		try {
 			channelId = std::stoi(result, nullptr, 0);
 		}
-		catch (std::invalid_argument & e) {
-			set_status_text("~r~Could not convert string to int (invalid channel).");
+		catch (std::invalid_argument) {
+			set_status_text("~r~Could not convert string to int (invalid channel).~y~");
 			return false;
 		}
 

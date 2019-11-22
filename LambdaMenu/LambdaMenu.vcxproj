@@ -17,7 +17,6 @@
     <ClCompile Include="anims.cpp" />
     <ClCompile Include="config_io.cpp" />
     <ClCompile Include="database_sqlite.cpp" />
-    <ClCompile Include="debuglog.cpp" />
     <ClCompile Include="inc\sqlite3\sqlite3.c" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="keyboard.cpp" />
@@ -40,7 +39,6 @@
     <ClInclude Include="anims.h" />
     <ClInclude Include="config_io.h" />
     <ClInclude Include="database.h" />
-    <ClInclude Include="debuglog.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="inc\main.h" />
     <ClInclude Include="inc\nativeCaller.h" />
