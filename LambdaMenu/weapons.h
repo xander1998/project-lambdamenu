@@ -21,7 +21,6 @@
 
 void process_weapon_menu();
 
-bool process_give_melee();
 bool do_give_weapon(std::string modelName);
 bool process_weaponlist_menu();
 
