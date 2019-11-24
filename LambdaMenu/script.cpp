@@ -3951,11 +3951,15 @@ bool onconfirm_dev_menu(MenuItem<int> choice)
 {
 	switch (activeLineIndexDev)
 	{
-	case 1:
+	case 0:
 		activeNetState = (NETWORK::NETWORK_IS_SESSION_ACTIVE() ? "~g~true" : "~r~false");
 		set_status_text("NETWORK_IS_SESSION_ACTIVE returns " + activeNetState);
+		if (!NETWORK::NETWORK_IS_SESSION_ACTIVE())
+		{
+			set_status_text("You are likely in singleplayer or instanced.");
+		}
 		break;
-	case 2:
+	case 1:
 
 		break;
 	}
