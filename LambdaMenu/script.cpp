@@ -3988,14 +3988,12 @@ bool onconfirm_leave_menu(MenuItem<int> choice)
 	switch (activeLineIndexLeave)
 	{
 	case 0:
-		if (!CAM::IS_SCREEN_FADED_OUT()) {
-			if (!CAM::IS_SCREEN_FADING_OUT()) {
-				CAM::DO_SCREEN_FADE_OUT(500);
-				NETWORK::NETWORK_SESSION_LEAVE_SINGLE_PLAYER();
-				while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
-				if (CAM::IS_SCREEN_FADED_OUT()) {
-					CAM::DO_SCREEN_FADE_IN(500);
-				}
+		if (!CAM::IS_SCREEN_FADED_OUT() && !CAM::IS_SCREEN_FADING_OUT()) {
+			CAM::DO_SCREEN_FADE_OUT(500);
+			NETWORK::NETWORK_SESSION_LEAVE_SINGLE_PLAYER();
+			while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
+			if (CAM::IS_SCREEN_FADED_OUT()) {
+				CAM::DO_SCREEN_FADE_IN(500);
 			}
 		}
 		break;
@@ -4010,7 +4008,7 @@ void process_leave_menu()
 	const int lineCount = 1;
 
 	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "YES, I Want To Leave This Session", NULL, NULL, true }
+		{ "Yes, I want to leave this session", NULL, NULL, true }
 	};
 
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexLeave, caption, onconfirm_leave_menu);
