@@ -1,4 +1,6 @@
-configuration: Release
+configuration:
+  - Release
+  - EnhancedReborn_DB
 image: Visual Studio 2017
 build:
 after_build:
