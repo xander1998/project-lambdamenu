@@ -403,8 +403,11 @@ bool ERDatabaseSQL::open()
 
 	write_text_to_log_file("Opening DB file");
 
-
+#ifdef ER_DB
+	WCHAR* db_path = get_storage_dir_path("/er.db");
+#else
 	WCHAR* db_path = get_storage_dir_path("/lm.db");
+#endif
 
 	//std::wstring ws(db_path);
 	//std::string fileSS(ws.begin(), ws.end());
