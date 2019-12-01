@@ -3721,7 +3721,11 @@ bool onconfirm_hudcolor_menu(MenuItem<int> choice)
 	switch (activeLineIndexHudColors)
 	{
 	case 0:
+#ifdef DEVELOPMENT
 		change_color_of_all_hud_ids(117, 27, 241, 150);
+#else
+		set_status_text("~r~Error! Not in developer mode!");
+#endif
 		break;
 	case 1:
 		for (int i = 0; i < 217; i++) 
