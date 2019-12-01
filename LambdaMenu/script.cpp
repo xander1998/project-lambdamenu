@@ -956,8 +956,7 @@ void blips()
 void teleport_to_marker_coords(Entity e, Vector3 coords)
 {
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(e, coords.x, coords.y, coords.z, 0, 0, 1);
-	WAIT(0);
-	set_status_text("Teleported to map marker.");
+	set_status_text("~g~Teleported to map marker.");
 }
 
 void animal_watch()
@@ -1011,10 +1010,12 @@ void death_watch()
 				Player killer = NETWORK::_0x6C0E2E0125610278(e); // _NETWORK_GET_PLAYER_FROM_PED
 				std::string kname = PLAYER::GET_PLAYER_NAME(killer);
 				if (kname != "") {
-					if (kname == PLAYER::GET_PLAYER_NAME(playerId)) {
+					if (kname == PLAYER::GET_PLAYER_NAME(playerId))
+					{
 						msg = "~o~<C>You</C> ~s~commited suicide.";
 					}
-					else {
+					else
+					{
 						msg = "<C>~y~" + kname + "</C> ~s~" + killActionFromWeaponHash(weaponHash) + " ~o~<C>You</C>~s~.";
 					}
 				}
@@ -1322,17 +1323,22 @@ void update_features()
 							std::string msg = "<C>~o~" + name + "</C> ~s~died.";
 							Hash weaponHash;
 							Entity e = NETWORK::NETWORK_GET_ENTITY_KILLER_OF_PLAYER(i, &weaponHash);
-							if (PED::IS_PED_A_PLAYER(e)) {
+							if (PED::IS_PED_A_PLAYER(e))
+							{
 								Player killer = NETWORK::_0x6C0E2E0125610278(e); // _NETWORK_GET_PLAYER_FROM_PED
 								std::string kname = PLAYER::GET_PLAYER_NAME(killer);
-								if (kname != "") {
-									if (kname == name) {
+								if (kname != "")
+								{
+									if (kname == name)
+									{
 										msg = "<C>~o~" + name + "</C> ~s~commited suicide.";
 									}
-									else if (kname == PLAYER::GET_PLAYER_NAME(playerId)) {
+									else if (kname == PLAYER::GET_PLAYER_NAME(playerId))
+									{
 										msg = "~y~<C>You</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
 									}
-									else {
+									else
+									{
 										msg = "~y~<C>" + kname + "</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
 									}
 								}
@@ -1724,8 +1730,13 @@ void update_features()
 	{
 		featurePlayerInvisibleUpdated = false;
 		if (bPlayerExists && featurePlayerInvisible)
+		{
 			ENTITY::SET_ENTITY_VISIBLE(playerPed, false);
-		else if (bPlayerExists){ ENTITY::SET_ENTITY_VISIBLE(playerPed, true); }
+		}
+		else if (bPlayerExists)
+		{
+			ENTITY::SET_ENTITY_VISIBLE(playerPed, true);
+		}
 	}
 
 	if (featurePlayerDrunkUpdated)
@@ -3947,6 +3958,7 @@ void process_misc_menu()
 //==================
 int activeLineIndexDev = 0;
 std::string activeNetState;
+std::string playerName;
 bool onconfirm_dev_menu(MenuItem<int> choice)
 {
 	switch (activeLineIndexDev)
@@ -3960,7 +3972,8 @@ bool onconfirm_dev_menu(MenuItem<int> choice)
 		}
 		break;
 	case 1:
-
+		playerName = PLAYER::GET_PLAYER_NAME(PLAYER::PLAYER_ID());
+		set_status_text_centre_screen("GET_PLAYER_NAME returns~n~" + playerName, 3000UL);
 		break;
 	}
 	return false;
@@ -3969,10 +3982,11 @@ void process_dev_menu()
 {
 	std::string caption = "Development Tools";
 
-	const int lineCount = 1;
+	const int lineCount = 2;
 
 	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Is Network Session Active?", NULL, NULL, false }
+		{ "Is Network Session Active?", NULL, NULL, false },
+		{ "What is my name?", NULL, NULL, false }
 	};
 
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexDev, caption, onconfirm_dev_menu);
@@ -4093,6 +4107,7 @@ void process_main_menu()
 	draw_generic_menu<int>(menuItems, &activeLineIndexMain, caption, onconfirm_main_menu, NULL, NULL);
 }
 
+#ifdef DEVELOPMENT
 void change_color_of_all_hud_ids(int r, int g, int b, int a)
 {
 	for (int i = 2; i < 216; i++)
@@ -4100,6 +4115,7 @@ void change_color_of_all_hud_ids(int r, int g, int b, int a)
 		UI::_0xF314CF4F0211894E(i, r, g, b, a);
 	}
 }
+#endif
 
 void reset_globals()
 {
