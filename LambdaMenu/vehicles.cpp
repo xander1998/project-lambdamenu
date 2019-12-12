@@ -4459,10 +4459,6 @@ Vehicle do_spawn_vehicle(DWORD model, std::string modelTitle) //, bool cleanup)
 
 		return rveh;
 	}
-	else
-	{
-		set_status_text("~r~Could not find model in CD image");
-	}
 	return -1;
 }
 
