@@ -4386,8 +4386,20 @@ Vehicle do_spawn_vehicle(DWORD model, std::string modelTitle) //, bool cleanup)
 {
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_A_VEHICLE(model))
 	{
+		int timer = 0;
 		STREAMING::REQUEST_MODEL(model);
-		while (!STREAMING::HAS_MODEL_LOADED(model)) WAIT(0);
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+		{
+			WAIT(1000);
+			timer += 1;
+
+			if (timer >= 50)
+			{
+				set_status_text("~r~Vehicle failed to load.");
+				return -1;
+			}
+		}
+
 		float lookDir = ENTITY::GET_ENTITY_HEADING(PLAYER::PLAYER_PED_ID());
 		Vector3 coords = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(PLAYER::PLAYER_PED_ID(), 0.0, 5.0, 0.0);
 		Vehicle rveh = VEHICLE::CREATE_VEHICLE(model, coords.x, coords.y, coords.z, lookDir, 1, 0);
@@ -4446,6 +4458,10 @@ Vehicle do_spawn_vehicle(DWORD model, std::string modelTitle) //, bool cleanup)
 		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 
 		return rveh;
+	}
+	else
+	{
+		set_status_text("~r~Could not find model in CD image");
 	}
 	return -1;
 }
