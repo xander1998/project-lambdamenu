@@ -25,7 +25,7 @@ bool exitFlag = false;
 char* noclip_ANIM_A = "amb@world_human_stand_impatient@male@no_sign@base";
 char* noclip_ANIM_B = "base";
 
-int travelSpeed = 0;
+int travelSpeed = 3;
 
 bool in_noclip_mode = false;
 
@@ -196,26 +196,29 @@ void create_noclip_help_text()
 	switch (travelSpeed)
 	{
 	case 0:
-		travelSpeedStr = "<C>Medium</C>";
-		break;
-	case 1:
-		travelSpeedStr = "<C>Fast</C>";
-		break;
-	case 2:
-		travelSpeedStr = "<C>Very Fast</C>";
-		break;
-	case 3:
-		travelSpeedStr = "<C>Extremely Fast</C>";
-		break;
-	case 4:
 		travelSpeedStr = "<C>Very Slow</C>";
 		break;
-	case 5:
+	case 1:
 		travelSpeedStr = "<C>Slow</C>";
+		break;
+	case 2:
+		travelSpeedStr = "<C>Medium</C>";
+		break;
+	case 3:
+		travelSpeedStr = "<C>Fast</C>";
+		break;
+	case 4:
+		travelSpeedStr = "<C>Very Fast</C>";
+		break;
+	case 5:
+		travelSpeedStr = "<C>Extremely Fast</C>";
+		break;
+	case 6:
+		travelSpeedStr = "<C>~r~Fast as fuck!</C>";
 		break;
 	}
 
-	ss << "~w~Current Travel Speed: <FONT COLOR='" + menuColor_HEX + "'>" << travelSpeedStr << "</FONT>";
+	ss << "~w~Current Travel Speed: <FONT COLOR='" << menuColor_HEX << "'>" << travelSpeedStr << "</FONT>";
 
 	int index = 0;
 	noclipStatusLines[index++] = "~w~H ~HUD_COLOUR_BLACK~- ~w~Hide ~HUD_COLOUR_BLACK~/ ~w~Show NoClip Menu";
@@ -266,22 +269,25 @@ void noclip(bool inVehicle)
 	switch (travelSpeed)
 	{
 	case 0:
-		forwardPush = 0.8f; //medium
+		forwardPush = 0.05f; // very slow
 		break;
 	case 1:
-		forwardPush = 1.8f; //fast
+		forwardPush = 0.2f; // slow
 		break;
 	case 2:
-		forwardPush = 3.6f; //very fast
+		forwardPush = 0.8f; // medium
 		break;
 	case 3:
-		forwardPush = 5.4f; //extremely fast
+		forwardPush = 1.8f; // fast
 		break;
 	case 4:
-		forwardPush = 0.05f; //very slow
+		forwardPush = 3.6f; // very fast
 		break;
 	case 5:
-		forwardPush = 0.2f; //slow
+		forwardPush = 5.4f; //extremely fast
+		break;
+	case 6:
+		forwardPush = 10.0f; // fast as fuck
 		break;
 	}
 
@@ -304,10 +310,6 @@ void noclip(bool inVehicle)
 		target = PED::GET_VEHICLE_PED_IS_USING(playerPed);
 	}
 
-	BOOL xBoolParam = 1;
-	BOOL yBoolParam = 1;
-	BOOL zBoolParam = 1;
-
 	ENTITY::SET_ENTITY_VELOCITY(playerPed, 0.0f, 0.0f, 0.0f);
 	ENTITY::SET_ENTITY_ROTATION(playerPed, 0, 0, 0, 0, false);
 
@@ -329,7 +331,7 @@ void noclip(bool inVehicle)
 	if (IsKeyJustUp(keyConfig->key_noclip_speed))
 	{
 		travelSpeed++;
-		if (travelSpeed > 5)
+		if (travelSpeed > 6)
 		{
 			travelSpeed = 0;
 		}
@@ -373,7 +375,7 @@ void noclip(bool inVehicle)
 		curHeading -= rotationSpeed;
 	}
 
-	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(target, curLocation.x, curLocation.y, curLocation.z, xBoolParam, yBoolParam, zBoolParam);
+	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(target, curLocation.x, curLocation.y, curLocation.z, 1, 1, 1);
 	ENTITY::SET_ENTITY_HEADING(target, curHeading - rotationSpeed);
 }
 
