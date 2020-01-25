@@ -3181,6 +3181,7 @@ void process_camera_menu()
 //==================
 
 int activeLineIndexTime = 0;
+int custom_time = 0;
 bool onconfirm_time_menu(MenuItem<int> choice)
 {
 	int right_now = TIME::GET_CLOCK_HOURS();
@@ -3205,11 +3206,21 @@ bool onconfirm_time_menu(MenuItem<int> choice)
 		set_status_text("Time changed to ~g~Night.");
 		break;
 	case 4:
-		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(right_now + 1, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
+		custom_time++;
+		if (custom_time == 25)
+		{
+			custom_time = 0;
+		}
+		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(custom_time, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
 		set_status_text("Time changed ~g~Forward 1 Hour");
 		break;
 	case 5:
-		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(right_now - 1, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
+		custom_time--;
+		if (custom_time == -1)
+		{
+			custom_time = 24;
+		}
+		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(custom_time, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
 		set_status_text("Time changed ~g~Backward 1 Hour");
 		break;
 		// switchable features
