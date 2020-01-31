@@ -30,6 +30,4 @@ void create_noclip_help_text();
 
 void update_noclip_text();
 
-void noclip_flip_angle();
-
 bool is_in_noclip_mode();
