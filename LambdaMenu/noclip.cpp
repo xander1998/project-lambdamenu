@@ -84,7 +84,7 @@ void process_noclip_menu()
 		// draw menu
 		if (help_showing)
 		{
-			std::string caption = "<FONT COLOR='" + menuColor_HEX + "'>LAMBDA</FONT> ~s~MENU  NOCLIP MODE";
+			std::string caption = "LAMBDA MENU  NOCLIP MODE";
 			draw_menu_header_line(caption, 264.0f, 35.0f, 0.0f, 1016.0f, 1026.0f, false);
 		}
 
@@ -218,7 +218,7 @@ void create_noclip_help_text()
 		break;
 	}
 
-	ss << "~w~Current Travel Speed: <FONT COLOR='" << menuColor_HEX << "'>" << travelSpeedStr << "</FONT>";
+	ss << "~w~Current Travel Speed: " << travelSpeedStr;
 
 	int index = 0;
 	noclipStatusLines[index++] = "~w~H ~HUD_COLOUR_BLACK~- ~w~Hide ~HUD_COLOUR_BLACK~/ ~w~Show NoClip Menu";
