@@ -4110,11 +4110,13 @@ void process_main_menu()
 		MenuItem<int> item;
 		item.caption = TOP_OPTIONS[i];
 		item.value = i;
+		item.isLeaf = (
 #ifdef DEVELOPMENT
-		item.isLeaf = (i==8);
+			i == 8
 #else
-		item.isLeaf = (i==7);
+			i == 7
 #endif
+			);
 		item.currentMenuIndex = i;
 		menuItems.push_back(item);
 	}
