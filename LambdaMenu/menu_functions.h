@@ -252,7 +252,7 @@ inline void draw_menu_header_line(std::string caption, float lineWidth, float li
 	if (pageCount > 1)
 	{
 		std::ostringstream ss;
-		ss << " <FONT COLOR='" + menuColor_HEX + "'>" << curPage << " of " << pageCount;
+		ss << " ~p~" << curPage << " of " << pageCount;
 		
 		//text_col[0] = 102;
 		//text_col[1] = 153;
