@@ -2739,7 +2739,7 @@ bool onconfirm_veh_menu(MenuItem<int> choice)
 				if (ENTITY::DOES_ENTITY_EXIST(veh) && !ENTITY::IS_ENTITY_DEAD(veh)){
 					if (ENTITY::DOES_ENTITY_EXIST(driver)){
 						if (driver == playerPed){
-							set_status_text("Drift Mode ~g~ENABLED.~n~~s~Hold <C><FONT COLOR='" + menuColor_HEX + "'>SHIFT</C> ~s~To Drift.");
+							set_status_text("Drift Mode ~g~ENABLED.~n~~s~Hold <C>~p~SHIFT</C> ~s~To Drift.");
 						}
 					}
 				}
@@ -2766,18 +2766,18 @@ bool onconfirm_veh_menu(MenuItem<int> choice)
 		if (featureVehControls)
 		{
 			set_status_text("Vehicle Controls ~g~ENABLED.");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>LEFT ~s~& <FONT COLOR='" + menuColor_HEX + "'>RIGHT ~s~Arrows control turn signals ~s~");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>UP ~s~& <FONT COLOR='" + menuColor_HEX + "'>DOWN ~s~Arrows control front windows");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL + UP ~s~& <FONT COLOR='" + menuColor_HEX + "'>DOWN ~s~Arrows controls back windows");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>NUMPAD DECIMAL ~s~Key controls interior light");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>NUMPAD PLUS ~s~Key toggles police lights");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>NUMPAD MINUS ~s~Key toggles police siren");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL+NUMPAD7 ~s~Key toggles Front Left Door ");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL+NUMPAD9 ~s~Key toggles Front Right Door");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL+NUMPAD4 ~s~Key toggles Back Left Door");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL+NUMPAD6 ~s~Key toggles Back Right Door");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL+NUMPAD8 ~s~Key toggles Hood");
-			set_status_text("<FONT COLOR='" + menuColor_HEX + "'>CTRL+NUMPAD5 ~s~Key toggles Trunk");
+			set_status_text("~p~LEFT ~s~& ~p~RIGHT ~s~Arrows control turn signals ~s~");
+			set_status_text("~p~UP ~s~& ~p~DOWN ~s~Arrows control front windows");
+			set_status_text("~p~CTRL + UP ~s~& ~p~DOWN ~s~Arrows controls back windows");
+			set_status_text("~p~NUMPAD DECIMAL ~s~Key controls interior light");
+			set_status_text("~p~NUMPAD PLUS ~s~Key toggles police lights");
+			set_status_text("~p~NUMPAD MINUS ~s~Key toggles police siren");
+			set_status_text("~p~CTRL+NUMPAD7 ~s~Key toggles Front Left Door ");
+			set_status_text("~p~CTRL+NUMPAD9 ~s~Key toggles Front Right Door");
+			set_status_text("~p~CTRL+NUMPAD4 ~s~Key toggles Back Left Door");
+			set_status_text("~p~CTRL+NUMPAD6 ~s~Key toggles Back Right Door");
+			set_status_text("~p~CTRL+NUMPAD8 ~s~Key toggles Hood");
+			set_status_text("~p~CTRL+NUMPAD5 ~s~Key toggles Trunk");
 		}
 		else
 		{
@@ -3530,7 +3530,7 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				draw_text1(speedKnot_text, 0.857, 0.91, 2.8);
 
 				char speed_text[50];
-				snprintf(speed_text, 50, (char*)("kn<FONT COLOR='" + menuColor_HEX + "'>/~s~kt").c_str());
+				snprintf(speed_text, 50, "kn~p~/~s~kt");
 				draw_text3(speed_text, 0.935, 0.855, 1.2);
 			}
 			else
@@ -3569,7 +3569,7 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				draw_text1(speedKnot_text, 0.857, 0.91, 2.8);
 
 				char speed_text[50];
-				snprintf(speed_text, 50, (char*)("kn<FONT COLOR='" + menuColor_HEX + "'>/~s~kt").c_str());
+				snprintf(speed_text, 50, "kn~p~/~s~kt");
 				draw_text3(speed_text, 0.935, 0.855, 1.2);
 			}
 			else
@@ -3608,7 +3608,7 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				draw_text1(speedKnot_text, 0.857, 0.91, 2.8);
 
 				char speed_text[50];
-				snprintf(speed_text, 50, (char*)("kn<FONT COLOR='" + menuColor_HEX + "'>/~s~kt").c_str());
+				snprintf(speed_text, 50, "kn~p~/~s~kt");
 				draw_text3(speed_text, 0.935, 0.855, 1.2);
 			}
 			else
@@ -3620,14 +3620,14 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				char speedMph_text[50];
 				char speedKph_text[50];
 
-				snprintf(speedKph_text, 50, (char*)("<FONT COLOR='" + menuColor_HEX + "'>%.0f").c_str(), speedKph);
+				snprintf(speedKph_text, 50, "~p~%.0f", speedKph);
 				snprintf(speedMph_text, 50, "%.0f", speedMph);
 
 				draw_text2(speedKph_text, 0.798, 0.914, 1.8);
 				draw_text1(speedMph_text, 0.857, 0.91, 2.8);
 
 				char kphspeed_text[50];
-				snprintf(kphspeed_text, 50, (char*)("<FONT COLOR='" + menuColor_HEX + "'>KPH").c_str());
+				snprintf(kphspeed_text, 50, "~p~KPH");
 				draw_text4(kphspeed_text, 0.902, 0.856, 0.9);
 
 				char speed_text[50];

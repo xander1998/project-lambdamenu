@@ -1301,7 +1301,7 @@ void update_features()
 				{
 					if (!isVoiceChatRunning)
 						isVoiceChatRunning = true;
-					voice_status_msg += "~n~<FONT COLOR='" + menuColor_HEX + "'>" + name + "</FONT>";
+					voice_status_msg += "~n~~p~" + name;
 				}
 
 				if (i != playerId)
@@ -2218,7 +2218,7 @@ void process_online_player_menu(bool(*onConfirmation)(MenuItem<int> value), bool
 			return;
 		}
 
-		std::string caption = "<FONT COLOR='" + menuColor_HEX + "'>" + std::to_string(lineCount) + " ~s~PLAYER" + (lineCount == 1 ? "" : "S") + " ONLINE";
+		std::string caption = "~p~" + std::to_string(lineCount) + " ~s~PLAYER" + (lineCount == 1 ? "" : "S") + " ONLINE";
 
 		draw_menu_from_struct_def(&lines_v[0], lineCount, &activeLineIndexOnlinePlayer, caption, onConfirmation);
 	}
@@ -2261,7 +2261,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 						}
 					}
 				}
-				set_status_text("Spectating: <FONT COLOR='" + menuColor_HEX + "'><C>" + target.name + "</C>.");
+				set_status_text("Spectating: ~p~<C>" + target.name + "</C>.");
 			}
 			else
 			{
@@ -2295,7 +2295,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 				{
 					Vector3 drawroute = ENTITY::GET_ENTITY_COORDS(target.ped, 0);
 					UI::SET_NEW_WAYPOINT(drawroute.x, drawroute.y);
-					set_status_text("Drawing Live Route To:~n~<FONT COLOR='" + menuColor_HEX + "'><C>" + target.name + "</C>.");
+					set_status_text("Drawing Live Route To:~n~~p~<C>" + target.name + "</C>.");
 				}
 			}
 			else
@@ -2331,7 +2331,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 			targetpos.x += 3.0; targetpos.z += 3.0;
 			STREAMING::REQUEST_COLLISION_AT_COORD(targetpos.x, targetpos.y, targetpos.z);
 			ENTITY::SET_ENTITY_COORDS_NO_OFFSET(playerPed, targetpos.x, targetpos.y, targetpos.z, 0, 0, 1);
-			set_status_text("Teleported to <FONT COLOR='" + menuColor_HEX + "'><C>" + target.name + "</C>.");
+			set_status_text("Teleported to ~p~<C>" + target.name + "</C>.");
 		}
 		break;
 
@@ -2353,7 +2353,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 
 						while (seatNum == passNum || seatNum > passNum)
 						{
-							set_status_text("<FONT COLOR='" + menuColor_HEX + "'><C>" + target.name + "'s</C> ~s~vehicle is full.");
+							set_status_text("~p~<C>" + target.name + "'s</C> ~s~vehicle is full.");
 							break;
 						}
 
@@ -2366,7 +2366,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 								PED::SET_PED_INTO_VEHICLE(playerPed, playerVeh, seatNum);
 								NETWORK::NETWORK_SET_IN_SPECTATOR_MODE(0, target.ped);
 								featureSpectate = false;
-								set_status_text("Teleported into <FONT COLOR='" + menuColor_HEX + "'><C>" + target.name + "'s</C> ~s~vehicle.");
+								set_status_text("Teleported into ~p~<C>" + target.name + "'s</C> ~s~vehicle.");
 								break;
 							}
 							else
@@ -2397,7 +2397,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 				int friendly = UI::GET_BLIP_FROM_ENTITY(target.ped);
 				UI::SET_BLIP_COLOUR(friendly, 3);
 				UI::SET_BLIP_NAME_TO_PLAYER_NAME(friendly, targetId);
-				set_status_text("Marked <FONT COLOR='" + menuColor_HEX + "'><C>" + target.name + "</C>~s~ as Friendly.");
+				set_status_text("Marked ~p~<C>" + target.name + "</C>~s~ as Friendly.");
 			}
 		}
 		break;
@@ -4089,7 +4089,7 @@ bool onconfirm_main_menu(MenuItem<int> choice)
 }
 void process_main_menu()
 {
-	std::string caption = "<FONT COLOR='" + menuColor_HEX + "'>LAMBDA</FONT> ~s~MENU";
+	std::string caption = "~p~LAMBDA ~s~MENU";
 	std::vector<std::string> TOP_OPTIONS = {
 		"Online Players",
 		"Player",
