@@ -17,7 +17,9 @@ struct {
 	BOOL isWithAlt;
 	BOOL wasDownBefore;
 	BOOL isUpNow;
-} keyStates[KEYS_SIZE];
+}
+
+keyStates[KEYS_SIZE];
 
 void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow)
 {
@@ -41,14 +43,19 @@ bool IsKeyJustUp(DWORD key, bool exclusive)
 {
 	bool b = (key < KEYS_SIZE) ? (GetTickCount() < keyStates[key].time + NOW_PERIOD && keyStates[key].isUpNow) : false;
 	if (b && exclusive)
+	{
 		ResetKeyState(key);
+	}
+
 	return b;
 }
 
 void ResetKeyState(DWORD key)
 {
 	if (key < KEYS_SIZE)
+	{
 		memset(&keyStates[key], 0, sizeof(keyStates[0]));
+	}		
 }
 
 int keyNameToVal(char * input)
@@ -61,12 +68,14 @@ int keyNameToVal(char * input)
 	{
 		if (strcmp(input, ALL_KEYS[i].name) == 0)
 		{
-			ss.str(""); ss.clear();
+			ss.str("");
+			ss.clear();
 			ss << "Found match of " << ALL_KEYS[i].name << " with code " << ALL_KEYS[i].keyCode;
 			write_text_to_log_file(ss.str());
 
 			return ALL_KEYS[i].keyCode;
 		}
 	}
+
 	return -1;
 }

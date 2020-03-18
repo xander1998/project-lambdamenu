@@ -25,7 +25,7 @@ bool exitFlag = false;
 char* noclip_ANIM_A = "amb@world_human_stand_impatient@male@no_sign@base";
 char* noclip_ANIM_B = "base";
 
-int travelSpeed = 3;
+int travelSpeed = 2;
 
 bool in_noclip_mode = false;
 
@@ -36,9 +36,9 @@ Vector3 curRotation;
 float curHeading;
 
 //Converts Radians to Degrees
-float degToRad(float degs)
+float deg_to_rad(float degs)
 {
-	return degs*3.141592653589793 / 180;
+	return degs * 3.14159265358979323846 / 180;
 }
 
 std::string noclipStatusLines[15];
@@ -51,7 +51,6 @@ void exit_noclip_menu_if_showing()
 	exitFlag = true;
 }
 
-//Test for noclip command.
 void process_noclip_menu()
 {
 	exitFlag = false;
@@ -81,7 +80,6 @@ void process_noclip_menu()
 	{
 		in_noclip_mode = true;
 
-		// draw menu
 		if (help_showing)
 		{
 			std::string caption = "~p~LAMBDA ~s~MENU  NOCLIP MODE";
@@ -90,7 +88,7 @@ void process_noclip_menu()
 
 		make_periodic_feature_call();
 
-		//Disable noclip on death
+
 		if (ENTITY::IS_ENTITY_DEAD(playerPed))
 		{
 			exitFlag = true;
@@ -137,10 +135,6 @@ void update_noclip_text()
 			int numActualLines = 0;
 			for (int i = 0; i < numLines; i++)
 			{
-//				if (!help_showing && i != 14)
-//				{
-//					continue;
-//				}
 
 				numActualLines++;
 
@@ -249,8 +243,8 @@ void moveThroughDoor()
 
 	float forwardPush = 0.6;
 
-	float xVect = forwardPush * sin(degToRad(curHeading)) * -1.0f;
-	float yVect = forwardPush * cos(degToRad(curHeading));
+	float xVect = forwardPush * sin(deg_to_rad(curHeading)) * -1.0f;
+	float yVect = forwardPush * cos(deg_to_rad(curHeading));
 
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(playerPed, curLocation.x + xVect, curLocation.y + yVect, curLocation.z, 1, 1, 1);
 }
@@ -289,10 +283,13 @@ void noclip(bool inVehicle)
 	case 6:
 		forwardPush = 10.0f; // fast as fuck
 		break;
+	case 7:
+		forwardPush = 30.0f;
+		break;
 	}
 
-	float xVect = forwardPush * sin(degToRad(curHeading)) * -1.0f;
-	float yVect = forwardPush * cos(degToRad(curHeading));
+	float xVect = forwardPush * sin(deg_to_rad(curHeading)) * -1.0f;
+	float yVect = forwardPush * cos(deg_to_rad(curHeading));
 
 	KeyInputConfig* keyConfig = get_config()->get_key_config();
 
@@ -337,7 +334,6 @@ void noclip(bool inVehicle)
 		}
 	}
 
-	//if (IsKeyJustUp(keyConfig->key_noclip_help))
 	if (IsKeyJustUp(VK_KEY_H))
 	{
 		help_showing = !help_showing;

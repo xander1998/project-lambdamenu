@@ -76,8 +76,10 @@ bool applyChosenSkin(DWORD model)
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 	{
 		STREAMING::REQUEST_MODEL(model);
-		while (!STREAMING::HAS_MODEL_LOADED(model))	WAIT(0);
-		//STREAMING::LOAD_ALL_OBJECTS_NOW();
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+		{
+			WAIT(0);
+		}
 
 		Vehicle veh = NULL;
 		if (PED::IS_PED_IN_ANY_VEHICLE(PLAYER::PLAYER_PED_ID(), 0))
@@ -88,15 +90,8 @@ bool applyChosenSkin(DWORD model)
 		save_player_weapons();
 
 		PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
-	//	if (model == 0x9C9EFFD8 || model == 0x705E61F2)
-	//	{
-	//		PED::SET_PED_RANDOM_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), FALSE);
-	//		PED::SET_PED_RANDOM_PROPS(PLAYER::PLAYER_PED_ID());
-	//	}
-	//	else
-	//	{
 		PED::SET_PED_DEFAULT_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID());
-	//	}
+
 		WAIT(0);
 
 		if (veh != NULL)
@@ -230,11 +225,8 @@ std::string getPropDetailAttribDescription(int i)
 
 void onhighlight_skinchanger_texture_menu(MenuItem<int> choice)
 {
-	if (true)//PED::IS_PED_COMPONENT_VARIATION_VALID(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue, skinDrawableMenuValue, value))
-	{
-		int currentDrawable = PED::GET_PED_DRAWABLE_VARIATION(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue);
-		PED::SET_PED_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue, currentDrawable, choice.value, 0);
-	}
+	int currentDrawable = PED::GET_PED_DRAWABLE_VARIATION(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue);
+	PED::SET_PED_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue, currentDrawable, choice.value, 0);
 	WAIT(100);
 }
 
@@ -247,23 +239,7 @@ bool onconfirm_skinchanger_texture_menu(MenuItem<int> choice)
 
 void onexit_skinchanger_texture_menu(bool returnValue)
 {
-	/*
-	//restore the applied selection
-	int texture;
-	if (skinTextureMenuValue == -1)
-	{
-	texture = findFirstValidPedTexture(skinDrawableMenuValue);
-	}
-	else
-	{
-	texture = skinTextureMenuValue;
-	}
-
-	if (PED::IS_PED_COMPONENT_VARIATION_VALID(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue, skinDrawableMenuValue, texture))
-	{
-	PED::SET_PED_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue, skinDrawableMenuValue, texture, 0);
-	}
-	*/
+	// nothing is here okay?
 }
 
 bool process_skinchanger_texture_menu(std::string caption)
@@ -278,7 +254,10 @@ bool process_skinchanger_texture_menu(std::string caption)
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 	{
 		STREAMING::REQUEST_MODEL(model);
-		while (!STREAMING::HAS_MODEL_LOADED(model))	WAIT(0);
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+		{
+			WAIT(0);
+		}
 
 		int currentDrawable = PED::GET_PED_DRAWABLE_VARIATION(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue);
 		int textures = PED::GET_NUMBER_OF_PED_TEXTURE_VARIATIONS(PLAYER::PLAYER_PED_ID(), skinDetailMenuValue, currentDrawable);
@@ -344,7 +323,10 @@ bool process_skinchanger_drawable_menu(std::string caption, int component)
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 	{
 		STREAMING::REQUEST_MODEL(model);
-		while (!STREAMING::HAS_MODEL_LOADED(model))	WAIT(0);
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+		{
+			WAIT(0);
+		}
 
 		int drawables = PED::GET_NUMBER_OF_PED_DRAWABLE_VARIATIONS(PLAYER::PLAYER_PED_ID(), component);
 		for (int i = 0; i < drawables; i++)
@@ -395,14 +377,12 @@ bool onconfirm_skinchanger_detail_menu(MenuItem<int> choice)
 
 bool process_skinchanger_detail_menu()
 {
-	DWORD waitTime = 150;
 	int foundTextures = 0;
-	MenuItemVector<int> menuItems;
-
 	int fixedChoices = 0;
-	const int partVariations = 12; 
-
-	int i = 0;
+	const int partVariations = 12;
+	
+	DWORD waitTime = 150;
+	MenuItemVector<int> menuItems;
 
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
 	Hash model = ENTITY::GET_ENTITY_MODEL(playerPed);
@@ -410,9 +390,12 @@ bool process_skinchanger_detail_menu()
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 	{
 		STREAMING::REQUEST_MODEL(model);
-		while (!STREAMING::HAS_MODEL_LOADED(model))	WAIT(0);
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+		{
+			WAIT(0);
+		}
 
-		for (; i < partVariations + fixedChoices; i++)
+		for (int i = 0; i < partVariations + fixedChoices; i++)
 		{
 			bool iFound = false;
 			int compIndex = i - fixedChoices;
@@ -423,6 +406,7 @@ bool process_skinchanger_detail_menu()
 			{
 				textures = PED::GET_NUMBER_OF_PED_TEXTURE_VARIATIONS(PLAYER::PLAYER_PED_ID(), compIndex, 0);
 			}
+
 			if (drawables > 1 || textures != 0)
 			{
 				std::ostringstream ss;
@@ -703,41 +687,36 @@ void onhighlight_props_drawable_menu(MenuItem<int> choice)
 
 bool process_prop_drawable_menu()
 {
-	DWORD waitTime = 150;
 	int foundTextures = 0;
-	MenuItemVector<int> menuItems;
-
 	int drawables = PED::GET_NUMBER_OF_PED_PROP_DRAWABLE_VARIATIONS(PLAYER::PLAYER_PED_ID(), skinPropsCategoryValue);
 
-	int i = -1;
+	DWORD waitTime = 150;
+	MenuItemVector<int> menuItems;
 
-	for (; i < drawables; i++)
+	for (int i = -1; i < drawables; i++)
 	{
 		bool iFound = false;
 		int compIndex = i;
-
 		int textures = 0;
-		//if (drawables > 1 || textures != 0)
+
+		MenuItem<int> item;
+
+		if (i == -1)
 		{
-			MenuItem<int> item;
-
-			if (i == -1)
-			{
-				item.caption = "Nothing";
-				item.isLeaf = true;
-			}
-			else
-			{
-				std::ostringstream ss;
-				ss << "Prop Item #" << (i + 1);
-				item.caption = ss.str();
-				int textures = PED::GET_NUMBER_OF_PED_PROP_TEXTURE_VARIATIONS(PLAYER::PLAYER_PED_ID(), skinPropsCategoryValue, i);
-				item.isLeaf = (textures <= 1);
-			}
-
-			item.value = i;
-			menuItems.push_back(item);
+			item.caption = "Nothing";
+			item.isLeaf = true;
 		}
+		else
+		{
+			std::ostringstream ss;
+			ss << "Prop Item #" << (i + 1);
+			item.caption = ss.str();
+			int textures = PED::GET_NUMBER_OF_PED_PROP_TEXTURE_VARIATIONS(PLAYER::PLAYER_PED_ID(), skinPropsCategoryValue, i);
+			item.isLeaf = (textures <= 1);
+		}
+
+		item.value = i;
+		menuItems.push_back(item);
 	}
 
 	return draw_generic_menu<int>(menuItems, &skinPropsDrawablePosition[skinPropsCategoryValue], "Available Props", onconfirm_props_drawable_menu, onhighlight_props_drawable_menu, NULL);
@@ -752,17 +731,15 @@ bool onconfirm_props_menu(MenuItem<int> choice)
 
 bool process_prop_menu()
 {
-	DWORD waitTime = 150;
 	int foundTextures = 0;
-	MenuItemVector<int> menuItems;
-
+	int count = 0;
 	int fixedChoices = 0;
 	const int partVariations = 10;
+	
+	DWORD waitTime = 150;
+	MenuItemVector<int> menuItems;
 
-	int i = 0;
-	int count = 0;
-
-	for (; i < partVariations + fixedChoices; i++)
+	for (int i = 0; i < partVariations + fixedChoices; i++)
 	{
 		bool iFound = false;
 		int compIndex = i - fixedChoices;
@@ -774,10 +751,9 @@ bool process_prop_menu()
 
 			std::ostringstream ss;
 			
-				std::string itemText = getPropDetailAttribDescription(compIndex);
-				//ss << "Slot " << (compIndex + 1) << ": " << itemText << " (" << drawables << ")";
-				ss << itemText << " (" << drawables << ")";
-				item.caption = ss.str();
+			std::string itemText = getPropDetailAttribDescription(compIndex);
+			ss << itemText << " (" << drawables << ")";
+			item.caption = ss.str();
 
 			item.value = compIndex;
 			item.isLeaf = false;
@@ -788,7 +764,6 @@ bool process_prop_menu()
 
 	if (count == 0)
 	{
-//		set_status_text("Nothing available for this model");
 		return false;
 	}
 

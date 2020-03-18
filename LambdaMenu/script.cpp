@@ -4087,6 +4087,7 @@ bool onconfirm_main_menu(MenuItem<int> choice)
 	}
 	return false;
 }
+
 void process_main_menu()
 {
 	std::string caption = "~p~LAMBDA ~s~MENU";
@@ -4110,13 +4111,10 @@ void process_main_menu()
 		MenuItem<int> item;
 		item.caption = TOP_OPTIONS[i];
 		item.value = i;
-		item.isLeaf = (
+		item.isLeaf = i == 7;
 #ifdef DEVELOPMENT
-			i == 8
-#else
-			i == 7
+		item.isLeaf = i == 8;
 #endif
-			);
 		item.currentMenuIndex = i;
 		menuItems.push_back(item);
 	}
