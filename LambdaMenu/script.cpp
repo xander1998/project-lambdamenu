@@ -3494,7 +3494,7 @@ bool onconfirm_voicechannel_menu()
 	{
 		//std::string::size_type sz;
 		try {
-			channelId = std::stoi(result, nullptr, 0);
+			channelId = std::stoi(result, nullptr, 10);
 		}
 		catch (std::invalid_argument) {
 			set_status_text("~r~Could not convert string to int (invalid channel).~y~");
