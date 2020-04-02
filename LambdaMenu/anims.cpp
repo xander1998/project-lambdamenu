@@ -16,6 +16,7 @@
 #include "menu_functions.h"
 #include "debuglog.h"
 #include <sstream>
+#include <functional>
 #include <vector>
 
 TreeNode *rootNode;

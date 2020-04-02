@@ -19,6 +19,7 @@
 #pragma comment(lib, "Shlwapi.lib")
 
 #define MAX_PLAYERS 256
+#define TRAINER_VERSION "6"
 
 #include "io.h"
 #include "config_io.h"
@@ -179,6 +180,7 @@ bool featureChannel3 = false;
 bool featureChannel4 = false;
 bool featureChannel5 = false;
 bool featureVoiceChat = true;
+bool featureVoiceControl = false;
 bool featureWantedLevelFrozen = false;
 bool featureWantedLevelFrozenUpdated = false;
 int frozenWantedLevel = 0;
@@ -1190,80 +1192,82 @@ void toggle_watch()
 	}
 
 	// voice settings
-	if (featureVPVeryClose)
-	{
-		NETWORK::NETWORK_SET_TALKER_PROXIMITY(25.01f);
+	if (featureVoiceControl) {
+		if (featureVPVeryClose)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(25.01f);
+		}
+
+		if (featureVPClose)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(75.01f);
+		}
+
+		if (featureVPNearby)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(200.01f);
+		}
+
+		if (featureVPDistant)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(500.01f);
+		}
+
+		if (featureVPFar)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(2500.01f);
+		}
+
+		if (featureVPVeryFar)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(8000.01f);
+		}
+
+		if (featureVPAllPlayers)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
+		}
+
+
+		if (featureChannelDefault)
+		{
+			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
+		}
+
+		if (featureChannel1)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
+		}
+
+		if (featureChannel2)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
+		}
+
+		if (featureChannel3)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
+		}
+
+		if (featureChannel4)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
+		}
+
+		if (featureChannel5)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
+		}
+
+		if (featureVoiceChat)
+		{
+			NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
+		}
+		else
+		{
+			NETWORK::NETWORK_SET_VOICE_ACTIVE(0);
+		}
 	}
-
-	if (featureVPClose)
-	{
-		NETWORK::NETWORK_SET_TALKER_PROXIMITY(75.01f);
-	}
-
-	if (featureVPNearby)
-	{
-		NETWORK::NETWORK_SET_TALKER_PROXIMITY(200.01f);
-	}
-
-	 if (featureVPDistant)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(500.01f);
-	 }
-
-	 if (featureVPFar)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(2500.01f);
-	 }
-
-	 if (featureVPVeryFar)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(8000.01f);
-	 }
-
-	 if (featureVPAllPlayers)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-	 }
-
-
-	 if (featureChannelDefault)
-	 {
-		 NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-	 }
-
-	 if (featureChannel1)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
-	 }
-
-	 if (featureChannel2)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
-	 }
-
-	 if (featureChannel3)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
-	 }
-
-	 if (featureChannel4)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
-	 }
-
-	 if (featureChannel5)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
-	 }
-
-	 if (featureVoiceChat)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
-	 }
-	 else
-	 {
-		 NETWORK::NETWORK_SET_VOICE_ACTIVE(0);
-	 }
 }
 
 //=============================
@@ -3779,7 +3783,7 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 {
 	switch (activeLineIndexVoice)
 	{
-	case 0:
+	case 1:
 		if (featureVoiceChat)
 		{
 			NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
@@ -3791,10 +3795,10 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 			set_status_text("Voice chat: ~r~Disabled");
 		}
 		break;
-	case 2:
+	case 3:
 		process_voicechannel_menu();
 		break;
-	case 3:
+	case 4:
 		process_voiceproximity_menu();
 		break;
 	default:
@@ -3804,11 +3808,12 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 }
 void process_voice_menu()
 {
-	const int lineCount = 4;
+	const int lineCount = 5;
 
 	std::string caption = "Voice Options";
 
 	StandardOrToggleMenuDef lines[lineCount] = {
+		{ "Enable Voice Control", &featureVoiceControl, NULL, true },
 		{ "Voice Chat", &featureVoiceChat, NULL, true },
 		{ "Show Voice Chat Speaker", &featureShowVoiceChatSpeaker, NULL, true },
 		{ "Voice Channel", NULL, NULL, false },
@@ -4229,6 +4234,99 @@ void reset_globals()
 	save_settings();
 #endif
 }
+
+#include <tuple>
+#include <list>
+
+std::list<std::tuple<std::function<bool()>, std::function<void()>>> g_callResults;
+
+void submit_call_on_result(const std::function<bool()>& result, const std::function<void()>& call)
+{
+	g_callResults.push_back({ result, call });
+}
+
+using TMenu = std::tuple<std::function<bool()>, std::function<void(bool)>>;
+
+#include <stack>
+
+std::stack<TMenu> g_menuList;
+
+void set_menu_processor(const std::function<bool()>& process, const std::function<void(bool)>& onExit)
+{
+	g_menuList.push({ process, onExit });
+}
+
+void process_current_menu()
+{
+	if (!g_menuList.empty())
+	{
+		if (!std::get<0>(g_menuList.top())())
+		{
+			auto fn = std::get<1>(g_menuList.top());
+
+			if (fn)
+			{
+				fn(false);
+			}
+
+			g_menuList.pop();
+		}
+	}
+}
+
+//#include <msgpack.hpp>
+
+
+//IMPORT void trigger_event(const char* eventName, const void* dataPtr, uint32_t size);
+
+void main_loop()
+{
+#if false
+	static bool initializedLM = false;
+
+	if (!initializedLM)
+	{
+		msgpack::sbuffer sb;
+		msgpack::packer<msgpack::sbuffer> packer(sb);
+		packer.pack_array(0);
+
+		trigger_event("lambdamenu:started", sb.data(), (uint32_t)sb.size());
+
+		initializedLM = true;
+	}
+#endif
+
+	if (trainer_switch_pressed())
+	{
+		menu_beep();
+		set_menu_showing(true);
+		process_main_menu();
+	}
+	else if (noclip_switch_pressed())
+	{
+		menu_beep();
+		process_noclip_menu();
+
+	}
+
+	process_current_menu();
+	update_features();
+
+	for (auto it = g_callResults.begin(); it != g_callResults.end(); )
+	{
+		if (std::get<0>(*it)())
+		{
+			std::get<1>(*it)();
+
+			it = g_callResults.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+}
+
 void RunMain()
 {	
 
