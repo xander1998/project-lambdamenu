@@ -14,6 +14,7 @@
 
 #include "menu_functions.h"
 #include "script.h"
+#include "colors.h"
 
 std::string centreScreenStatusText;
 DWORD centreScreenStatusTextDrawTicksMax;
@@ -63,9 +64,9 @@ void draw_menu_line(std::string caption, float lineWidth, float lineHeight, floa
 		//rect_col[0] = 102;
 		//rect_col[1] = 153;
 		//rect_col[2] = 255;
-		rect_col[0] = 93;
-		rect_col[1] = 182;
-		rect_col[2] = 229;
+		rect_col[0] = menuColor_RGB[0];
+		rect_col[1] = menuColor_RGB[1];
+		rect_col[2] = menuColor_RGB[2];
 		rect_col[3] = 200;
 
 
@@ -82,7 +83,10 @@ void draw_menu_line(std::string caption, float lineWidth, float lineHeight, floa
 		rect_col[2] = 0;
 		rect_col[3] = 200;
 
-		if (rescaleText) text_scale = 0.60;
+		if (rescaleText)
+		{
+			text_scale = 0.60;
+		}
 		font = 2;
 	}
 	else
@@ -264,13 +268,6 @@ std::string show_keyboard(char* title_id, char* prepopulated_text)
 		WAIT(0);
 	}
 
-	/*
-	Any x;
-	GAMEPLAY::START_SAVE_DATA(&x, 1, 1);
-	GAMEPLAY::REGISTER_TEXT_LABEL_TO_SAVE(&x, "XYZ123");
-	GAMEPLAY::STOP_SAVE_DATA();
-	*/
-
 	GAMEPLAY::DISPLAY_ONSCREEN_KEYBOARD(
 		true,
 		const_cast<char*>(title_id == NULL ? "HUD_TITLE" : title_id),
@@ -306,20 +303,14 @@ void MenuItem<T>::onConfirm()
 	}
 }
 
-
 template<class T>
 void ToggleMenuItem<T>::onConfirm()
 {
-	//set_status_text("Base confirm");
-
-	//call super
 	MenuItem<T>::onConfirm();
 
-	//toggle the value if there is none
 	if (toggleValue != NULL)
 	{
 		*toggleValue = !*toggleValue;
-		//set_status_text(*toggleValue ? "Now ON" : "Now OFF");
 		if (toggleValueUpdated != NULL)
 		{
 			*toggleValueUpdated = true;
@@ -330,9 +321,7 @@ void ToggleMenuItem<T>::onConfirm()
 template<class T>
 int WantedSymbolItem<T>::get_wanted_value()
 {
-	BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(PLAYER::PLAYER_PED_ID());
-	Player player = PLAYER::PLAYER_ID();
-	return PLAYER::GET_PLAYER_WANTED_LEVEL(player);
+	return PLAYER::GET_PLAYER_WANTED_LEVEL(PLAYER::PLAYER_ID());
 }
 
 template<class T>
@@ -343,24 +332,13 @@ void WantedSymbolItem<T>::handleLeftPress()
 	int currentLevel = PLAYER::GET_PLAYER_WANTED_LEVEL(player);
 	if (bPlayerExists && currentLevel > 0)
 	{
-		//setFrozenWantedFeature(true);
 		PLAYER::SET_PLAYER_WANTED_LEVEL(player, --currentLevel, 0);
 		PLAYER::SET_PLAYER_WANTED_LEVEL_NOW(player, 0);
-		//setFrozenWantedLvl(PLAYER::GET_PLAYER_WANTED_LEVEL(player));
-		std::stringstream ss;
-		if (currentLevel > 0)
-		{
-			ss << "Wanted Level: " << currentLevel << " Star";
-			if (currentLevel > 1)
-			{
-				ss << "s"; //plural
-			}
-		}
-		else
-		{
-			ss << "Wanted Level Cleared";
-		}
-		//		set_status_text(ss.str());
+	}
+
+	if (currentLevel < 0)
+	{
+		set_status_text("~b~Cannot lower wanted level further.");
 	}
 }
 
@@ -373,16 +351,12 @@ void WantedSymbolItem<T>::handleRightPress()
 	int currentLevel = PLAYER::GET_PLAYER_WANTED_LEVEL(player);
 	if (bPlayerExists && currentLevel < 5)
 	{
-		//setFrozenWantedFeature(true);
 		PLAYER::SET_PLAYER_WANTED_LEVEL(player, ++currentLevel, 0);
 		PLAYER::SET_PLAYER_WANTED_LEVEL_NOW(player, 0);
-		//setFrozenWantedLvl(PLAYER::GET_PLAYER_WANTED_LEVEL(player));
-		std::stringstream ss;
-		ss << "Wanted Level: " << currentLevel << " Star";
-		if (currentLevel > 1)
-		{
-			ss << "s"; //plural
-		}
-		//		set_status_text(ss.str());
+	}
+
+	if (currentLevel > 5)
+	{
+		set_status_text("~b~Cannot raise wanted level further.");
 	}
 }

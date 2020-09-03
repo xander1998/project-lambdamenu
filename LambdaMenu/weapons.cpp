@@ -18,22 +18,29 @@
 
 const std::vector<std::string> MENU_WEAPON_CATEGORIES{ "Melee", "Handguns", "Submachine Guns", "Assault Rifles", "Shotguns", "Sniper Rifles", "Heavy Weapons", "Thrown Weapons", "Spawn Weapon By Name", "Spawn Component By Name" };
 
-const std::vector<std::string> CAPTIONS_MELEE{ "Knife", "Knuckleduster", "Nightstick", "Hammer", "Baseball Bat", "Golf Club", "Crowbar", "Bottle", "Antique Dagger", "Hatchet", "Machete", "Flashlight", "Switchblade", "Pool Cue", "Pipe Wrench", "Battle Axe" }; //13
-const std::vector<std::string> VALUES_MELEE{ "WEAPON_KNIFE", "WEAPON_KNUCKLE", "WEAPON_NIGHTSTICK", "WEAPON_HAMMER", "WEAPON_BAT", "WEAPON_GOLFCLUB", "WEAPON_CROWBAR", "WEAPON_BOTTLE", "WEAPON_DAGGER", "WEAPON_HATCHET", "WEAPON_MACHETE", "WEAPON_FLASHLIGHT", "WEAPON_SWITCHBLADE", "WEAPON_POOLCUE", "WEAPON_WRENCH", "WEAPON_BATTLEAXE" };
-const std::vector<std::string> CAPTIONS_HANDGUN{ "Pistol", "Combat Pistol", "AP Pistol", "Pistol .50", "SNS Pistol", "Heavy Pistol", "Vintage Pistol", "Stun Gun", "Flare Gun", "Marksman Pistol", "Heavy Revolver" }; //11
-const std::vector<std::string> VALUES_HANDGUN{ "WEAPON_PISTOL", "WEAPON_COMBATPISTOL", "WEAPON_APPISTOL", "WEAPON_PISTOL50", "WEAPON_SNSPISTOL", "WEAPON_HEAVYPISTOL", "WEAPON_VINTAGEPISTOL", "WEAPON_STUNGUN", "WEAPON_FLAREGUN", "WEAPON_MARKSMANPISTOL", "WEAPON_REVOLVER" };
-const std::vector<std::string> CAPTIONS_SUBMACHINE{ "Micro SMG", "SMG", "Mini SMG", "Assault SMG", "MG", "Combat MG", "Combat PDW", "Gusenberg Sweeper", "Machine Pistol" }; //8
-const std::vector<std::string> VALUES_SUBMACHINE{ "WEAPON_MICROSMG", "WEAPON_SMG", "WEAPON_MINISMG", "WEAPON_ASSAULTSMG", "WEAPON_MG", "WEAPON_COMBATMG", "WEAPON_COMBATPDW", "WEAPON_GUSENBERG", "WEAPON_MACHINEPISTOL" };
-const std::vector<std::string> CAPTIONS_ASSAULT{ "Assault Rifle", "Carbine Rifle", "Advanced Rifle", "Special Carbine", "Bullpup Rifle", "Compact Rifle" }; //6
-const std::vector<std::string> VALUES_ASSAULT{ "WEAPON_ASSAULTRIFLE", "WEAPON_CARBINERIFLE", "WEAPON_ADVANCEDRIFLE", "WEAPON_SPECIALCARBINE", "WEAPON_BULLPUPRIFLE", "WEAPON_COMPACTRIFLE" };
-const std::vector<std::string> CAPTIONS_SHOTGUN{ "Pump Shotgun", "Sawed Off Shotgun", "Bullpup Shotgun", "Assault Shotgun", "Musket", "Heavy Shotgun", "Double Barrel Shotgun", "Sweeper Shotgun" }; //7
-const std::vector<std::string> VALUES_SHOTGUN{ "WEAPON_PUMPSHOTGUN", "WEAPON_SAWNOFFSHOTGUN", "WEAPON_BULLPUPSHOTGUN", "WEAPON_ASSAULTSHOTGUN", "WEAPON_MUSKET", "WEAPON_HEAVYSHOTGUN", "WEAPON_DBSHOTGUN", "WEAPON_AUTOSHOTGUN" };
-const std::vector<std::string> CAPTIONS_SNIPER{ "Sniper Rifle", "Heavy Sniper", "Marksman Rifle" }; //3
-const std::vector<std::string> VALUES_SNIPER{ "WEAPON_SNIPERRIFLE", "WEAPON_HEAVYSNIPER", "WEAPON_MARKSMANRIFLE" };
-const std::vector<std::string> CAPTIONS_HEAVY{ "Grenade Launcher", "Compact Grenade Launcher", "RPG", "Stinger", "Minigun", "Fireworks Launcher", "Railgun", "Homing Launcher" }; //7
-const std::vector<std::string> VALUES_HEAVY{ "WEAPON_GRENADELAUNCHER", "WEAPON_COMPACTLAUNCHER", "WEAPON_RPG", "WEAPON_STINGER", "WEAPON_MINIGUN", "WEAPON_FIREWORK", "WEAPON_RAILGUN", "WEAPON_HOMINGLAUNCHER" };
-const std::vector<std::string> CAPTIONS_THROWN{ "Grenade", "Sticky Bomb", "Proximity Mine", "Tear Gas", "Smoke Grenade", "Molotov", "Fire Extinguisher", "Jerry Can", "Snowball", "Flare", "Ball", "Pipe Bomb" }; //11
-const std::vector<std::string> VALUES_THROWN{ "WEAPON_GRENADE", "WEAPON_STICKYBOMB", "WEAPON_PROXMINE", "WEAPON_BZGAS", "WEAPON_SMOKEGRENADE", "WEAPON_MOLOTOV", "WEAPON_FIREEXTINGUISHER", "WEAPON_PETROLCAN", "WEAPON_SNOWBALL", "WEAPON_FLARE", "WEAPON_BALL", "WEAPON_PIPEBOMB" };
+const std::vector<std::string> CAPTIONS_MELEE{ "Knife",		 "Knuckleduster",  "Nightstick",		"Hammer",		 "Baseball Bat", "Golf Club",       "Crowbar",        "Bottle",        "Antique Dagger", "Hatchet",        "Machete",        "Flashlight",        "Switchblade",        "Pool Cue",       "Pipe Wrench",   "Battle Axe", "Stone Hatchet" }; //13
+const std::vector<std::string> VALUES_MELEE{   "WEAPON_KNIFE", "WEAPON_KNUCKLE", "WEAPON_NIGHTSTICK", "WEAPON_HAMMER", "WEAPON_BAT",   "WEAPON_GOLFCLUB", "WEAPON_CROWBAR", "WEAPON_BOTTLE", "WEAPON_DAGGER",  "WEAPON_HATCHET", "WEAPON_MACHETE", "WEAPON_FLASHLIGHT", "WEAPON_SWITCHBLADE", "WEAPON_POOLCUE", "WEAPON_WRENCH", "WEAPON_BATTLEAXE", "WEAPON_STONE_HATCHET" };
+
+const std::vector<std::string> CAPTIONS_HANDGUN{ "Pistol Mk II",      "SNS Pistol Mk II",     "Heavy Revolver Mk II", "Up-n-Atomizer",    "Pistol",        "Combat Pistol",       "AP Pistol",       "Pistol .50",      "SNS Pistol",       "Heavy Pistol",       "Vintage Pistol",       "Stun Gun",       "Flare Gun",       "Marksman Pistol",       "Heavy Revolver" }; //11
+const std::vector<std::string> VALUES_HANDGUN{   "WEAPON_PISTOL_MK2", "WEAPON_SNSPISTOL_MK2", "WEAPON_REVOLVER_MK2",  "WEAPON_RAYPISTOL", "WEAPON_PISTOL", "WEAPON_COMBATPISTOL", "WEAPON_APPISTOL", "WEAPON_PISTOL50", "WEAPON_SNSPISTOL", "WEAPON_HEAVYPISTOL", "WEAPON_VINTAGEPISTOL", "WEAPON_STUNGUN", "WEAPON_FLAREGUN", "WEAPON_MARKSMANPISTOL", "WEAPON_REVOLVER" };
+
+const std::vector<std::string> CAPTIONS_SUBMACHINE{ "Combat MG Mk II",     "SMG Mk II",      "Combat MG Mk II",     "Micro SMG",       "SMG",        "Mini SMG",       "Assault SMG",       "MG",        "Combat MG",       "Combat PDW",       "Gusenberg Sweeper", "Machine Pistol" }; //8
+const std::vector<std::string> VALUES_SUBMACHINE{   "WEAPON_COMBATMG_MK2", "WEAPON_SMG_MK2", "WEAPON_COMBATMG_MK2", "WEAPON_MICROSMG", "WEAPON_SMG", "WEAPON_MINISMG", "WEAPON_ASSAULTSMG", "WEAPON_MG", "WEAPON_COMBATMG", "WEAPON_COMBATPDW", "WEAPON_GUSENBERG",  "WEAPON_MACHINEPISTOL" };
+
+const std::vector<std::string> CAPTIONS_ASSAULT{ "Special Carbine Mk II",     "Bullpup Rifle Mk II",     "Assault Rifle Mk II",     "Carbine Rifle Mk II",     "Assault Rifle",       "Carbine Rifle",       "Advanced Rifle",       "Special Carbine",       "Bullpup Rifle",       "Compact Rifle" }; //6
+const std::vector<std::string> VALUES_ASSAULT{   "WEAPON_SPECIALCARBINE_MK2", "WEAPON_BULLPUPRIFLE_MK2", "WEAPON_ASSAULTRIFLE_MK2", "WEAPON_CARBINERIFLE_MK2", "WEAPON_ASSAULTRIFLE", "WEAPON_CARBINERIFLE", "WEAPON_ADVANCEDRIFLE", "WEAPON_SPECIALCARBINE", "WEAPON_BULLPUPRIFLE", "WEAPON_COMPACTRIFLE" };
+
+const std::vector<std::string> CAPTIONS_SHOTGUN{ "Pump Shotgun Mk II",     "Pump Shotgun",       "Sawed Off Shotgun",     "Bullpup Shotgun",       "Assault Shotgun",       "Musket",        "Heavy Shotgun",       "Double Barrel Shotgun", "Sweeper Shotgun" }; //7
+const std::vector<std::string> VALUES_SHOTGUN{   "WEAPON_PUMPSHOTGUN_MK2", "WEAPON_PUMPSHOTGUN", "WEAPON_SAWNOFFSHOTGUN", "WEAPON_BULLPUPSHOTGUN", "WEAPON_ASSAULTSHOTGUN", "WEAPON_MUSKET", "WEAPON_HEAVYSHOTGUN", "WEAPON_DBSHOTGUN",      "WEAPON_AUTOSHOTGUN" };
+
+const std::vector<std::string> CAPTIONS_SNIPER{ "Marksman Rifle Mk II",     "Heavy Sniper Mk II",     "Sniper Rifle",       "Heavy Sniper",       "Marksman Rifle" }; //3
+const std::vector<std::string> VALUES_SNIPER{   "WEAPON_MARKSMANRIFLE_MK2", "WEAPON_HEAVYSNIPER_MK2", "WEAPON_SNIPERRIFLE", "WEAPON_HEAVYSNIPER", "WEAPON_MARKSMANRIFLE" };
+
+const std::vector<std::string> CAPTIONS_HEAVY{ "Grenade Launcher",       "Compact Grenade Launcher", "RPG",        "Stinger",        "Minigun",        "Fireworks Launcher", "Railgun",        "Homing Launcher" }; //7
+const std::vector<std::string> VALUES_HEAVY{   "WEAPON_GRENADELAUNCHER", "WEAPON_COMPACTLAUNCHER",   "WEAPON_RPG", "WEAPON_STINGER", "WEAPON_MINIGUN", "WEAPON_FIREWORK",    "WEAPON_RAILGUN", "WEAPON_HOMINGLAUNCHER" };
+
+const std::vector<std::string> CAPTIONS_THROWN{ "Grenade",        "Sticky Bomb",       "Proximity Mine",  "Tear Gas",     "Smoke Grenade",       "Molotov",        "Fire Extinguisher",       "Jerry Can",        "Snowball",        "Flare",        "Ball",        "Pipe Bomb" }; //11
+const std::vector<std::string> VALUES_THROWN{   "WEAPON_GRENADE", "WEAPON_STICKYBOMB", "WEAPON_PROXMINE", "WEAPON_BZGAS", "WEAPON_SMOKEGRENADE", "WEAPON_MOLOTOV", "WEAPON_FIREEXTINGUISHER", "WEAPON_PETROLCAN", "WEAPON_SNOWBALL", "WEAPON_FLARE", "WEAPON_BALL", "WEAPON_PIPEBOMB" };
 
 const std::vector<std::string> VOV_WEAPON_CAPTIONS[] = { CAPTIONS_MELEE, CAPTIONS_HANDGUN, CAPTIONS_SUBMACHINE, CAPTIONS_ASSAULT, CAPTIONS_SHOTGUN, CAPTIONS_SNIPER, CAPTIONS_HEAVY, CAPTIONS_THROWN };
 const std::vector<std::string> VOV_WEAPON_VALUES[] = { VALUES_MELEE, VALUES_HANDGUN, VALUES_SUBMACHINE, VALUES_ASSAULT, VALUES_SHOTGUN, VALUES_SNIPER, VALUES_HEAVY, VALUES_THROWN };
@@ -193,6 +200,8 @@ int saved_armour = 0;
 
 bool redrawWeaponMenuAfterEquipChange = false;
 
+std::string previousWeaponModelName;
+std::string previousWeaponComponentModelName;
 
 bool process_individual_weapon_menu(int weaponIndex)
 {
@@ -205,7 +214,12 @@ bool process_individual_weapon_menu(int weaponIndex)
 	std::string caption = VOV_WEAPON_CAPTIONS[lastSelectedWeaponCategory].at(weaponIndex);
 	if (caption.compare("Pistol .50") == 0)
 	{
-		caption = "Pistol"; //menu title can't handle symbols
+		caption = "Pistol \\.50";
+	}
+
+	if (caption.compare("Up-n-Atomizer") == 0)
+	{
+		caption = "Up\\-n\\-Atomizer";
 	}
 
 	std::string value = VOV_WEAPON_VALUES[lastSelectedWeaponCategory].at(weaponIndex);
@@ -371,9 +385,10 @@ bool onconfirm_weaponlist_menu(MenuItem<int> choice)
 	Ped playerPed = PLAYER::PLAYER_PED_ID();
 	if (choice.value == MENU_WEAPON_CATEGORIES.size() - 2) //custom weapon spawn
 	{
-		std::string result = show_keyboard(NULL, "Enter weapon model name");
+		std::string result = show_keyboard(NULL, (char*)previousWeaponModelName.c_str());
 		if (!result.empty())
 		{
+			previousWeaponModelName = result;
 			Hash whash = GAMEPLAY::GET_HASH_KEY((char*)result.c_str());
 			if (!WEAPON::IS_WEAPON_VALID(whash))
 			{
@@ -392,9 +407,10 @@ bool onconfirm_weaponlist_menu(MenuItem<int> choice)
 	}
 	else if (choice.value == MENU_WEAPON_CATEGORIES.size() - 1) //custom weapon component spawn
 	{
-		std::string result = show_keyboard(NULL, "Enter weapon component model name");
+		std::string result = show_keyboard(NULL, (char*)previousWeaponComponentModelName.c_str());
 		if (!result.empty())
 		{
+			previousWeaponComponentModelName = result;
 			Hash chash = GAMEPLAY::GET_HASH_KEY((char*)result.c_str());
 			Hash weapon = WEAPON::GET_SELECTED_PED_WEAPON(playerPed);
 			int unarmed = GAMEPLAY::GET_HASH_KEY("WEAPON_UNARMED");
@@ -472,13 +488,21 @@ bool process_weaponlist_menu()
 
 bool do_give_weapon(std::string modelName)
 {
-	// common variables
-	BOOL bPlayerExists = ENTITY::DOES_ENTITY_EXIST(PLAYER::PLAYER_PED_ID());
-	Player player = PLAYER::PLAYER_ID();
-	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	if (modelName.c_str() == "")
+	{
+		return false;
+	}
 
-	if (bPlayerExists) { WEAPON::GIVE_DELAYED_WEAPON_TO_PED(playerPed, GAMEPLAY::GET_HASH_KEY((char *)modelName.c_str()), 1000, 0); return true; }
-	else { return false; }
+	Ped playerPed = PLAYER::PLAYER_PED_ID();
+	Player player = PLAYER::PLAYER_ID();
+	BOOL pedExists = ENTITY::DOES_ENTITY_EXIST(playerPed);
+
+	if (pedExists)
+	{
+		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(playerPed, GAMEPLAY::GET_HASH_KEY((char*)modelName.c_str()), 1000, TRUE);
+		return true;
+	}
+	return false;
 }
 
 bool onconfirm_weapon_menu(MenuItem<int> choice)

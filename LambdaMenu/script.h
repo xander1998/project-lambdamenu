@@ -51,6 +51,8 @@ bool process_skinchanger_detail_menu();
 
 void update_features();
 
+void change_color_of_all_hud_ids(int r, int g, int b, int a);
+
 void reset_globals();
 
 void set_all_nearby_peds_to_calm(Ped playerPed, int count);
@@ -65,7 +67,6 @@ void load_settings();
 
 void save_settings();
 
-#ifndef SERVER_SIDED
 DWORD WINAPI save_settings_thread(LPVOID lpParameter);
 
 void init_storage();
@@ -77,26 +78,5 @@ WCHAR* get_storage_dir_path(char* file);
 WCHAR* get_temp_dir_path();
 
 WCHAR* get_temp_dir_path(char* file);
-#else
-inline char* get_storage_dir_path()
-{
-       return "";
-}
-
-inline char* get_storage_dir_path(char* file)
-{
-       return file;
-}
-
-inline char* get_temp_dir_path()
-{
-       return "";
-}
-
-inline char* get_temp_dir_path(char* file)
-{
-       return file;
-}
-#endif
 
 ERDatabase* get_database();

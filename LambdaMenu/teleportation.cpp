@@ -217,13 +217,8 @@ std::vector<const char*> IPLS_NORTH_YANKTON = {
 	"prologue03_lod",
 	"prologue03b",
 	"prologue03b_lod",
-	//the commented code disables the 'Prologue' grave and
-	//enables the 'Bury the Hatchet' grave
-	//"prologue03_grv_cov",
-	//"prologue03_grv_cov_lod",
 	"prologue03_grv_dug",
 	"prologue03_grv_dug_lod",
-	//"prologue03_grv_fun",
 	"prologue_grv_torch",
 	"plg_04",
 	"prologue04",
@@ -248,8 +243,6 @@ std::vector<const char*> IPLS_NORTH_YANKTON = {
 	"prologue06_int_lod",
 	"prologue06_pannel",
 	"prologue06_pannel_lod",
-	//"prologue_m2_door",
-	//"prologue_m2_door_lod",
 	"plg_occl_00",
 	"prologue_occl",
 	"plg_rd",
@@ -258,11 +251,9 @@ std::vector<const char*> IPLS_NORTH_YANKTON = {
 	"prologuerd_lod"
 };
 
-
 std::vector<tele_location> LOCATIONS_REQSCEN = {
 	{ "Carrier", 3069.330f, -4632.4f, 15.043f },
 	{ "Fort Zancudo UFO", -2052.000f, 3237.000f, 1456.973f, { "ufo", "ufo_lod", "ufo_eye" }, {}, false },
-	//{ "Heist Yacht", -2043.974f, -1031.582f, 11.981f, IPLS_HEISTYACHT, {}, false },
 	{ "North Yankton", 3360.19f, -4849.67f, 111.8f, IPLS_NORTH_YANKTON, {}, false },
 	{ "North Yankton Bank", 5309.519f, -5212.375f, 83.522f, IPLS_NORTH_YANKTON, {}, false },
 	{ "SS Bulker (Intact)", -163.749f, -2377.94f, 9.3192f, { "cargoship" }, { "sunkcargoship" }, false },
@@ -270,14 +261,6 @@ std::vector<tele_location> LOCATIONS_REQSCEN = {
 	{ "Train Crash Bridge", -532.1309f, 4526.187f, 88.7955f, { "canyonriver01_traincrash", "railing_end" }, { "railing_start", "canyonriver01" }, false },
 	{ "Yacht", -2023.661f, -1038.038f, 5.577f },
 };
-
-/*
-std::vector<tele_location> LOCATIONS_BROKEN = {
-	{ "Carrier", 3069.330f, -4704.220f, 15.043f, IPLS_CARRIER, {}, false },
-	{ "Director Mod Trailer", -20.004f, -10.889f, 500.602f },
-};
-*/
-
 
 std::vector<std::string> MENU_LOCATION_CATEGORIES{ "Safehouses", "Landmarks", "Roof/High Up", "Underwater", "Interiors", "Extra Exterior Scenery" };
 
@@ -293,8 +276,10 @@ void teleport_to_coords(Entity e, Vector3 coords)
 void output_current_location(Entity e)
 {
 	Vector3 coords = ENTITY::GET_ENTITY_COORDS(e, 0);
+
 	std::ostringstream ss;
 	ss << "X: " << coords.x << "\nY: " << coords.y << "\nZ: " << coords.z;
+
 	set_status_text_centre_screen(ss.str(), 4000UL);
 }
 
@@ -302,10 +287,9 @@ void teleport_to_marker(Entity e)
 {
 	Vector3 coords;
 	bool success = false;
-
 	bool blipFound = false;
-	// search for marker blip
 	int blipIterator = UI::_GET_BLIP_INFO_ID_ITERATOR();
+
 	for (Blip i = UI::GET_FIRST_BLIP_INFO_ID(blipIterator); UI::DOES_BLIP_EXIST(i) != 0; i = UI::GET_NEXT_BLIP_INFO_ID(blipIterator))
 	{
 		if (UI::GET_BLIP_INFO_ID_TYPE(i) == 4)
@@ -341,6 +325,7 @@ void teleport_to_marker(Entity e)
 				break;
 			}
 		}
+
 		// if ground not found then set Z in air and give player a parachute
 		if (!groundFound)
 		{
@@ -521,13 +506,13 @@ bool process_teleport_menu(int categoryIndex)
 		MenuItemVector<int> menuItems;
 
 		MenuItem<int> markerItem;
-		markerItem.caption = "GO TO MARKER LOCATION";
+		markerItem.caption = "Teleport to waypoint";
 		markerItem.value = -2;
 		markerItem.isLeaf = true;
 		menuItems.push_back(markerItem);
 
 		MenuItem<int> dialogItem;
-		dialogItem.caption = "SHOW COORDINATES";
+		dialogItem.caption = "Show coordinates";
 		dialogItem.value = -1;
 		dialogItem.isLeaf = true;
 		menuItems.push_back(dialogItem);

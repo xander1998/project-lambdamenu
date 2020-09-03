@@ -32,7 +32,6 @@ int driveStyle;
 const std::vector<std::string> ALL_ANIMS =
 {
 	"amb@bagels@male@walking@ static",
-#ifndef SERVER_SIDED
 	"amb@code_human_cower@female@base base",
 	"amb@code_human_cower@female@enter enter",
 	"amb@code_human_cower@female@exit exit_flee",
@@ -21913,7 +21912,6 @@ const std::vector<std::string> ALL_ANIMS =
 	"weapons@unarmed walk_additive_forward",
 	"weapons@unarmed walk_additive_left",
 	"weapons@unarmed walk_additive_right"
-#endif
 };
 
 
@@ -21930,7 +21928,11 @@ void update_actions()
 
 static bool StringEndsWith(const std::string& a, const std::string& b)
 {
-	if (b.size() > a.size()) return false;
+	if (b.size() > a.size())
+	{
+		return false;
+	}
+
 	return std::equal(a.begin() + a.size() - b.size(), a.end(), b.begin());
 }
 
@@ -21980,30 +21982,14 @@ TreeNode* build_anim_tree(std::vector<std::string> input)
 	
 	for (const auto& anim : input)
 	{
-		/*
-		std::stringstream logss;
-		logss << "Processing line " << anim;
-		write_text_to_log_file(logss.str());
-		logss.str(""); logss.clear();
-		*/
-
 		std::string dict = get_dict_from_string(anim);
-
 		std::stringstream ss(dict);
-
 		std::string token;
 
 		TreeNode* currentNode = resultRoot;
 
 		while (std::getline(ss, token, '@'))
 		{
-			/*
-			std::stringstream logss;
-			logss << "Parsed token " << token;
-			write_text_to_log_file(logss.str());
-			logss.str(""); logss.clear();
-			*/
-
 			TreeNode* child = currentNode->findChildWithValue(token);
 			if (child == NULL)
 			{
@@ -22175,12 +22161,14 @@ bool onconfirm_anim_menu(MenuItem<int> choice)
 	if (!target->hasChildren())
 	{
 		auto dict_str = target->getFullDict();
-		char* dict = (char*) dict_str.c_str();
 		auto anim_str = target->value;
+
+		char* dict = (char*) dict_str.c_str();
 		char* anim = (char*)anim_str.c_str();
 
 		std::stringstream ss;
 		ss << "Selected dict: " << dict << " and anim: " << anim;
+
 		write_text_to_log_file(ss.str());
 
 		Player player = PLAYER::PLAYER_ID();
@@ -22337,210 +22325,7 @@ bool process_anims_menu_top()
 
 	return false;
 }
-/*
-int activeLineIndexScenarioMenu = 0;
 
-bool onconfirm_scenario_menu(MenuItem<int> choice)
-{
-	Ped playerPed = PLAYER::PLAYER_PED_ID();
-
-	char* dict, *anim;
-
-	switch (activeLineIndexScenarioMenu)
-	{
-	case 0:
-		dict = "anim@mp_player_intcelebrationmale"; anim = "finger_kiss";
-		//dict = "amb@world_human_aa_coffee"; anim = "base";
-		break;
-	case 1:
-		dict = "anim@mp_player_intcelebrationmale"; anim = "peace";
-		//dict = "amb@world_human_aa_smoke@male"; anim = "base";
-		break;
-	case 2:
-		dict = "anim@mp_player_intcelebrationmale"; anim = "you_loco";
-		//dict = "amb@world_human_smoking_pot@male"; anim = "base";
-		break;
-	case 3:
-
-		dict = "amb@world_human_drinking@beer@male"; anim = "base";
-		break;
-	case 4:
-
-		dict = "amb@world_human_yoga@female"; anim = "base_b";
-		break;
-	default:
-		break;
-	}
-	STREAMING::REQUEST_ANIM_DICT(dict);
-	while (!STREAMING::HAS_ANIM_DICT_LOADED(dict))
-		WAIT(0);
-	//	AI::TASK_PLAY_ANIM(playerPed, dict, anim, 8, -8, -1, 0, 0, false, 0, true); //original enhanced native trainer
-	//	AI::TASK_PLAY_ANIM(playerPed, dict, anim, 1, -1, -1, 48, 0, 0, 0, 0); //original enhanced fivem trainer
-	AI::TASK_PLAY_ANIM(playerPed, dict, anim, 1, -1, -1, 44, 0, 0, 0, 0); //most recently used in efmtr 1.8
-	//	AI::TASK_PLAY_ANIM(playerPed, dict, anim, 8.0, -1, -1, 0, 0, 0, 0, 0);
-	//  AI:TASK_PLAY_ANIM(playerPed, dict, anim, 8.0f, 0.0f, -1, 9, 0, 0, 0, 0);
-	STREAMING::REMOVE_ANIM_DICT(dict);
-	return false;
-}
-
-void process_scenario_menu()
-{
-	std::string caption = "Scenarios";
-
-	const int lineCount = 5;
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Finger Kiss", NULL, NULL, true },
-		{ "Peace", NULL, NULL, true },
-		{ "Loco", NULL, NULL, true },
-		{ "Beer", NULL, NULL, true },
-		{ "Yoga", NULL, NULL, true }
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexScenarioMenu, caption, onconfirm_scenario_menu);
-}
-
-
-int activeLineIndexTaskDriveStyleMenu = 0;
-
-bool onconfirm_taskdrivestyle_menu(MenuItem<int> choice)
-{
-
-	switch (activeLineIndexTaskDriveStyleMenu)
-	{
-	case 0:
-		driveStyle = 3;
-		break;
-	case 1:
-		driveStyle = 0;
-		break;
-	case 2:
-		driveStyle = 1;
-		break;
-	case 3:
-		driveStyle = 2;
-		break;
-	case 4:
-		driveStyle = 5;
-		break;
-	case 5:
-		driveStyle = 4;
-		break;
-	case 6:
-		driveStyle = 6;
-		break;
-	default:
-		break;
-	}
-	return false;
-}
-
-void process_taskdrivestyle_menu()
-{
-	std::string caption = "Driving Styles";
-
-	const int lineCount = 7;
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Normal", NULL, NULL, true },
-		{ "Rushed", NULL, NULL, true },
-		{ "Ignore Traffic Lights", NULL, NULL, true },
-		{ "Fast", NULL, NULL, true },
-		{ "Fast (Stops & Overtakes)", NULL, NULL, true },
-		{ "Fast (Avoid Traffic)", NULL, NULL, true },
-		{ "Fast (Avoid Traffic Extremely)", NULL, NULL, true }
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexTaskDriveStyleMenu, caption, onconfirm_taskdrivestyle_menu);
-}
-
-void task_drivetomark()
-{
-	Ped playerPed = PLAYER::PLAYER_PED_ID();
-	Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
-	Vector3 coords;
-	bool blipFound = false;
-	// search for marker blip
-	int blipIterator = UI::_GET_BLIP_INFO_ID_ITERATOR();
-	for (Blip i = UI::GET_FIRST_BLIP_INFO_ID(blipIterator); UI::DOES_BLIP_EXIST(i) != 0; i = UI::GET_NEXT_BLIP_INFO_ID(blipIterator))
-	{
-		if (UI::GET_BLIP_INFO_ID_TYPE(i) == 4)
-		{
-			coords = UI::GET_BLIP_INFO_ID_COORD(i);
-			blipFound = true;
-			break;
-		}
-	}
-	if (blipFound)
-	{
-		//if (player in veh check)
-		//{
-		PED::SET_DRIVER_ABILITY(playerPed, 1.0f);
-		AI::TASK_VEHICLE_DRIVE_TO_COORD_LONGRANGE(playerPed, veh, coords.x, coords.y, coords.z, ENTITY::GET_ENTITY_SPEED(veh), driveStyle, 0.0f);
-		//}
-		//else {player is not in veh notifiaction}
-	}
-	else
-	{
-		set_status_text("Map marker not found.");
-	}
-}
-
-int activeLineIndexTaskDriveMenu = 0;
-
-bool onconfirm_taskdrive_menu(MenuItem<int> choice)
-{
-	Ped playerPed = PLAYER::PLAYER_PED_ID();
-	Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
-	Vector3 mypos = ENTITY::GET_ENTITY_COORDS(playerPed, 0);
-
-	switch (activeLineIndexTaskDriveMenu)
-	{
-	case 0:
-		AI::TASK_SHUFFLE_TO_NEXT_VEHICLE_SEAT(playerPed, veh);
-		break;
-	case 1:
-		AI::TASK_VEHICLE_PARK(playerPed, veh, mypos.x, mypos.y + 5, mypos.z, ENTITY::GET_ENTITY_HEADING(playerPed), 0, 20.0f, 1);
-		break;
-	case 2:
-		PED::SET_DRIVER_ABILITY(playerPed, 1.0f);
-		AI::TASK_VEHICLE_DRIVE_WANDER(playerPed, veh, ENTITY::GET_ENTITY_SPEED(veh), driveStyle);
-		break;
-	case 3:
-		task_drivetomark();
-		break;
-	case 4:
-		process_taskdrivestyle_menu();
-		break;
-//	case 5:
-		//process_taskdrivespeed_menu();
-//		break;
-	default:
-		break;
-	}
-	return false;
-}
-
-void process_taskdrive_menu()
-{
-	std::string caption = "Driving Tasks";
-
-	const int lineCount = 5;
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Change Seat", NULL, NULL, true },
-		{ "Park Vehicle", NULL, NULL, true },
-		{ "Wander", NULL, NULL, true },
-		{ "Drive To Waypoint", NULL, NULL, true },
-//		{ "Drive Speed", NULL, NULL, false }, set speed. increase, decrease
-//		{ "Drive Skill", NULL, NULL, false }, 4 or 5 setting, novice, beginner, intermediate, expert
-		{ "Drive Styles", NULL, NULL, false }
-
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexTaskDriveMenu, caption, onconfirm_taskdrive_menu);
-}
-*/
 int activeLineIndexTaskMenu = 0;
 
 bool onconfirm_task_menu(MenuItem<int> choice)
@@ -22549,9 +22334,6 @@ bool onconfirm_task_menu(MenuItem<int> choice)
 
 	switch (activeLineIndexTaskMenu)
 	{
-//	case 0:
-//		process_taskdrive_menu();
-//		break;
 	case 0:
 		AI::CLEAR_PED_TASKS(playerPed);
 		break;
@@ -22574,7 +22356,6 @@ void process_task_menu()
 	const int lineCount = 3;
 
 	StandardOrToggleMenuDef lines[lineCount] = {
-//		{ "Driving", NULL, NULL, false },
 		{ "Clear Primary Task(s)", NULL, NULL, true },
 		{ "Clear Seconday Task(s)", NULL, NULL, true },
 		{ "Clear All Task(s)", NULL, NULL, true }
@@ -22595,15 +22376,6 @@ bool onconfirm_ani_menu(MenuItem<int> choice)
 	case 1:
 		process_anim_menu();
 		break;
-//	case 2:
-//		process_scenario_menu();
-//		break;
-//	case 3:
-//		open gesture menu
-//		break;
-//	case 4:
-//		open facial menu
-//		break;
 	case 2:
 		process_anims_menu_top();
 		break;
@@ -22622,9 +22394,6 @@ bool process_ani_menu()
 	StandardOrToggleMenuDef lines[lineCount] = {
 		{ "Tasks", NULL, NULL, false },
 		{ "Taunts", NULL, NULL, false },
-//		{ "Ambient", NULL, NULL, false },
-//		{ "Gestures", NULL, NULL, false },
-//		{ "Facial", NULL, NULL, false },
 		{ "Animation Library", NULL, NULL, false }
 	};
 

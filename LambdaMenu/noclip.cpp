@@ -18,13 +18,14 @@
 #include "keyboard.h"
 #include "config_io.h"
 #include "script.h"
+#include "colors.h"
 
 bool exitFlag = false;
 
 char* noclip_ANIM_A = "amb@world_human_stand_impatient@male@no_sign@base";
 char* noclip_ANIM_B = "base";
 
-int travelSpeed = 0;
+int travelSpeed = 2;
 
 bool in_noclip_mode = false;
 
@@ -35,9 +36,9 @@ Vector3 curRotation;
 float curHeading;
 
 //Converts Radians to Degrees
-float degToRad(float degs)
+float deg_to_rad(float degs)
 {
-	return degs*3.141592653589793 / 180;
+	return degs * 3.14159265358979323846 / 180;
 }
 
 std::string noclipStatusLines[15];
@@ -50,7 +51,6 @@ void exit_noclip_menu_if_showing()
 	exitFlag = true;
 }
 
-//Test for noclip command.
 void process_noclip_menu()
 {
 	exitFlag = false;
@@ -80,16 +80,15 @@ void process_noclip_menu()
 	{
 		in_noclip_mode = true;
 
-		// draw menu
 		if (help_showing)
 		{
-			std::string caption = "~b~LAMBDA ~s~MENU  NOCLIP MODE";
+			std::string caption = "~p~LAMBDA ~s~MENU  NOCLIP MODE";
 			draw_menu_header_line(caption, 264.0f, 35.0f, 0.0f, 1016.0f, 1026.0f, false);
 		}
 
 		make_periodic_feature_call();
 
-		//Disable noclip on death
+
 		if (ENTITY::IS_ENTITY_DEAD(playerPed))
 		{
 			exitFlag = true;
@@ -136,10 +135,6 @@ void update_noclip_text()
 			int numActualLines = 0;
 			for (int i = 0; i < numLines; i++)
 			{
-//				if (!help_showing && i != 14)
-//				{
-//					continue;
-//				}
 
 				numActualLines++;
 
@@ -195,26 +190,29 @@ void create_noclip_help_text()
 	switch (travelSpeed)
 	{
 	case 0:
-		travelSpeedStr = "<C>Medium</C>";
-		break;
-	case 1:
-		travelSpeedStr = "<C>Fast</C>";
-		break;
-	case 2:
-		travelSpeedStr = "<C>Very Fast</C>";
-		break;
-	case 3:
-		travelSpeedStr = "<C>Extremely Fast</C>";
-		break;
-	case 4:
 		travelSpeedStr = "<C>Very Slow</C>";
 		break;
-	case 5:
+	case 1:
 		travelSpeedStr = "<C>Slow</C>";
+		break;
+	case 2:
+		travelSpeedStr = "<C>Medium</C>";
+		break;
+	case 3:
+		travelSpeedStr = "<C>Fast</C>";
+		break;
+	case 4:
+		travelSpeedStr = "<C>Very Fast</C>";
+		break;
+	case 5:
+		travelSpeedStr = "<C>Extremely Fast</C>";
+		break;
+	case 6:
+		travelSpeedStr = "<C>~r~Fast as fuck!</C>";
 		break;
 	}
 
-	ss << "~w~Current Travel Speed: ~b~" << travelSpeedStr;
+	ss << "~w~Current Travel Speed: ~p~" << travelSpeedStr;
 
 	int index = 0;
 	noclipStatusLines[index++] = "~w~H ~HUD_COLOUR_BLACK~- ~w~Hide ~HUD_COLOUR_BLACK~/ ~w~Show NoClip Menu";
@@ -245,8 +243,8 @@ void moveThroughDoor()
 
 	float forwardPush = 0.6;
 
-	float xVect = forwardPush * sin(degToRad(curHeading)) * -1.0f;
-	float yVect = forwardPush * cos(degToRad(curHeading));
+	float xVect = forwardPush * sin(deg_to_rad(curHeading)) * -1.0f;
+	float yVect = forwardPush * cos(deg_to_rad(curHeading));
 
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(playerPed, curLocation.x + xVect, curLocation.y + yVect, curLocation.z, 1, 1, 1);
 }
@@ -265,29 +263,34 @@ void noclip(bool inVehicle)
 	switch (travelSpeed)
 	{
 	case 0:
-		forwardPush = 0.8f; //medium
+		forwardPush = 0.05f; // very slow
 		break;
 	case 1:
-		forwardPush = 1.8f; //fast
+		forwardPush = 0.2f; // slow
 		break;
 	case 2:
-		forwardPush = 3.6f; //very fast
+		forwardPush = 0.8f; // medium
 		break;
 	case 3:
-		forwardPush = 5.4f; //extremely fast
+		forwardPush = 1.8f; // fast
 		break;
 	case 4:
-		forwardPush = 0.05f; //very slow
+		forwardPush = 3.6f; // very fast
 		break;
 	case 5:
-		forwardPush = 0.2f; //slow
+		forwardPush = 5.4f; //extremely fast
+		break;
+	case 6:
+		forwardPush = 10.0f; // fast as fuck
+		break;
+	case 7:
+		forwardPush = 30.0f;
 		break;
 	}
 
-	float xVect = forwardPush * sin(degToRad(curHeading)) * -1.0f;
-	float yVect = forwardPush * cos(degToRad(curHeading));
+	float xVect = forwardPush * sin(deg_to_rad(curHeading)) * -1.0f;
+	float yVect = forwardPush * cos(deg_to_rad(curHeading));
 
-#ifndef SERVER_SIDED
 	KeyInputConfig* keyConfig = get_config()->get_key_config();
 
 	bool moveUpKey = get_key_pressed(keyConfig->key_noclip_up);
@@ -303,10 +306,6 @@ void noclip(bool inVehicle)
 	{
 		target = PED::GET_VEHICLE_PED_IS_USING(playerPed);
 	}
-
-	BOOL xBoolParam = 1;
-	BOOL yBoolParam = 1;
-	BOOL zBoolParam = 1;
 
 	ENTITY::SET_ENTITY_VELOCITY(playerPed, 0.0f, 0.0f, 0.0f);
 	ENTITY::SET_ENTITY_ROTATION(playerPed, 0, 0, 0, 0, false);
@@ -329,13 +328,12 @@ void noclip(bool inVehicle)
 	if (IsKeyJustUp(keyConfig->key_noclip_speed))
 	{
 		travelSpeed++;
-		if (travelSpeed > 5)
+		if (travelSpeed > 6)
 		{
 			travelSpeed = 0;
 		}
 	}
 
-	//if (IsKeyJustUp(keyConfig->key_noclip_help))
 	if (IsKeyJustUp(VK_KEY_H))
 	{
 		help_showing = !help_showing;
@@ -373,9 +371,8 @@ void noclip(bool inVehicle)
 		curHeading -= rotationSpeed;
 	}
 
-	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(target, curLocation.x, curLocation.y, curLocation.z, xBoolParam, yBoolParam, zBoolParam);
+	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(target, curLocation.x, curLocation.y, curLocation.z, 1, 1, 1);
 	ENTITY::SET_ENTITY_HEADING(target, curHeading - rotationSpeed);
-#endif
 }
 
 bool is_in_noclip_mode()

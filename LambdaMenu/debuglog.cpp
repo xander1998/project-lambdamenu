@@ -37,7 +37,7 @@ void write_text_to_log_file(const std::string &text)
 {
 	printf("%s\n", text.c_str());
 
-	if (!DEBUG_LOG_ENABLED)
+	if (true)
 	{
 		return;
 	}
