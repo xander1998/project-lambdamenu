@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Lambda Menu
 * (C) Oui 2017 (https://gitlab.com/oui)
 * https://lambda.menu
@@ -3924,11 +3924,11 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 		process_reset_globals();
 		break;
 	case 22:
-		set_status_text("<C>~b~Lambda ~s~Menu 2.4.1</C>");
+		set_status_text("<C>~b~Lambda ~s~Menu 2.5</C>");
 		set_status_text("Contributors:");
-		set_status_text("Oui, TheDroidGeek & ");
-		set_status_text("The FiveM Collective");
-		set_status_text("Firecul");
+		set_status_text("Oui, TheDroidGeek,");
+		set_status_text("The FiveM Collective,");
+		set_status_text("Firecul & Zeemahh");
 		break;
 		// switchable features
 	default:
