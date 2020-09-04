@@ -1,6 +1,6 @@
 # Lambda Menu
 
-[![Build status](https://ci.appveyor.com/api/projects/status/m0vc1qh4fcfit1hd?svg=true)](https://ci.appveyor.com/project/Zeemahh/project-lambdamenu)
+[![Build status](https://ci.appveyor.com/api/projects/status/4h4e5r1dd6pk9cg3/branch/master?svg=true)](https://ci.appveyor.com/project/Firecul/project-lambdamenu/branch/master)
 
 In-game menu for FiveM/Project Λ.
 

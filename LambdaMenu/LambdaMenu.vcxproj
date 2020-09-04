@@ -173,7 +173,8 @@
       <AdditionalOptions>lib\ScriptHookV.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y "$(ProjectDir)bin\$(Configuration)\LambdaMenu.asi" "E:\Cfx.re\FiveM\FiveM.app\plugins"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
