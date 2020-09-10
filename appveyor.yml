@@ -1,0 +1,14 @@
+version: 1.2.{build}
+branches:
+  only:
+  - master
+max_jobs: 1
+image: Visual Studio 2019
+configuration: Release
+platform: x64
+build:
+  project: LambdaMenu.sln
+  verbosity: minimal
+after_build:
+  - cmd: 7z a LambdaMenu-%VERSION_NAME%.zip -r .\LambdaMenu\bin\%CONFIGURATION%\LambdaMenu.asi
+  - cmd: appveyor PushArtifact LambdaMenu-%VERSION_NAME%.zip
