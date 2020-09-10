@@ -17,6 +17,7 @@
 #include "menu_functions.h"
 #include "config_io.h"
 #include "debuglog.h"
+#include "colors.h"
 
 #pragma warning(disable : 4244 4305) // double <-> float conversions
 
@@ -136,7 +137,6 @@ std::vector<struct_door_options> DOOR_OPTIONS = {
 	{ "Trunk ", NULL }, //INDEX 5 (Opens ramp on C-130|TITAN)
 	{ "Trunk 2", NULL }, //INDEX 6 (What uses this?)
 	{ "All", NULL } //INDEX 7
-
 };
 
 int doorOptionsMenuIndex = 0;
@@ -420,7 +420,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						{
 							int rstate = VEHICLE::GET_CONVERTIBLE_ROOF_STATE(ownedveh);
 							if (rstate != 0 && rstate != 3)
+							{
 								VEHICLE::RAISE_CONVERTIBLE_ROOF(ownedveh, 0);
+							}
 						}
 						VEHICLE::SET_VEHICLE_NEEDS_TO_BE_HOTWIRED(ownedveh, 1);
 						VEHICLE::SET_VEHICLE_ALARM(ownedveh, 1);
@@ -431,11 +433,15 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 					ownedvehlocked = true;
 				}
 				else
+				{
 					set_status_text("Owned vehicle already locked.");
+				}
 
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
 		{
@@ -454,10 +460,14 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 					ownedvehlocked = false;
 				}
 				else
+				{
 					set_status_text("Owned vehicle already unlocked.");
+				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		break;
 	case 1: //convertable
@@ -476,10 +486,14 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 							set_status_text("Owned Vehicle Remote Convertable Top On.");
 						}
 						else
+						{
 							set_status_text("Owned Vehicle Is Not A Convertable.");
+						}
 					}
 					else
+					{
 						set_status_text("Cannot put convertable top up while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -489,13 +503,18 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						set_status_text("Owned Vehicle Remote Convertable Top On.");
 					}
 					else
+					{
 						set_status_text("Owned Vehicle Is Not A Convertable.");
+					}
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
+		{
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
 			{
 				Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(ownedveh, -1);
@@ -509,11 +528,15 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 							set_status_text("Owned Vehicle Remote Convertable Top Off.");
 						}
 						else
+						{
 							set_status_text("Owned Vehicle Is Not A Convertable.");
+						}
 
 					}
 					else
+					{
 						set_status_text("Cannot put convertable top down while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -523,11 +546,16 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						set_status_text("Owned Vehicle Remote Convertable Top Off.");
 					}
 					else
+					{
 						set_status_text("Owned Vehicle Is Not A Convertable.");
+					}
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
+		}
 		break;
 	case 2: //engine
 		if (featureRemoteEngine)
@@ -549,9 +577,10 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 							set_status_text("Vehicle engine is already on.");
 						}
 					}
-
 					else
+					{
 						set_status_text("Cannot turn on while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -560,7 +589,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
@@ -590,38 +621,10 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		break;
-		/*	case 1: //radio
-				if (featureRemoteRadio)
-				{
-				if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
-				{
-				//	if (VEHICLE::IS_VEHICLE_SEAT_FREE(ownedveh, -1))
-				//	{
-					set_status_text("Owned Vehicle Remote Radio On.");
-				//	}
-				//	else
-				//		set_status_text("Cannot remote turn on from inside!");
-				}
-				else
-				set_status_text("Owned vehicle not found.");
-				}
-				else
-				{
-				if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
-				{
-				if (VEHICLE::IS_VEHICLE_SEAT_FREE(ownedveh, -1))
-				{
-				set_status_text("Owned Vehicle Remote Radio Off.");
-				}
-				else
-				set_status_text("Cannot remote turn off from inside!");
-				}
-				else
-				set_status_text("Owned vehicle not found.");
-				}
-				break; */
 	case 3: //lights
 		if (featureRemoteLights)
 		{
@@ -635,7 +638,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						set_status_text("Cannot turn on when you are already driving.");
 					}
 					else
+					{
 						set_status_text("Cannot turn on while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -644,7 +649,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
@@ -657,7 +664,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						set_status_text("Cannot turn off when you are already driving.");
 					}
 					else
+					{
 						set_status_text("Cannot turn off while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -666,8 +675,10 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
-		break;
+			}
+		break; 
 
 	case 4: //hazard lights
 		if (featureRemoteHazardLights)
@@ -683,7 +694,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						VEHICLE::SET_VEHICLE_INDICATOR_LIGHTS(ownedveh, 1, true);
 					}
 					else
+					{
 						set_status_text("Cannot turn on hazard lights while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -692,9 +705,12 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
+		{
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
 			{
 				Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(ownedveh, -1);
@@ -706,7 +722,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						VEHICLE::SET_VEHICLE_INDICATOR_LIGHTS(ownedveh, 1, false);
 					}
 					else
+					{
 						set_status_text("Cannot turn off hazard lights while someone else is the driver.");
+					}
 				}
 				else
 				{
@@ -715,9 +733,11 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
+		}
 		break;
-
 	case 5:
 		if (featureRemoteNeons)
 		{
@@ -736,8 +756,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 
 					}
 					else
+					{
 						set_status_text("Cannot turn neons on while someone else is the driver.");
-					//	featureRemoteNeons = false;
+					}
 				}
 				else
 				{
@@ -749,9 +770,12 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
+		{
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
 			{
 				Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(ownedveh, -1);
@@ -767,8 +791,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 
 					}
 					else
+					{
 						set_status_text("Cannot turn neons off while someone else is the driver.");
-				//		featureRemoteNeons = false;
+					}
 				}
 				else
 				{
@@ -780,7 +805,10 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
+		}
 		break;
 
 	case 6://windows
@@ -801,8 +829,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 
 					}
 					else
+					{
 						set_status_text("Cannot open all windows while someone else is the driver.");
-					//	featureRemoteWindows = false;
+					}
 				}
 				else
 				{
@@ -814,9 +843,12 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
+		{
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
 			{
 				Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(ownedveh, -1);
@@ -831,8 +863,10 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						set_status_text("Owned Vehicle Remote Closed Windows.");
 					}
 					else
+					{
 						set_status_text("Cannot close all windows while someone else is the driver.");
-				//		featureRemoteWindows = false;
+					}
+					//		featureRemoteWindows = false;
 				}
 				else
 				{
@@ -844,7 +878,10 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
+		}
 		break;
 	case 7://doors
 		if (featureRemoteDoors)
@@ -864,7 +901,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 
 					}
 					else
+					{
 						set_status_text("Cannot open all doors while someone else is the driver.");
+					}
 					//	featureRemoteDoors = false;
 				}
 				else
@@ -877,7 +916,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		}
 		else
 			if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh))
@@ -891,7 +932,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 						set_status_text("Owned Vehicle Remote Closed Doors.");
 					}
 					else
+					{
 						set_status_text("Cannot close all doors while someone else is the driver.");
+					}
 				//	featureRemoteDoors = false;
 				}
 				else
@@ -901,7 +944,9 @@ bool onconfirm_remote_menu(MenuItem<int> choice)
 				}
 			}
 			else
+			{
 				set_status_text("Owned vehicle not found.");
+			}
 		break;
 	default:
 		break;
@@ -918,13 +963,11 @@ void process_remote_menu()
 		{ "Locked", &featureVehLocks, NULL, true },
 		{ "Convertable", &featureRemoteConvertable, NULL, true },
 		{ "Engine", &featureRemoteEngine, NULL, true },
-//		{ "Radio On", &featureRemoteRadio, NULL, true },
 		{ "Lights", &featureRemoteLights, NULL, true },
 		{ "Hazard Lights", &featureRemoteHazardLights, NULL, true },
 		{ "Neons ", &featureRemoteNeons, NULL, true },
 		{ "Windows Open", &featureRemoteWindows, NULL, true },
 		{ "Open Doors", &featureRemoteDoors, NULL, true }
-//		{ "Hydraulics", NULL, NULL, false },
 	};
 
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexRemote, caption, onconfirm_remote_menu);
@@ -953,61 +996,78 @@ bool onconfirm_ownedvehicle_menu(MenuItem<int> choice)
 				int bleep = UI::ADD_BLIP_FOR_ENTITY(ownedveh);
 				Vehicle ve = PED::GET_VEHICLE_PED_IS_USING(playerPed);
 				Hash vemodel = ENTITY::GET_ENTITY_MODEL(ve);
-				if (vemodel == GAMEPLAY::GET_HASH_KEY("rhino")) {
+				if (vemodel == GAMEPLAY::GET_HASH_KEY("rhino"))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 421);
 				}
-				else if (((vemodel == GAMEPLAY::GET_HASH_KEY("lazer")) || (vemodel == GAMEPLAY::GET_HASH_KEY("besra"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("hydra"))) {
+				else if (((vemodel == GAMEPLAY::GET_HASH_KEY("lazer")) || (vemodel == GAMEPLAY::GET_HASH_KEY("besra"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("hydra")))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 424);
 				}
-				else if (VEHICLE::IS_THIS_MODEL_A_PLANE(vemodel)) {
+				else if (VEHICLE::IS_THIS_MODEL_A_PLANE(vemodel))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 423);
 				}
-				else if (VEHICLE::IS_THIS_MODEL_A_HELI(vemodel)) {
+				else if (VEHICLE::IS_THIS_MODEL_A_HELI(vemodel))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 422);
 				}
-				else if ((((vemodel == GAMEPLAY::GET_HASH_KEY("technical")) || (vemodel == GAMEPLAY::GET_HASH_KEY("insurgent"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("limo2"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("insurgent2"))) {
+				else if ((((vemodel == GAMEPLAY::GET_HASH_KEY("technical")) || (vemodel == GAMEPLAY::GET_HASH_KEY("insurgent"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("limo2"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("insurgent2")))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 426);
 				}
-				else if (((vemodel == GAMEPLAY::GET_HASH_KEY("dinghy")) || (vemodel == GAMEPLAY::GET_HASH_KEY("dinghy2"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("dinghy3"))) {
+				else if (((vemodel == GAMEPLAY::GET_HASH_KEY("dinghy")) || (vemodel == GAMEPLAY::GET_HASH_KEY("dinghy2"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("dinghy3")))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 404);
 				}
-				else if ((vemodel == GAMEPLAY::GET_HASH_KEY("submersible")) || (vemodel == GAMEPLAY::GET_HASH_KEY("submersible2"))) {
+				else if ((vemodel == GAMEPLAY::GET_HASH_KEY("submersible")) || (vemodel == GAMEPLAY::GET_HASH_KEY("submersible2")))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 308);
 				}
-				else if (VEHICLE::IS_THIS_MODEL_A_BOAT(vemodel)) {
+				else if (VEHICLE::IS_THIS_MODEL_A_BOAT(vemodel))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 427);
 				}
-				else if ((VEHICLE::IS_THIS_MODEL_A_BIKE(vemodel)) || (VEHICLE::IS_THIS_MODEL_A_BICYCLE(vemodel))) {
+				else if ((VEHICLE::IS_THIS_MODEL_A_BIKE(vemodel)) || (VEHICLE::IS_THIS_MODEL_A_BICYCLE(vemodel)))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 226);
 				}
-				else if (((((((((((vemodel == GAMEPLAY::GET_HASH_KEY("POLICEOLD2")) || (vemodel == GAMEPLAY::GET_HASH_KEY("POLICEOLD1"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("POLICET"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("POLICE"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("POLICE2"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("POLICE3"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("POLICEB"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("RIOT"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("SHERIFF"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("SHERIFF2"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("PRANGER"))) {
+				else if (VEHICLE::GET_VEHICLE_CLASS(vemodel) == 18)
+				{
 					UI::SET_BLIP_SPRITE(bleep, 56);
 				}
-				else if (vemodel == GAMEPLAY::GET_HASH_KEY("taxi")) {
+				else if (vemodel == GAMEPLAY::GET_HASH_KEY("taxi"))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 198);
 				}
-				else if (((vemodel == GAMEPLAY::GET_HASH_KEY("brickade")) || (vemodel == GAMEPLAY::GET_HASH_KEY("stockade"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("stockade3"))) {
+				else if (((vemodel == GAMEPLAY::GET_HASH_KEY("brickade")) || (vemodel == GAMEPLAY::GET_HASH_KEY("stockade"))) || (vemodel == GAMEPLAY::GET_HASH_KEY("stockade3")))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 67);
 				}
-				else if ((vemodel == GAMEPLAY::GET_HASH_KEY("towtruck")) || (vemodel == GAMEPLAY::GET_HASH_KEY("towtruck2"))) {
+				else if ((vemodel == GAMEPLAY::GET_HASH_KEY("towtruck")) || (vemodel == GAMEPLAY::GET_HASH_KEY("towtruck2")))
+				{
 					UI::SET_BLIP_SPRITE(bleep, 68);
 				}
 				else if ((vemodel == GAMEPLAY::GET_HASH_KEY("trash")) || (vemodel == GAMEPLAY::GET_HASH_KEY("trash2"))) {
 					UI::SET_BLIP_SPRITE(bleep, 318);
 				}
-				else {
+				else
+				{
 					UI::SET_BLIP_SPRITE(bleep, 225);
 				}
 				UI::SET_BLIP_COLOUR(bleep, 3);
 				ownedvehlocked = false;
 				set_status_text("Current vehicle has been set as owned.");
 			}
-			else {
+			else
+			{
 				set_status_text("You can't own a vehicle you're not driving.");
 			}
 		}
 		else
+		{
 			set_status_text("Not in a vehicle.");
+		}
 		break;
 
 
@@ -1027,7 +1087,9 @@ bool onconfirm_ownedvehicle_menu(MenuItem<int> choice)
 			set_status_text("Cleared previously owned vehicle.");
 		}
 		else
+		{
 			set_status_text("Owned vehicle not found.");
+		}
 		break;
 
 	case 2:
@@ -1068,7 +1130,9 @@ bool onconfirm_ownedvehicle_menu(MenuItem<int> choice)
 			set_status_text("Teleported into vehicle as driver.");
 		}
 		else
+		{
 			set_status_text("Owned vehicle not found.");
+		}
 		break;
 
 
@@ -2738,7 +2802,7 @@ bool onconfirm_veh_menu(MenuItem<int> choice)
 				if (ENTITY::DOES_ENTITY_EXIST(veh) && !ENTITY::IS_ENTITY_DEAD(veh)){
 					if (ENTITY::DOES_ENTITY_EXIST(driver)){
 						if (driver == playerPed){
-							set_status_text("Drift Mode ~g~ENABLED.~n~~s~Hold <C>~b~SHIFT</C> ~s~To Drift.");
+							set_status_text("Drift Mode ~g~ENABLED.~n~~s~Hold <C>~p~SHIFT</C> ~s~To Drift.");
 						}
 					}
 				}
@@ -2765,18 +2829,18 @@ bool onconfirm_veh_menu(MenuItem<int> choice)
 		if (featureVehControls)
 		{
 			set_status_text("Vehicle Controls ~g~ENABLED.");
-			set_status_text("~b~LEFT ~s~& ~b~RIGHT ~s~Arrows control turn signals ~s~");
-			set_status_text("~b~UP ~s~& ~b~DOWN ~s~Arrows control front windows");
-			set_status_text("~b~CTRL + UP ~s~& ~b~DOWN ~s~Arrows controls back windows");
-			set_status_text("~b~NUMPAD DECIMAL ~s~Key controls interior light");
-			set_status_text("~b~NUMPAD PLUS ~s~Key toggles police lights");
-			set_status_text("~b~NUMPAD MINUS ~s~Key toggles police siren");
-			set_status_text("~b~CTRL+NUMPAD7 ~s~Key toggles Front Left Door ");
-			set_status_text("~b~CTRL+NUMPAD9 ~s~Key toggles Front Right Door");
-			set_status_text("~b~CTRL+NUMPAD4 ~s~Key toggles Back Left Door");
-			set_status_text("~b~CTRL+NUMPAD6 ~s~Key toggles Back Right Door");
-			set_status_text("~b~CTRL+NUMPAD8 ~s~Key toggles Hood");
-			set_status_text("~b~CTRL+NUMPAD5 ~s~Key toggles Trunk");
+			set_status_text("~p~LEFT ~s~& ~p~RIGHT ~s~Arrows control turn signals ~s~");
+			set_status_text("~p~UP ~s~& ~p~DOWN ~s~Arrows control front windows");
+			set_status_text("~p~CTRL + UP ~s~& ~p~DOWN ~s~Arrows controls back windows");
+			set_status_text("~p~NUMPAD DECIMAL ~s~Key controls interior light");
+			set_status_text("~p~NUMPAD PLUS ~s~Key toggles police lights");
+			set_status_text("~p~NUMPAD MINUS ~s~Key toggles police siren");
+			set_status_text("~p~CTRL+NUMPAD7 ~s~Key toggles Front Left Door ");
+			set_status_text("~p~CTRL+NUMPAD9 ~s~Key toggles Front Right Door");
+			set_status_text("~p~CTRL+NUMPAD4 ~s~Key toggles Back Left Door");
+			set_status_text("~p~CTRL+NUMPAD6 ~s~Key toggles Back Right Door");
+			set_status_text("~p~CTRL+NUMPAD8 ~s~Key toggles Hood");
+			set_status_text("~p~CTRL+NUMPAD5 ~s~Key toggles Trunk");
 		}
 		else
 		{
@@ -2971,7 +3035,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 		Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(veh, -1);
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
 
-#ifndef SERVER_SIDED
 		bool bUp = get_key_pressed(get_config()->get_key_config()->key_veh_boost);
 		bool bDown = get_key_pressed(get_config()->get_key_config()->key_veh_stop);
 
@@ -2994,7 +3057,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				}
 			}
 		}
-#endif
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3492,7 +3554,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 		Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(veh, -1);
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
 
-#ifndef SERVER_SIDED
 		KeyInputConfig* keyConfig = get_config()->get_key_config();
 
 		bool bSelect = get_key_pressed(keyConfig->drift_mode);
@@ -3510,7 +3571,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				}
 			}
 		}
-#endif
 	}
 
 
@@ -3533,7 +3593,7 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				draw_text1(speedKnot_text, 0.857, 0.91, 2.8);
 
 				char speed_text[50];
-				snprintf(speed_text, 50, "kn~b~/~s~kt");
+				snprintf(speed_text, 50, "kn~p~/~s~kt");
 				draw_text3(speed_text, 0.935, 0.855, 1.2);
 			}
 			else
@@ -3572,7 +3632,7 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				draw_text1(speedKnot_text, 0.857, 0.91, 2.8);
 
 				char speed_text[50];
-				snprintf(speed_text, 50, "kn~b~/~s~kt");
+				snprintf(speed_text, 50, "kn~p~/~s~kt");
 				draw_text3(speed_text, 0.935, 0.855, 1.2);
 			}
 			else
@@ -3611,7 +3671,7 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				draw_text1(speedKnot_text, 0.857, 0.91, 2.8);
 
 				char speed_text[50];
-				snprintf(speed_text, 50, "kn~b~/~s~kt");
+				snprintf(speed_text, 50, "kn~p~/~s~kt");
 				draw_text3(speed_text, 0.935, 0.855, 1.2);
 			}
 			else
@@ -3623,14 +3683,14 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				char speedMph_text[50];
 				char speedKph_text[50];
 
-				snprintf(speedKph_text, 50, "~b~%.0f", speedKph);
+				snprintf(speedKph_text, 50, "~p~%.0f", speedKph);
 				snprintf(speedMph_text, 50, "%.0f", speedMph);
 
 				draw_text2(speedKph_text, 0.798, 0.914, 1.8);
 				draw_text1(speedMph_text, 0.857, 0.91, 2.8);
 
 				char kphspeed_text[50];
-				snprintf(kphspeed_text,50,  "~b~KPH");
+				snprintf(kphspeed_text, 50, "~p~KPH");
 				draw_text4(kphspeed_text, 0.902, 0.856, 0.9);
 
 				char speed_text[50];
@@ -3890,7 +3950,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 	//vehicle controls
 	if (featureVehControls && bPlayerExists && PED::IS_PED_IN_ANY_VEHICLE(playerPed, 0))
 	{
-#ifndef SERVER_SIDED
 		Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
 		Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(veh, -1);
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
@@ -4096,7 +4155,6 @@ void update_vehicle_features(BOOL bPlayerExists, Ped playerPed)
 				}
 			}
 		}
-#endif
 	}
 
 	if (ownedveh != NULL && ENTITY::DOES_ENTITY_EXIST(ownedveh) && !VEHICLE::_IS_VEHICLE_ENGINE_ON(ownedveh) && !featureRemoteEngine)
@@ -4373,36 +4431,38 @@ bool do_spawn_vehicle(std::string modelName, std::string modelTitle)
 			}
 			else
 			{
-				Ped driver = VEHICLE::GET_PED_IN_VEHICLE_SEAT(preveh, -1);
-				if (ENTITY::DOES_ENTITY_EXIST(driver))
+				if (VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) != 0)
 				{
-					set_status_text("Driver in vehicle, can't delete.");
+					set_status_text("~r~Unable to delete last spawned vehicle (is occupied).");
+					return false;
 				}
-				else if (!ENTITY::DOES_ENTITY_EXIST(driver) && VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) > 0)
-				{
-					set_status_text("Passenger(s) in vehicle, can't delete.");
-				}
-				else if (ENTITY::DOES_ENTITY_EXIST(driver) && VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) > 0)
-				{
-					set_status_text("Driver & passenger(s) in vehicle, can't delete.");
-				}
-				else if (!ENTITY::DOES_ENTITY_EXIST(driver) && VEHICLE::GET_VEHICLE_NUMBER_OF_PASSENGERS(preveh) == 0)
-				{
-					VEHICLE::DELETE_VEHICLE(&preveh);
-				}
+
+				VEHICLE::DELETE_VEHICLE(&preveh);
 			}
 		}
 		return true;
 	}
-return false;
+	return false;
 }
 
 Vehicle do_spawn_vehicle(DWORD model, std::string modelTitle) //, bool cleanup)
 {
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_A_VEHICLE(model))
 	{
+		int timer = 0;
 		STREAMING::REQUEST_MODEL(model);
-		while (!STREAMING::HAS_MODEL_LOADED(model)) WAIT(0);
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+		{
+			WAIT(1000);
+			timer += 1;
+
+			if (timer >= 50)
+			{
+				set_status_text("~r~Vehicle failed to load.");
+				return -1;
+			}
+		}
+
 		float lookDir = ENTITY::GET_ENTITY_HEADING(PLAYER::PLAYER_PED_ID());
 		Vector3 coords = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(PLAYER::PLAYER_PED_ID(), 0.0, 5.0, 0.0);
 		Vehicle rveh = VEHICLE::CREATE_VEHICLE(model, coords.x, coords.y, coords.z, lookDir, 1, 0);
@@ -4807,28 +4867,29 @@ void save_current_vehicle(int slot)
 						ERDatabase* database = get_database();
 						if (database->save_vehicle(veh, result, slot))
 						{
-							set_status_text("Saved Vehicle");
+							set_status_text("~g~Vehicle has been saved as: ~r~" + result);
 							activeSavedVehicleSlotName = result;
 						}
 						else
 						{
-							set_status_text("Save Error");
+							set_status_text("~r~/!\\ IMPORTANT /!\\");
+							set_status_text("~r~VEHICLE SAVE FAILED, THIS IS BAD!");
 						}
 					}
 				}
 				else
 				{
-					set_status_text("You must be the driver to save a vehicle.");
+					set_status_text("~r~Save failed (you are not the driver).");
 				}
 			}
 			else
 			{
-				set_status_text("You must be the driver to save a vehicle.");
+				set_status_text("~r~Save failed (entity does not exist).");
 			}
 		}
 		else
 		{
-			set_status_text("Player isn't in a vehicle");
+			set_status_text("~r~Save failed (you are not in a vehicle).");
 		}
 	}
 }

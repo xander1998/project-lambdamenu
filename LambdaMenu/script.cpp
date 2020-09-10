@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Lambda Menu
 * (C) Oui 2017 (https://gitlab.com/oui)
 * https://lambda.menu
@@ -17,8 +17,9 @@
 */
 
 #pragma comment(lib, "Shlwapi.lib")
+#pragma warning(disable : 4996)
 
-#define MAX_PLAYERS 256
+constexpr auto MAX_PLAYERS = 256;
 
 #include "io.h"
 #include "config_io.h"
@@ -34,12 +35,10 @@
 #include "anims.h"
 //#include "crash_handler.h"
 
-#ifndef SERVER_SIDED
 #include <DbgHelp.h>
 #include <ShlObj.h>
 #include <windows.h>
 #include <Shlwapi.h>
-#endif
 
 #include <string>
 #include <sstream> 
@@ -179,8 +178,11 @@ bool featureChannel3 = false;
 bool featureChannel4 = false;
 bool featureChannel5 = false;
 bool featureVoiceChat = true;
+bool featureVoiceControl = false;
 bool featureWantedLevelFrozen = false;
 bool featureWantedLevelFrozenUpdated = false;
+bool featPurpleAsShit = false;
+bool defaultHudColors = true;
 int frozenWantedLevel = 0;
 int blipCheck1;
 int blipCheck2;
@@ -955,8 +957,7 @@ void blips()
 void teleport_to_marker_coords(Entity e, Vector3 coords)
 {
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(e, coords.x, coords.y, coords.z, 0, 0, 1);
-	WAIT(0);
-	set_status_text("Teleported to map marker.");
+	set_status_text("~g~Teleported to map marker.");
 }
 
 void animal_watch()
@@ -1010,10 +1011,12 @@ void death_watch()
 				Player killer = NETWORK::_0x6C0E2E0125610278(e); // _NETWORK_GET_PLAYER_FROM_PED
 				std::string kname = PLAYER::GET_PLAYER_NAME(killer);
 				if (kname != "") {
-					if (kname == PLAYER::GET_PLAYER_NAME(playerId)) {
+					if (kname == PLAYER::GET_PLAYER_NAME(playerId))
+					{
 						msg = "~o~<C>You</C> ~s~commited suicide.";
 					}
-					else {
+					else
+					{
 						msg = "<C>~y~" + kname + "</C> ~s~" + killActionFromWeaponHash(weaponHash) + " ~o~<C>You</C>~s~.";
 					}
 				}
@@ -1190,80 +1193,82 @@ void toggle_watch()
 	}
 
 	// voice settings
-	if (featureVPVeryClose)
-	{
-		NETWORK::NETWORK_SET_TALKER_PROXIMITY(25.01f);
+	if (featureVoiceControl) {
+		if (featureVPVeryClose)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(25.01f);
+		}
+
+		if (featureVPClose)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(75.01f);
+		}
+
+		if (featureVPNearby)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(200.01f);
+		}
+
+		if (featureVPDistant)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(500.01f);
+		}
+
+		if (featureVPFar)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(2500.01f);
+		}
+
+		if (featureVPVeryFar)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(8000.01f);
+		}
+
+		if (featureVPAllPlayers)
+		{
+			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
+		}
+
+
+		if (featureChannelDefault)
+		{
+			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
+		}
+
+		if (featureChannel1)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
+		}
+
+		if (featureChannel2)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
+		}
+
+		if (featureChannel3)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
+		}
+
+		if (featureChannel4)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
+		}
+
+		if (featureChannel5)
+		{
+			NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
+		}
+
+		if (featureVoiceChat)
+		{
+			NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
+		}
+		else
+		{
+			NETWORK::NETWORK_SET_VOICE_ACTIVE(0);
+		}
 	}
-
-	if (featureVPClose)
-	{
-		NETWORK::NETWORK_SET_TALKER_PROXIMITY(75.01f);
-	}
-
-	if (featureVPNearby)
-	{
-		NETWORK::NETWORK_SET_TALKER_PROXIMITY(200.01f);
-	}
-
-	 if (featureVPDistant)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(500.01f);
-	 }
-
-	 if (featureVPFar)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(2500.01f);
-	 }
-
-	 if (featureVPVeryFar)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(8000.01f);
-	 }
-
-	 if (featureVPAllPlayers)
-	 {
-		 NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-	 }
-
-
-	 if (featureChannelDefault)
-	 {
-		 NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-	 }
-
-	 if (featureChannel1)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
-	 }
-
-	 if (featureChannel2)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
-	 }
-
-	 if (featureChannel3)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
-	 }
-
-	 if (featureChannel4)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
-	 }
-
-	 if (featureChannel5)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
-	 }
-
-	 if (featureVoiceChat)
-	 {
-		 NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
-	 }
-	 else
-	 {
-		 NETWORK::NETWORK_SET_VOICE_ACTIVE(0);
-	 }
 }
 
 //=============================
@@ -1299,7 +1304,7 @@ void update_features()
 				{
 					if (!isVoiceChatRunning)
 						isVoiceChatRunning = true;
-					voice_status_msg += "~n~~b~" + name;
+					voice_status_msg += "~n~~p~" + name;
 				}
 
 				if (i != playerId)
@@ -1321,17 +1326,22 @@ void update_features()
 							std::string msg = "<C>~o~" + name + "</C> ~s~died.";
 							Hash weaponHash;
 							Entity e = NETWORK::NETWORK_GET_ENTITY_KILLER_OF_PLAYER(i, &weaponHash);
-							if (PED::IS_PED_A_PLAYER(e)) {
+							if (PED::IS_PED_A_PLAYER(e))
+							{
 								Player killer = NETWORK::_0x6C0E2E0125610278(e); // _NETWORK_GET_PLAYER_FROM_PED
 								std::string kname = PLAYER::GET_PLAYER_NAME(killer);
-								if (kname != "") {
-									if (kname == name) {
+								if (kname != "")
+								{
+									if (kname == name)
+									{
 										msg = "<C>~o~" + name + "</C> ~s~commited suicide.";
 									}
-									else if (kname == PLAYER::GET_PLAYER_NAME(playerId)) {
+									else if (kname == PLAYER::GET_PLAYER_NAME(playerId))
+									{
 										msg = "~y~<C>You</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
 									}
-									else {
+									else
+									{
 										msg = "~y~<C>" + kname + "</C> ~s~" + killActionFromWeaponHash(weaponHash) + " <C>~o~" + name + "</C>~s~.";
 									}
 								}
@@ -1498,13 +1508,9 @@ void update_features()
 
 	if (game_frame_num % 1000 == 0)
 	{
-#ifndef SERVER_SIDED
 		DWORD myThreadID;
 		HANDLE myHandle = CreateThread(0, 0, save_settings_thread, 0, 0, &myThreadID);
 		CloseHandle(myHandle);
-#else
-		save_settings();
-#endif
 	}
 
 	update_centre_screen_status_text();
@@ -1707,7 +1713,6 @@ void update_features()
 	else
 	{
 		PED::SET_PED_CAN_RAGDOLL(playerPed, 1); //CAN ragdoll
-#ifndef SERVER_SIDED
 		KeyInputConfig* keyConfig = get_config()->get_key_config();
 		bool pRag = get_key_pressed(keyConfig->player_ragdoll);
 		bool fRag = get_key_pressed(keyConfig->ragdoll_force);
@@ -1721,7 +1726,6 @@ void update_features()
 				ENTITY::APPLY_FORCE_TO_ENTITY(playerPed, 1, rand() % 100, rand() % 100, rand() % 100, rand() % 100, rand() % 100, rand() % 100, false, false, false, false, false, false);
 			}
 		}
-#endif
 	}
 
 	//Player Invisible
@@ -1729,8 +1733,13 @@ void update_features()
 	{
 		featurePlayerInvisibleUpdated = false;
 		if (bPlayerExists && featurePlayerInvisible)
+		{
 			ENTITY::SET_ENTITY_VISIBLE(playerPed, false);
-		else if (bPlayerExists){ ENTITY::SET_ENTITY_VISIBLE(playerPed, true); }
+		}
+		else if (bPlayerExists)
+		{
+			ENTITY::SET_ENTITY_VISIBLE(playerPed, true);
+		}
 	}
 
 	if (featurePlayerDrunkUpdated)
@@ -1980,7 +1989,6 @@ void update_features()
 	//----Hotkeys----
 
 	//map cycle
-#ifndef SERVER_SIDED
 	if (bPlayerExists)
 	{
 		bool mapcycle = IsKeyJustUp(get_config()->get_key_config()->map_cycle);
@@ -2182,7 +2190,6 @@ void update_features()
 			}
 		}
 	}
-#endif
 }
 
 //==================
@@ -2214,7 +2221,7 @@ void process_online_player_menu(bool(*onConfirmation)(MenuItem<int> value), bool
 			return;
 		}
 
-		std::string caption = "~b~" + std::to_string(lineCount) + " ~s~PLAYER" + (lineCount == 1 ? "" : "S") + " ONLINE";
+		std::string caption = "~p~" + std::to_string(lineCount) + " ~s~PLAYER" + (lineCount == 1 ? "" : "S") + " ONLINE";
 
 		draw_menu_from_struct_def(&lines_v[0], lineCount, &activeLineIndexOnlinePlayer, caption, onConfirmation);
 	}
@@ -2257,7 +2264,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 						}
 					}
 				}
-				set_status_text("Spectating: ~b~<C>" + target.name + "</C>.");
+				set_status_text("Spectating: ~p~<C>" + target.name + "</C>.");
 			}
 			else
 			{
@@ -2291,7 +2298,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 				{
 					Vector3 drawroute = ENTITY::GET_ENTITY_COORDS(target.ped, 0);
 					UI::SET_NEW_WAYPOINT(drawroute.x, drawroute.y);
-					set_status_text("Drawing Live Route To:~n~~b~<C>" + target.name + "</C>.");
+					set_status_text("Drawing Live Route To:~n~~p~<C>" + target.name + "</C>.");
 				}
 			}
 			else
@@ -2327,7 +2334,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 			targetpos.x += 3.0; targetpos.z += 3.0;
 			STREAMING::REQUEST_COLLISION_AT_COORD(targetpos.x, targetpos.y, targetpos.z);
 			ENTITY::SET_ENTITY_COORDS_NO_OFFSET(playerPed, targetpos.x, targetpos.y, targetpos.z, 0, 0, 1);
-			set_status_text("Teleported to ~b~<C>" + target.name + "</C>.");
+			set_status_text("Teleported to ~p~<C>" + target.name + "</C>.");
 		}
 		break;
 
@@ -2349,7 +2356,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 
 						while (seatNum == passNum || seatNum > passNum)
 						{
-							set_status_text("~b~<C>" + target.name + "'s</C> ~s~vehicle is full.");
+							set_status_text("~p~<C>" + target.name + "'s</C> ~s~vehicle is full.");
 							break;
 						}
 
@@ -2362,7 +2369,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 								PED::SET_PED_INTO_VEHICLE(playerPed, playerVeh, seatNum);
 								NETWORK::NETWORK_SET_IN_SPECTATOR_MODE(0, target.ped);
 								featureSpectate = false;
-								set_status_text("Teleported into ~b~<C>" + target.name + "'s</C> ~s~vehicle.");
+								set_status_text("Teleported into ~p~<C>" + target.name + "'s</C> ~s~vehicle.");
 								break;
 							}
 							else
@@ -2372,13 +2379,13 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 						}
 					}
 					else
-						set_status_text("~b~<C>" + target.name + "'s</C> ~s~vehicle is locked.");
+						set_status_text("~r~<C>" + target.name + "'s</C> ~s~vehicle is locked.");
 				}
 				else
-					set_status_text("~b~<C>" + target.name + "'s</C> ~s~vehicle not found. User may be out of range, spectate first.");
+					set_status_text("~r~<C>" + target.name + "'s</C> ~s~vehicle not found. User may be out of range, spectate first.");
 			}
 			else
-				set_status_text("~b~<C>" + target.name + "</C> ~s~not found. User may be offline.");
+				set_status_text("~r~<C>" + target.name + "</C> ~s~not found. User may be offline.");
 		}
 		break;
 
@@ -2393,7 +2400,7 @@ bool onconfirm_online_player_options_menu(MenuItem<int> choice)
 				int friendly = UI::GET_BLIP_FROM_ENTITY(target.ped);
 				UI::SET_BLIP_COLOUR(friendly, 3);
 				UI::SET_BLIP_NAME_TO_PLAYER_NAME(friendly, targetId);
-				set_status_text("Marked ~b~<C>" + target.name + "</C>~s~ as Friendly.");
+				set_status_text("Marked ~p~<C>" + target.name + "</C>~s~ as Friendly.");
 			}
 		}
 		break;
@@ -3177,6 +3184,7 @@ void process_camera_menu()
 //==================
 
 int activeLineIndexTime = 0;
+int custom_time = 0;
 bool onconfirm_time_menu(MenuItem<int> choice)
 {
 	int right_now = TIME::GET_CLOCK_HOURS();
@@ -3201,11 +3209,21 @@ bool onconfirm_time_menu(MenuItem<int> choice)
 		set_status_text("Time changed to ~g~Night.");
 		break;
 	case 4:
-		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(right_now + 1, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
+		custom_time++;
+		if (custom_time == 25)
+		{
+			custom_time = 0;
+		}
+		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(custom_time, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
 		set_status_text("Time changed ~g~Forward 1 Hour");
 		break;
 	case 5:
-		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(right_now - 1, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
+		custom_time--;
+		if (custom_time == -1)
+		{
+			custom_time = 24;
+		}
+		NETWORK::NETWORK_OVERRIDE_CLOCK_TIME(custom_time, TIME::GET_CLOCK_MINUTES(), TIME::GET_CLOCK_SECONDS());
 		set_status_text("Time changed ~g~Backward 1 Hour");
 		break;
 		// switchable features
@@ -3470,139 +3488,29 @@ void process_world_menu()
 //==================
 int activeLineIndexVoiceChannel = 0;
 
-bool onconfirm_voicechannel_menu(MenuItem<int> choice)
+std::string lastVoiceInput;
+int channelId;
+bool onconfirm_voicechannel_menu()
 {
-	switch (activeLineIndexVoiceChannel)
+	std::string result = show_keyboard(NULL, (char*)lastVoiceInput.c_str());
+	if (!result.empty())
 	{
-	case 0:
-		if (!featureChannelDefault)
-		{
-			featureChannelDefault = true;
+		//std::string::size_type sz;
+		try {
+			channelId = std::stoi(result, nullptr, 10);
 		}
-		else
-		{
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
+		catch (std::invalid_argument) {
+			set_status_text("~r~Could not convert string to int (invalid channel).~y~");
+			return false;
 		}
-		break;
-	case 1:
-		if (featureChannel1)
-		{
-			featureChannelDefault = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
-			set_status_text("Voice channel: ~g~Channel 1");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 2:
-		if (featureChannel2)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
-			set_status_text("Voice channel: ~g~Channel 2");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 3:
-		if (featureChannel3)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel4 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
-			set_status_text("Voice channel: ~g~Channel 3");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 4:
-		if (featureChannel4)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel5 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
-			set_status_text("Voice channel: ~g~Channel 4");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	case 5:
-		if (featureChannel5)
-		{
-			featureChannelDefault = false;
-			featureChannel1 = false;
-			featureChannel2 = false;
-			featureChannel3 = false;
-			featureChannel4 = false;
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
-			set_status_text("Voice channel: ~g~Channel 5");
-		}
-		else
-		{
-			featureChannelDefault = true;
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-			set_status_text("Voice channel: ~g~Default");
-		}
-		break;
-	default:
-		break;
+
+		NETWORK::NETWORK_SET_VOICE_CHANNEL(channelId);
+		set_status_text("Voice channel set to: ~g~Channel " + channelId);
+		set_status_text_centre_screen("Channel ID: " + channelId, 4000UL);
+		return true;
 	}
+	set_status_text("~r~Failed to set voice channel (result was empty).");
 	return false;
-}
-void process_voicechannel_menu()
-{
-	const int lineCount = 6;
-
-	std::string caption = "Voice Channels";
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Default", &featureChannelDefault, NULL, true },
-		{ "Channel 1", &featureChannel1, NULL, true },
-		{ "Channel 2", &featureChannel2, NULL, true },
-		{ "Channel 3", &featureChannel3, NULL, true },
-		{ "Channel 4", &featureChannel4, NULL, true },
-		{ "Channel 5", &featureChannel5, NULL, true }
-		//	{ "Team", &feature, NULL, true },
-		//	{ "Friends", &feature, NULL, true }
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexVoiceChannel, caption, onconfirm_voicechannel_menu);
 }
 
 //==================
@@ -3779,7 +3687,7 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 {
 	switch (activeLineIndexVoice)
 	{
-	case 0:
+	case 1:
 		if (featureVoiceChat)
 		{
 			NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
@@ -3792,9 +3700,9 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 		}
 		break;
 	case 2:
-		process_voicechannel_menu();
+		onconfirm_voicechannel_menu();
 		break;
-	case 3:
+	case 4:
 		process_voiceproximity_menu();
 		break;
 	default:
@@ -3804,18 +3712,61 @@ bool onconfirm_voice_menu(MenuItem<int> choice)
 }
 void process_voice_menu()
 {
-	const int lineCount = 4;
+	const int lineCount = 5;
 
 	std::string caption = "Voice Options";
 
 	StandardOrToggleMenuDef lines[lineCount] = {
+		{ "Enable Voice Control", &featureVoiceControl, NULL, true },
 		{ "Voice Chat", &featureVoiceChat, NULL, true },
 		{ "Show Voice Chat Speaker", &featureShowVoiceChatSpeaker, NULL, true },
-		{ "Voice Channel", NULL, NULL, false },
+		{ "Set Voice Channel", NULL, NULL, false },
 		{ "Voice Proximity", NULL, NULL, false }
 	};
 
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexVoice, caption, onconfirm_voice_menu);
+}
+
+//================
+// Random hud color option lol
+//================
+int activeLineIndexHudColors = 0;
+bool onconfirm_hudcolor_menu(MenuItem<int> choice)
+{
+	switch (activeLineIndexHudColors)
+	{
+	case 0:
+#ifdef DEVELOPMENT
+		change_color_of_all_hud_ids(117, 27, 241, 150);
+#else
+		set_status_text("~r~Error! Not in developer mode!");
+#endif
+		break;
+	case 1:
+		for (int i = 0; i < 217; i++) 
+		{
+			UI::RESET_HUD_COMPONENT_VALUES(i);
+		}
+		break;
+
+	default:
+		break;
+	}
+	return false;
+}
+
+void process_hud_colors()
+{
+	const int lineCount = 2;
+
+	std::string caption = "Hud Colors";
+
+	StandardOrToggleMenuDef lines[lineCount] = {
+		{ "Purple Colors", &featPurpleAsShit, NULL, false },
+		{ "Reset", &defaultHudColors, NULL, true }
+	};
+
+	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexHudColors, caption, onconfirm_hudcolor_menu);
 }
 
 //==================
@@ -3934,7 +3885,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 	case 9:
 		process_voice_menu();
 		break;
-	case 10: //portable radio
+	case 11: //portable radio
 		if (featurePlayerRadio || featurePlayerRadioUpdated)
 			{
 				if (featurePlayerRadio)
@@ -3943,10 +3894,13 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 					AUDIO::SET_MOBILE_RADIO_ENABLED_DURING_GAMEPLAY(false);
 			}
 		break;
-	case 12: // next radio track
+	case 12:
+		process_hud_colors();
+		break;
+	case 13: // next radio track
 		AUDIO::SKIP_RADIO_FORWARD();
 		break;
-	case 13:
+	case 14:
 		if (!featureHideMap)
 		{
 			UI::DISPLAY_RADAR(1);
@@ -3956,7 +3910,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 			UI::DISPLAY_RADAR(0);
 		}
 		break; 
-	case 14:
+	case 15:
 		if (!featureBigHud)
 		{
 			UI::_SET_RADAR_BIGMAP_ENABLED(0, 0);
@@ -3966,15 +3920,15 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 			UI::_SET_RADAR_BIGMAP_ENABLED(1, 0);
 		}
 	break;
-	case 20:
+	case 21:
 		process_reset_globals();
 		break;
-	case 21:
-		set_status_text("<C>~b~Lambda ~s~Menu 2.4.1</C>");
+	case 22:
+		set_status_text("<C>~b~Lambda ~s~Menu 2.5</C>");
 		set_status_text("Contributors:");
-		set_status_text("Oui, TheDroidGeek & ");
-		set_status_text("The FiveM Collective");
-		set_status_text("Firecul");
+		set_status_text("Oui, TheDroidGeek,");
+		set_status_text("The FiveM Collective,");
+		set_status_text("Firecul & Zeemahh");
 		break;
 		// switchable features
 	default:
@@ -3984,7 +3938,7 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 }
 void process_misc_menu()
 {
-	const int lineCount = 22;
+	const int lineCount = 23;
 
 	std::string caption = "Game Settings";
 
@@ -3999,6 +3953,7 @@ void process_misc_menu()
 		{ "Player Notifications", &featurePlayerNotifications, NULL, true },
 		{ "Death Notifications", &featureDeathNotifications, NULL, true },
 		{ "Voice Options", NULL, NULL, false },
+		{ "HUD Colors", NULL, NULL, false },
 		{ "Radio Always Off", &featureRadioAlwaysOff, &featureRadioAlwaysOffUpdated, true },
 		{ "Portable Radio", &featurePlayerRadio, &featurePlayerRadioUpdated, true },
 		{ "Next Radio Track", NULL, NULL, true },
@@ -4016,6 +3971,47 @@ void process_misc_menu()
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexMisc, caption, onconfirm_misc_menu);
 }
 
+#ifdef DEVELOPMENT
+//==================
+// DEVELOPMENT TOOLS
+//==================
+int activeLineIndexDev = 0;
+std::string activeNetState;
+std::string playerName;
+bool onconfirm_dev_menu(MenuItem<int> choice)
+{
+	switch (activeLineIndexDev)
+	{
+	case 0:
+		activeNetState = (NETWORK::NETWORK_IS_SESSION_ACTIVE() ? "~g~true" : "~r~false");
+		set_status_text("NETWORK_IS_SESSION_ACTIVE returns " + activeNetState);
+		if (!NETWORK::NETWORK_IS_SESSION_ACTIVE())
+		{
+			set_status_text("You are likely in singleplayer or instanced.");
+		}
+		break;
+	case 1:
+		playerName = PLAYER::GET_PLAYER_NAME(PLAYER::PLAYER_ID());
+		set_status_text_centre_screen("GET_PLAYER_NAME returns~n~" + playerName, 3000UL);
+		break;
+	}
+	return false;
+}
+void process_dev_menu()
+{
+	std::string caption = "Development Tools";
+
+	const int lineCount = 2;
+
+	StandardOrToggleMenuDef lines[lineCount] = {
+		{ "Is Network Session Active?", NULL, NULL, false },
+		{ "What is my name?", NULL, NULL, false }
+	};
+
+	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexDev, caption, onconfirm_dev_menu);
+}
+#endif
+
 //==================
 // LEAVE MENU
 //==================
@@ -4025,14 +4021,12 @@ bool onconfirm_leave_menu(MenuItem<int> choice)
 	switch (activeLineIndexLeave)
 	{
 	case 0:
-		if (!CAM::IS_SCREEN_FADED_OUT()) {
-			if (!CAM::IS_SCREEN_FADING_OUT()) {
-				CAM::DO_SCREEN_FADE_OUT(500);
-				NETWORK::NETWORK_SESSION_LEAVE_SINGLE_PLAYER();
-				while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
-				if (CAM::IS_SCREEN_FADED_OUT()) {
-					CAM::DO_SCREEN_FADE_IN(500);
-				}
+		if (!CAM::IS_SCREEN_FADED_OUT() && !CAM::IS_SCREEN_FADING_OUT()) {
+			CAM::DO_SCREEN_FADE_OUT(500);
+			NETWORK::NETWORK_SESSION_LEAVE_SINGLE_PLAYER();
+			while (!CAM::IS_SCREEN_FADED_OUT()) WAIT(0);
+			if (CAM::IS_SCREEN_FADED_OUT()) {
+				CAM::DO_SCREEN_FADE_IN(500);
 			}
 		}
 		break;
@@ -4047,7 +4041,7 @@ void process_leave_menu()
 	const int lineCount = 1;
 
 	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "YES, I Want To Leave This Session", NULL, NULL, true }
+		{ "Yes, I want to leave this session", NULL, NULL, true }
 	};
 
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexLeave, caption, onconfirm_leave_menu);
@@ -4082,15 +4076,25 @@ bool onconfirm_main_menu(MenuItem<int> choice)
 	case 6:
 		process_misc_menu();
 		break;
+#ifdef DEVELOPMENT
+	case 7:
+		process_dev_menu();
+		break;
+	case 8:
+		process_leave_menu();
+		break;
+#else
 	case 7:
 		process_leave_menu();
 		break;
+#endif
 	}
 	return false;
 }
+
 void process_main_menu()
 {
-	std::string caption = "~b~LAMBDA ~s~MENU";
+	std::string caption = "~p~LAMBDA ~s~MENU";
 	std::vector<std::string> TOP_OPTIONS = {
 		"Online Players",
 		"Player",
@@ -4099,6 +4103,9 @@ void process_main_menu()
 		"Vehicles",
 		"World",
 		"Settings",
+#ifdef DEVELOPMENT
+		"Development Tools",
+#endif
 		"Leave Session"
 	};
 
@@ -4108,7 +4115,10 @@ void process_main_menu()
 		MenuItem<int> item;
 		item.caption = TOP_OPTIONS[i];
 		item.value = i;
-		item.isLeaf = (i==7);
+		item.isLeaf = i == 7;
+#ifdef DEVELOPMENT
+		item.isLeaf = i == 8;
+#endif
 		item.currentMenuIndex = i;
 		menuItems.push_back(item);
 	}
@@ -4116,7 +4126,15 @@ void process_main_menu()
 	draw_generic_menu<int>(menuItems, &activeLineIndexMain, caption, onconfirm_main_menu, NULL, NULL);
 }
 
-
+#ifdef DEVELOPMENT
+void change_color_of_all_hud_ids(int r, int g, int b, int a)
+{
+	for (int i = 2; i < 216; i++)
+	{
+		UI::_0xF314CF4F0211894E(i, r, g, b, a);
+	}
+}
+#endif
 
 void reset_globals()
 {
@@ -4217,21 +4235,17 @@ void reset_globals()
 	featureVPAllPlayers = true;
 	featureChannelDefault = true;
 	featurePoliceBlips = true;
-	
+
 	
 	set_status_text("All Settings ~r~RESET.");
 
-#ifndef SERVER_SIDED
 	DWORD myThreadID;
 	HANDLE myHandle = CreateThread(0, 0, save_settings_thread, 0, 0, &myThreadID);
 	CloseHandle(myHandle);
-#else
-	save_settings();
-#endif
 }
+
 void RunMain()
 {	
-
 	//reset_globals();
 
 	write_text_to_log_file("Setting up calls");
@@ -4273,7 +4287,6 @@ void RunMain()
 	}
 }
 
-#ifndef SERVER_SIDED
 void make_minidump(EXCEPTION_POINTERS* e)
 {
 	write_text_to_log_file("Dump requested");
@@ -4323,7 +4336,6 @@ int filterException(int code, PEXCEPTION_POINTERS ex)
 	make_minidump(ex);
 	return EXCEPTION_EXECUTE_HANDLER;
 }
-#endif
 
 void ScriptMain()
 {
@@ -4336,9 +4348,7 @@ void ScriptMain()
 
 		clear_log_file();
 
-#ifndef SERVER_SIDED
 		init_storage();
-#endif
 
 		write_text_to_log_file("Creating database?");
 
@@ -4354,9 +4364,9 @@ void ScriptMain()
 
 		srand(GetTickCount());
 		write_text_to_log_file("Reading config...");
-#ifndef SERVER_SIDED
+
 		read_config_file();
-#endif
+
 		write_text_to_log_file("Config read complete");	
 		RunMain();
 		
@@ -4512,7 +4522,8 @@ std::vector<FeatureEnabledLocalDefinition> get_feature_enablements()
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel4", &featureChannel4 });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel5", &featureChannel5 });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureVoiceChat", &featureVoiceChat });
-	
+	results.push_back(FeatureEnabledLocalDefinition{ "featPurpleAsShit", &featPurpleAsShit });
+
 
 	std::vector<FeatureEnabledLocalDefinition> vehResults = get_feature_enablements_vehicles();
 	results.insert(results.end(), vehResults.begin(), vehResults.end());
@@ -4523,13 +4534,11 @@ std::vector<FeatureEnabledLocalDefinition> get_feature_enablements()
 	return results;
 }
 
-#ifndef SERVER_SIDED
 DWORD WINAPI save_settings_thread(LPVOID lpParameter)
 {
 	save_settings();
 	return 0;
 }
-#endif
 
 void save_settings()
 {
@@ -4559,7 +4568,6 @@ void load_settings()
 
 void init_storage()
 {
-#ifndef SERVER_SIDED
 	WCHAR* folder = get_storage_dir_path();
 	write_text_to_log_file("Trying to create storage folder");
 
@@ -4592,10 +4600,8 @@ void init_storage()
 		write_text_to_log_file("Couldn't create temp dir");
 	}
 	delete folder2;
-#endif
 }
 
-#ifndef SERVER_SIDED
 WCHAR* get_temp_dir_path()
 {
 	WCHAR s[MAX_PATH];
@@ -4666,16 +4672,8 @@ WCHAR* get_storage_dir_path(char* file)
 
 	return output;
 }
-#endif
 
 ERDatabase* get_database()
 {
 	return database;
 }
-
-#ifdef SERVER_SIDED
-DWORD GetTickCount()
-{
-	return GAMEPLAY::GET_GAME_TIMER();
-}
-#endif

@@ -257,3 +257,5 @@ paket-files/
 
 # our Build/
 Build/
+
+tmp/

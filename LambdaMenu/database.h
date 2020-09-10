@@ -60,8 +60,6 @@ class SavedVehicleDBRow
 public:
 
 	int rowID;
-	std::string saveName;
-	DWORD model;
 	int colourPrimary;
 	int colourSecondary;
 	int colourExtraPearl;
@@ -74,17 +72,19 @@ public:
 	int colourCustom1RGB[3];
 	int colourCustom2RGB[3];
 	int livery;
-	std::string plateText;
 	int plateType;
 	int wheelType;
 	int windowTint;
-	bool burstableTyres;
-	bool customTyres;
 	int interiorColor;
 	int lightColor;
 	int neonColor[3];
 	int smokeColor[3];
 	int neonToggle[4];
+	std::string saveName;
+	std::string plateText;
+	DWORD model;
+	bool burstableTyres;
+	bool customTyres;
 
 	std::vector<SavedVehicleExtraDBRow*> extras;
 	std::vector<SavedVehicleModDBRow*> mods;
