@@ -88,8 +88,6 @@ bool featurePlayerVehHeadDisplay = true;
 bool featurePlayerBlipCone = false;
 bool featurePlayerNotifications = true;
 bool featureDeathNotifications = true;
-bool featureShowVoiceChatSpeaker = true;
-bool isVoiceChatRunning = true;
 bool featurePoliceBlips = true;
 bool featureMapBlips = false;
 bool featureAreaStreetNames = false;
@@ -177,8 +175,6 @@ bool featureChannel2 = false;
 bool featureChannel3 = false;
 bool featureChannel4 = false;
 bool featureChannel5 = false;
-bool featureVoiceChat = true;
-bool featureVoiceControl = false;
 bool featureWantedLevelFrozen = false;
 bool featureWantedLevelFrozenUpdated = false;
 bool featPurpleAsShit = false;
@@ -1191,84 +1187,6 @@ void toggle_watch()
 		blips();
 		blipCheck2 = true;
 	}
-
-	// voice settings
-	if (featureVoiceControl) {
-		if (featureVPVeryClose)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(25.01f);
-		}
-
-		if (featureVPClose)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(75.01f);
-		}
-
-		if (featureVPNearby)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(200.01f);
-		}
-
-		if (featureVPDistant)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(500.01f);
-		}
-
-		if (featureVPFar)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(2500.01f);
-		}
-
-		if (featureVPVeryFar)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(8000.01f);
-		}
-
-		if (featureVPAllPlayers)
-		{
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-		}
-
-
-		if (featureChannelDefault)
-		{
-			NETWORK::NETWORK_CLEAR_VOICE_CHANNEL();
-		}
-
-		if (featureChannel1)
-		{
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(1);
-		}
-
-		if (featureChannel2)
-		{
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(2);
-		}
-
-		if (featureChannel3)
-		{
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(3);
-		}
-
-		if (featureChannel4)
-		{
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(4);
-		}
-
-		if (featureChannel5)
-		{
-			NETWORK::NETWORK_SET_VOICE_CHANNEL(5);
-		}
-
-		if (featureVoiceChat)
-		{
-			NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
-		}
-		else
-		{
-			NETWORK::NETWORK_SET_VOICE_ACTIVE(0);
-		}
-	}
 }
 
 //=============================
@@ -1284,28 +1202,16 @@ void update_features()
 			playerId = PLAYER::PLAYER_ID();
 		}
 
-		std::string voice_status_msg = " <C>Currently Talking:<C/>";
-		bool isVoiceChatRunning = false;
-
 		for (int i = 0; i < MAX_PLAYERS; i++)
 		{
 			if (trainer_switch_pressed()) { // To increase chances of trainer switch key capture,
 				set_menu_showing(true);     // since this is a consuming function.
 				return;
 			}
-			if (featureShowVoiceChatSpeaker && isVoiceChatRunning)
-				update_centre_screen_status_text();
 
 			if (NETWORK::NETWORK_IS_PLAYER_CONNECTED(i))
 			{
 				std::string name = (char*)PLAYER::GET_PLAYER_NAME(i);
-
-				if (featureShowVoiceChatSpeaker && NETWORK::NETWORK_IS_PLAYER_TALKING(i))
-				{
-					if (!isVoiceChatRunning)
-						isVoiceChatRunning = true;
-					voice_status_msg += "~n~~p~" + name;
-				}
 
 				if (i != playerId)
 				{
@@ -1484,9 +1390,6 @@ void update_features()
 		}
 
 		playerWasDisconnected = false;
-
-		if (isVoiceChatRunning)
-			set_status_text_centre_screen(voice_status_msg);
 	}
 	else
 	{
@@ -3483,250 +3386,6 @@ void process_world_menu()
 	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexWorld, caption, onconfirm_world_menu);
 }
 
-//==================
-// VOICE CHANNEL MENU
-//==================
-int activeLineIndexVoiceChannel = 0;
-
-std::string lastVoiceInput;
-int channelId;
-bool onconfirm_voicechannel_menu()
-{
-	std::string result = show_keyboard(NULL, (char*)lastVoiceInput.c_str());
-	if (!result.empty())
-	{
-		//std::string::size_type sz;
-		try {
-			channelId = std::stoi(result, nullptr, 10);
-		}
-		catch (std::invalid_argument) {
-			set_status_text("~r~Could not convert string to int (invalid channel).~y~");
-			return false;
-		}
-
-		NETWORK::NETWORK_SET_VOICE_CHANNEL(channelId);
-		set_status_text("Voice channel set to: ~g~Channel " + channelId);
-		set_status_text_centre_screen("Channel ID: " + channelId, 4000UL);
-		return true;
-	}
-	set_status_text("~r~Failed to set voice channel (result was empty).");
-	return false;
-}
-
-//==================
-// VOICE PROXIMITY MENU
-//==================
-int activeLineIndexVoiceProximity = 0;
-bool onconfirm_voiceproximity_menu(MenuItem<int> choice)
-{
-	switch (activeLineIndexVoiceProximity)
-	{
-
-	case 0:
-		if (featureVPVeryClose)
-		{
-			featureVPClose = false;
-			featureVPNearby = false;
-			featureVPDistant = false;
-			featureVPFar = false;
-			featureVPVeryFar = false;
-			featureVPAllPlayers = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(25.01f);
-			set_status_text("Voice proximity: ~g~25 meters");
-		}
-		else
-		{
-			featureVPAllPlayers = true;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-	case 1:
-		if (featureVPClose)
-		{
-			featureVPVeryClose = false;
-			featureVPNearby = false;
-			featureVPDistant = false;
-			featureVPFar = false;
-			featureVPVeryFar = false;
-			featureVPAllPlayers = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(75.01f);
-			set_status_text("Voice proximity: ~g~75 meters");
-		}
-		else
-		{
-			featureVPAllPlayers = true;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-	case 2:
-		if (featureVPNearby)
-		{
-			featureVPVeryClose = false;
-			featureVPClose = false;
-			featureVPDistant = false;
-			featureVPFar = false;
-			featureVPVeryFar = false;
-			featureVPAllPlayers = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(200.01f);
-			set_status_text("Voice proximity: ~g~200 meters");
-		}
-		else
-		{
-			featureVPAllPlayers = true;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-	case 3:
-		if (featureVPDistant)
-		{
-			featureVPVeryClose = false;
-			featureVPClose = false;
-			featureVPNearby = false;
-			featureVPFar = false;
-			featureVPVeryFar = false;
-			featureVPAllPlayers = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(500.01f);
-			set_status_text("Voice proximity: ~g~500 meters");
-		}
-		else
-		{
-			featureVPAllPlayers = true;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-	case 4:
-		if (featureVPFar)
-		{
-			featureVPVeryClose = false;
-			featureVPClose = false;
-			featureVPNearby = false;
-			featureVPDistant = false;
-			featureVPVeryFar = false;
-			featureVPAllPlayers = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(2500.01f);
-			set_status_text("Voice proximity: ~g~2,500 meters");
-		}
-		else
-		{
-			featureVPAllPlayers = true;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-	case 5:
-		if (featureVPVeryFar)
-		{
-			featureVPVeryClose = false;
-			featureVPClose = false;
-			featureVPNearby = false;
-			featureVPDistant = false;
-			featureVPFar = false;
-			featureVPAllPlayers = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(8000.01f);
-			set_status_text("Voice proximity: ~g~8,000 meters");
-		}
-		else
-		{
-			featureVPAllPlayers = true;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-	case 6:
-		if (!featureVPAllPlayers)
-		{
-			featureVPAllPlayers = true;
-		}
-		else
-		{
-			featureVPVeryClose = false;
-			featureVPClose = false;
-			featureVPNearby = false;
-			featureVPDistant = false;
-			featureVPFar = false;
-			featureVPVeryFar = false;
-			NETWORK::NETWORK_SET_TALKER_PROXIMITY(0.00f);
-			set_status_text("Voice proximity: ~g~All Players");
-		}
-		break;
-		// switchable features
-	default:
-		break;
-	}
-	return false;
-}
-void process_voiceproximity_menu()
-{
-	const int lineCount = 7;
-
-	std::string caption = "Voice Proximity";
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Very Close", &featureVPVeryClose, NULL, true },
-		{ "Close", &featureVPClose, NULL, true },
-		{ "Nearby", &featureVPNearby, NULL, true },
-		{ "Distant", &featureVPDistant, NULL, true },
-		{ "Far", &featureVPFar, NULL, true },
-		{ "Very Far", &featureVPVeryFar, NULL, true },
-		{ "All Players", &featureVPAllPlayers, NULL, true }
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexVoiceProximity, caption, onconfirm_voiceproximity_menu);
-}
-
-//==================
-// VOICE OPTIONS MENU
-//==================
-int activeLineIndexVoice = 0;
-
-bool onconfirm_voice_menu(MenuItem<int> choice)
-{
-	switch (activeLineIndexVoice)
-	{
-	case 1:
-		if (featureVoiceChat)
-		{
-			NETWORK::NETWORK_SET_VOICE_ACTIVE(1);
-			set_status_text("Voice chat: ~g~Enabled");
-		}
-		else
-		{
-			NETWORK::NETWORK_SET_VOICE_ACTIVE(0);
-			set_status_text("Voice chat: ~r~Disabled");
-		}
-		break;
-	case 2:
-		onconfirm_voicechannel_menu();
-		break;
-	case 4:
-		process_voiceproximity_menu();
-		break;
-	default:
-		break;
-	}
-	return false;
-}
-void process_voice_menu()
-{
-	const int lineCount = 5;
-
-	std::string caption = "Voice Options";
-
-	StandardOrToggleMenuDef lines[lineCount] = {
-		{ "Enable Voice Control", &featureVoiceControl, NULL, true },
-		{ "Voice Chat", &featureVoiceChat, NULL, true },
-		{ "Show Voice Chat Speaker", &featureShowVoiceChatSpeaker, NULL, true },
-		{ "Set Voice Channel", NULL, NULL, false },
-		{ "Voice Proximity", NULL, NULL, false }
-	};
-
-	draw_menu_from_struct_def(lines, lineCount, &activeLineIndexVoice, caption, onconfirm_voice_menu);
-}
-
 //================
 // Random hud color option lol
 //================
@@ -3883,7 +3542,6 @@ bool onconfirm_misc_menu(MenuItem<int> choice)
 		}
 		break;	
 	case 9:
-		process_voice_menu();
 		break;
 	case 11: //portable radio
 		if (featurePlayerRadio || featurePlayerRadioUpdated)
@@ -3952,7 +3610,6 @@ void process_misc_menu()
 		{ "Police Blips", &featurePoliceBlips, NULL, true },
 		{ "Player Notifications", &featurePlayerNotifications, NULL, true },
 		{ "Death Notifications", &featureDeathNotifications, NULL, true },
-		{ "Voice Options", NULL, NULL, false },
 		{ "HUD Colors", NULL, NULL, false },
 		{ "Radio Always Off", &featureRadioAlwaysOff, &featureRadioAlwaysOffUpdated, true },
 		{ "Portable Radio", &featurePlayerRadio, &featurePlayerRadioUpdated, true },
@@ -4231,7 +3888,6 @@ void reset_globals()
 	featureChannel4 =
 	featureChannel5 =
 	featureBlackout = false;
-	featureVoiceChat = true;
 	featureVPAllPlayers = true;
 	featureChannelDefault = true;
 	featurePoliceBlips = true;
@@ -4467,7 +4123,6 @@ std::vector<FeatureEnabledLocalDefinition> get_feature_enablements()
 	results.push_back(FeatureEnabledLocalDefinition{ "featurePlayerBlipCone", &featurePlayerBlipCone });
 	results.push_back(FeatureEnabledLocalDefinition{ "featurePlayerNotifications", &featurePlayerNotifications });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureDeathNotifications", &featureDeathNotifications });
-	results.push_back(FeatureEnabledLocalDefinition{ "featureShowVoiceChatSpeaker", &featureShowVoiceChatSpeaker });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureWeatherWind", &featureWeatherWind });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureWeatherFreeze", &featureWeatherFreeze });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureMiscLockRadio", &featureMiscLockRadio });
@@ -4521,7 +4176,6 @@ std::vector<FeatureEnabledLocalDefinition> get_feature_enablements()
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel3", &featureChannel3 });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel4", &featureChannel4 });
 	results.push_back(FeatureEnabledLocalDefinition{ "featureChannel5", &featureChannel5 });
-	results.push_back(FeatureEnabledLocalDefinition{ "featureVoiceChat", &featureVoiceChat });
 	results.push_back(FeatureEnabledLocalDefinition{ "featPurpleAsShit", &featPurpleAsShit });
 
 
